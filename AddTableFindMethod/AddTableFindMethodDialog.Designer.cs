@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.TableNameControl = new System.Windows.Forms.TextBox();
+            this.addTableFindMethodParmsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.label1 = new System.Windows.Forms.Label();
             this.FieldsControl = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -41,7 +42,6 @@
             this.MethodTypeCheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.label5 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.addTableFindMethodParmsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.addTableFindMethodParmsBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -54,6 +54,10 @@
             this.TableNameControl.Size = new System.Drawing.Size(178, 20);
             this.TableNameControl.TabIndex = 0;
             this.TableNameControl.TextChanged += new System.EventHandler(this.TableNameControl_TextChanged);
+            // 
+            // addTableFindMethodParmsBindingSource
+            // 
+            this.addTableFindMethodParmsBindingSource.DataSource = typeof(AddTableFindMethod.AddTableFindMethodParms);
             // 
             // label1
             // 
@@ -122,6 +126,7 @@
             // 
             // ResultTextBox
             // 
+            this.ResultTextBox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ResultTextBox.Location = new System.Drawing.Point(267, 40);
             this.ResultTextBox.MaxLength = 327670;
             this.ResultTextBox.Multiline = true;
@@ -161,10 +166,6 @@
             this.linkLabel1.TabIndex = 12;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "Copy to clipboard";
-            // 
-            // addTableFindMethodParmsBindingSource
-            // 
-            this.addTableFindMethodParmsBindingSource.DataSource = typeof(AddTableFindMethod.AddTableFindMethodParms);
             // 
             // AddTableFindMethodDialog
             // 

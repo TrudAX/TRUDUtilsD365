@@ -6,6 +6,87 @@ using System.Threading.Tasks;
 
 namespace AddTableFindMethod
 {
+    public class CodeGenerateHelper
+    {
+        int     currentIndent       = 0;
+        String  currentIndentStr    = "";
+
+        int     currentLinePos      = 0;
+        bool    isIndentAppended    = false;
+
+        int     savedIndent;
+
+        Dictionary<string, int> columnAllignMap =
+            new Dictionary<string, int>();
+
+        public StringBuilder resultString = new StringBuilder();
+
+        public void indentSetValue(int _value)
+        {
+            currentIndent = _value;
+            currentIndentStr = new String(' ', currentIndent);
+        }
+
+        public void indentIncrease()
+        {
+            currentIndent += 4;
+            currentIndentStr = new String(' ', currentIndent);
+        }
+        public void indentDecrease()
+        {
+            currentIndent -= 4;
+            currentIndent = Math.Max(currentIndent, 0);
+            currentIndentStr = new String(' ', currentIndent);
+        }
+        public void indentRestorePrev()
+        {
+            this.indentSetValue(savedIndent);
+        }
+        public void indentSetAsCurrentPos()
+        {
+            savedIndent         = currentIndent;
+            currentIndent       = currentLinePos;
+            currentIndentStr    = new String(' ', currentIndent);
+        }
+
+        public void appendLine(String _line)
+        {
+            resultString.AppendLine((isIndentAppended ? "" : currentIndentStr) + _line);
+            currentLinePos = currentIndent;
+
+            isIndentAppended = false;
+        }
+        public void append(String _line, string  _format = "")
+        {
+            String textToAppend = (isIndentAppended ? "" : currentIndentStr) + (_format == "" ? _line : this.getFormatedValue(_line, _format));
+            resultString.Append(textToAppend);
+            currentLinePos = textToAppend.Length;
+            isIndentAppended = true;
+        }
+
+        public string getFormatedValue(String _value, string _formatStr)
+        {
+            return _value.PadRight(columnAllignMap[_formatStr]);
+        }
+
+        public void addColumnAllignInt(string _name, int _value)
+        {
+            if (!columnAllignMap.ContainsKey(_name))
+            {
+                columnAllignMap.Add(_name, _value);
+            }
+            if (columnAllignMap[_name] < _value)
+            {
+                columnAllignMap[_name] = _value;
+            }
+
+        }
+        public void addColumnAllign(string _name, String _value)
+        {
+            int keyValue = _value.Length;
+            this.addColumnAllignInt(_name, keyValue);           
+        }
+    }
     public class AxTableField
     {
         public string FieldName { get; set; }
@@ -43,24 +124,30 @@ namespace AddTableFindMethod
         {
             string methodText = "";
 
+            
+
             int longestNameLength = (from x in fields select x.FieldName.Length).Max();
             int longestTypeLength = (from x in fields select x.FieldType.Length).Max();
             longestTypeLength = Math.Max("boolean".Length, longestTypeLength);
 
-            methodText += $"maxTypeLength= {longestTypeLength} maxFieldLength = {longestNameLength} \r\n";
+            CodeGenerateHelper generateHelper = new CodeGenerateHelper();
+
+            generateHelper.addColumnAllignInt("Type",      longestTypeLength);
+            generateHelper.addColumnAllignInt("FieldName", longestNameLength);
+
 
             string varName = AddTableFindMethodParms.prettyName(this.TableName);
-            string indent;
             string mandatoryFields = "";
 
             if (this.IsCreateFind)
             {
-                methodText += $"public static {this.TableName} find(";              
-                indent = new String(' ', methodText.Length);
+                generateHelper.append($"public static {this.TableName} find(");
+                generateHelper.indentSetAsCurrentPos();
 
                 bool isFirst = true;
 
                 // build args and mandatory fields list
+                mandatoryFields = "";
                 foreach (AxTableField df in fields.OrderBy(x=>x.Position))
                 {
                     if (df.IsMandatory || df.FieldName == "RecId")
@@ -73,56 +160,74 @@ namespace AddTableFindMethod
                     }
                     if (!isFirst)
                     {
-                        methodText += String.Format(",\n{0}", indent);
+                        generateHelper.appendLine(",");
                     }
-                    methodText += String.Format("{0} _{1}", df.FieldType.PadRight(longestTypeLength), prettyName(df.FieldName));
+                    generateHelper.append(df.FieldType, "Type");
+                    generateHelper.append(String.Format(" _{0}", prettyName(df.FieldName)));
+
+                    //methodText += String.Format("{0} _{1}", df.FieldType.PadRight(longestTypeLength), prettyName(df.FieldName));
                     isFirst = false;
                 }
-
+                generateHelper.appendLine(",");
+                generateHelper.append("boolean", "Type");
+                generateHelper.appendLine(" _forUpdate = false)");
 
                 //build method header
-                methodText += strfmt(',\n%1boolean%2_forUpdate = false)\n{\n', indent, strrep(' ', 1 + longestTypeLength - strlen('boolean')));
-                indent = '    ';
-                methodText += indent + dt.name() + ' ' + varName + ';\n';
-                methodText += indent + '\n';
+                generateHelper.indentSetValue(0);
+                generateHelper.appendLine("{");
+                generateHelper.indentIncrease();
+
+                generateHelper.appendLine(this.TableName + " " + varName + ";");
+                generateHelper.appendLine(";");
 
                 //check for mandatory fields
-                if (mandatoryFields)
+                if (mandatoryFields != "")
                 {
-                    methodText += indent + 'if (' + mandatoryFields + ')\n';
-                    methodText += indent + '{\n';
-                    indent += '    ';
+                    generateHelper.appendLine("if (" + mandatoryFields + ")");
+                    generateHelper.appendLine("{");
+                    generateHelper.indentIncrease();
                 }
 
                 //selectForUpdate
-                methodText += indent + varName + '.selectForUpdate(_forUpdate);\n\n';
+                generateHelper.appendLine(varName + ".selectForUpdate(_forUpdate);");
+                generateHelper.appendLine("");
 
                 //build select query
-                methodText += indent + 'select firstonly ' + varname + '\n';
-                methodText += indent + '    where ';
-                for (i = 1; i <= di.numberOfFields(); ++i)
+                generateHelper.appendLine("select firstonly " + varName);
+                generateHelper.append("    where ");
+                generateHelper.indentSetAsCurrentPos();
+
+                isFirst = true;
+                foreach (AxTableField df in fields.OrderBy(x => x.Position))
                 {
-                    df = new DictField(dt.id(), di.field(i));
-                    if (i != 1)
+                    if (!isFirst)
                     {
-                        methodText += '\n' + indent + '       && ';
+                        generateHelper.appendLine(" && ");
                     }
-                    methodText += varName + '.' + df.name() + strrep(' ', longestNameLength - strlen(df.name())) + ' == _' + prettyName(df.name());
+                    generateHelper.append(varName + ".");
+                    generateHelper.append(df.FieldName, "FieldName");
+
+                    generateHelper.append(" == _" + prettyName(df.FieldName));
+                    isFirst = false;
                 }
-                methodText += ';\n';
+                generateHelper.indentRestorePrev();
+                generateHelper.appendLine(";");
 
                 //footer
-                if (mandatoryFields)
+                if (mandatoryFields != "")
                 {
-                    indent = substr(indent, 1, strlen(indent) - 4);
-                    methodText += indent + '}\n';
+                    generateHelper.indentDecrease();
+                    generateHelper.appendLine("}");
+
                 }
-                methodText += '\n';
-                methodText += indent + 'return ' + varName + ';\n';
+                generateHelper.appendLine("");
+                generateHelper.appendLine("return " + varName + ";");
+                generateHelper.indentDecrease();
 
-                methodText += '}';
+                generateHelper.appendLine("}");
 
-                res += "find\r\n";
+                methodText += generateHelper.resultString.ToString();
+
             }
             if (this.IsCreateFindRecId)
             {

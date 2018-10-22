@@ -24,6 +24,7 @@ namespace AddTableFindMethodTest
             AddTableFindMethodParms parms = new AddTableFindMethodParms();
             //parms.MethodName = "find3";
             parms.IsTestMode = true;
+            parms.TableName = "MyTable";
             parms.fields = new List<AxTableField> {
                 new AxTableField { FieldName = "Field1",    FieldType = "Type1",    IsMandatory = true },
                 new AxTableField { FieldName = "Field2Big", FieldType = "Type2Big", IsMandatory = true },
