@@ -1,4 +1,4 @@
-﻿namespace AddTableFindMethod
+﻿namespace TRUDUtilsD365.AddTableFindMethod
 {
     partial class AddTableFindMethodDialog
     {
@@ -57,7 +57,7 @@
             // 
             // addTableFindMethodParmsBindingSource
             // 
-            this.addTableFindMethodParmsBindingSource.DataSource = typeof(AddTableFindMethod.AddTableFindMethodParms);
+            this.addTableFindMethodParmsBindingSource.DataSource = typeof(TRUDUtilsD365.AddTableFindMethod.AddTableFindMethodParms);
             // 
             // label1
             // 
@@ -126,11 +126,15 @@
             // 
             // ResultTextBox
             // 
+            this.ResultTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.ResultTextBox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ResultTextBox.Location = new System.Drawing.Point(267, 40);
             this.ResultTextBox.MaxLength = 327670;
             this.ResultTextBox.Multiline = true;
             this.ResultTextBox.Name = "ResultTextBox";
+            this.ResultTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.ResultTextBox.Size = new System.Drawing.Size(446, 297);
             this.ResultTextBox.TabIndex = 9;
             this.ResultTextBox.WordWrap = false;

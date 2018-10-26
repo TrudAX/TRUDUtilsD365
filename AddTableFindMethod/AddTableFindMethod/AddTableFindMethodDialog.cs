@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace AddTableFindMethod
+namespace TRUDUtilsD365.AddTableFindMethod
 {
     public partial class AddTableFindMethodDialog : Form
     {

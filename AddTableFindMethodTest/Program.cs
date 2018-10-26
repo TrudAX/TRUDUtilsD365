@@ -4,7 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-using AddTableFindMethod;
+using TRUDUtilsD365.AddTableFindMethod;
+using TRUDUtilsD365.CreateExtensionClass;
 
 namespace AddTableFindMethodTest
 {
@@ -19,6 +20,29 @@ namespace AddTableFindMethodTest
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            //TestAddTableFindMethod();
+            TestCreateExtensionClass();
+        }
+
+        private static void TestCreateExtensionClass()
+        {
+            CreateExtensionClassDialog dialog = new CreateExtensionClassDialog();
+
+            CreateExtensionClassParms parms = new CreateExtensionClassParms();
+
+            parms.ElementName = "CustTable";
+            parms.ElementType = "Form";
+            parms.Prefix = "MY";
+            parms.ClassType = ExtensionClassType.EventHandler;
+
+            dialog.setParameters(parms);
+
+            Application.Run(dialog);
+        }
+
+
+        private static void TestAddTableFindMethod()
+        {
             AddTableFindMethodDialog dialog = new AddTableFindMethodDialog();
 
             AddTableFindMethodParms parms = new AddTableFindMethodParms();

@@ -8,8 +8,8 @@
     <ProjectGuid>{3A63594B-16DA-4EDD-93C5-A38D01ABDB10}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AddTableFindMethod</RootNamespace>
-    <AssemblyName>AddTableFindMethod</AssemblyName>
+    <RootNamespace>TRUDUtilsD365</RootNamespace>
+    <AssemblyName>TRUDUtilsD365</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SkipAssemblyComVisible>true</SkipAssemblyComVisible>
@@ -40,33 +40,37 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddTableFindMethodDialog.cs">
+    <Compile Include="AddTableFindMethod\AddTableFindMethodDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddTableFindMethodDialog.Designer.cs">
+    <Compile Include="AddTableFindMethod\AddTableFindMethodDialog.Designer.cs">
       <DependentUpon>AddTableFindMethodDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="AddTableFindMethodParms.cs" />
-    <Compile Include="DesignerContextMenuAddIn.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="AddinResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AddinResources.resx</DependentUpon>
+    <Compile Include="AddTableFindMethod\AddTableFindMethodParms.cs" />
+    <Compile Include="AddTableFindMethod\DesignerAddTableFindMethod.cs" />
+    <Compile Include="CreateExtensionClass\CreateExtensionClassDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
+    <Compile Include="CreateExtensionClass\CreateExtensionClassDialog.Designer.cs">
+      <DependentUpon>CreateExtensionClassDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CreateExtensionClass\CreateExtensionClassParms.cs" />
+    <Compile Include="CreateExtensionClass\DesignerCreateExtensionClass.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AddinResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>AddinResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AddTableFindMethodDialog.resx">
+    <EmbeddedResource Include="AddTableFindMethod\AddTableFindMethodDialog.resx">
       <DependentUpon>AddTableFindMethodDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CreateExtensionClass\CreateExtensionClassDialog.resx">
+      <DependentUpon>CreateExtensionClassDialog.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\DataSources\AddTableFindMethodParms.datasource" />
+    <None Include="Properties\DataSources\TRUDUtilsD365.CreateExtensionClass.CreateExtensionClassParms.datasource" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(INETROOT)\Source\Frameworks\DevToolsVS12\common\Microsoft.Dynamics.Framework.Tools.Extensibility.Targets" Condition=" '$(INETROOT)' != '' " />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Dynamics\AX\Microsoft.Dynamics.Framework.Tools.Extensibility.targets" Condition=" '$(INETROOT)' == '' " />

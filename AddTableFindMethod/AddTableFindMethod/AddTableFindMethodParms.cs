@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AddTableFindMethod
+namespace TRUDUtilsD365.AddTableFindMethod
 {
     public class CodeGenerateHelper
     {
@@ -117,14 +117,11 @@ namespace AddTableFindMethod
                 return "";
             }
             return _input.First().ToString().ToLower() + _input.Substring(1);
-            
         }
 
         public string generateResult()
         {
-            string methodText = "";
-
-            
+            string methodText;// = "";
 
             int longestNameLength = (from x in fields select x.FieldName.Length).Max();
             int longestTypeLength = (from x in fields select x.FieldType.Length).Max();
@@ -137,17 +134,16 @@ namespace AddTableFindMethod
 
 
             string varName = AddTableFindMethodParms.prettyName(this.TableName);
-            string mandatoryFields = "";
+            string mandatoryFields;
 
             if (this.IsCreateFind)
             {
                 generateHelper.append($"public static {this.TableName} find(");
                 generateHelper.indentSetAsCurrentPos();
 
-                bool isFirst = true;
-
                 // build args and mandatory fields list
                 mandatoryFields = "";
+                bool isFirst = true;
                 foreach (AxTableField df in fields.OrderBy(x=>x.Position))
                 {
                     if (df.IsMandatory || df.FieldName == "RecId")
@@ -164,8 +160,6 @@ namespace AddTableFindMethod
                     }
                     generateHelper.append(df.FieldType, "Type");
                     generateHelper.append(String.Format(" _{0}", prettyName(df.FieldName)));
-
-                    //methodText += String.Format("{0} _{1}", df.FieldType.PadRight(longestTypeLength), prettyName(df.FieldName));
                     isFirst = false;
                 }
                 generateHelper.appendLine(",");
@@ -226,17 +220,122 @@ namespace AddTableFindMethod
 
                 generateHelper.appendLine("}");
 
-                methodText += generateHelper.resultString.ToString();
-
             }
             if (this.IsCreateFindRecId)
             {
-                methodText += "findRecId\r\n";
+                generateHelper.indentSetValue(0);
+
+                generateHelper.appendLine("");
+                generateHelper.appendLine($"public static {this.TableName} findRecId(RefRecId _recId,  _forUpdate = false)");
+
+                //build method header
+                generateHelper.appendLine("{");
+                generateHelper.indentIncrease();
+                generateHelper.appendLine(this.TableName + " " + varName + ";");
+                generateHelper.appendLine(";");
+
+                generateHelper.appendLine("if (_recId)");
+                generateHelper.appendLine("{");
+                generateHelper.indentIncrease();
+
+                //selectForUpdate
+                generateHelper.appendLine(varName + ".selectForUpdate(_forUpdate);");
+                generateHelper.appendLine("");
+
+                //build select query
+                generateHelper.appendLine("select firstonly " + varName);
+                generateHelper.appendLine("    where " + varName + ".RecId == _recId;");
+                generateHelper.indentDecrease();
+                generateHelper.appendLine("}");
+                generateHelper.appendLine("");
+                generateHelper.appendLine("return " + varName + ";");
+                generateHelper.indentDecrease();
+
+                generateHelper.appendLine("}");
             }
             if (this.IsCreateExists)
             {
-                methodText += "exists\r\n";
+                generateHelper.indentSetValue(0);
+                generateHelper.appendLine("");
+
+                generateHelper.append($"public static boolean exists(");
+                generateHelper.indentSetAsCurrentPos();
+
+                // build args and mandatory fields list
+                mandatoryFields = "";
+                bool isFirst = true;
+                foreach (AxTableField df in fields.OrderBy(x => x.Position))
+                {
+                    if (df.IsMandatory || df.FieldName == "RecId")
+                    {
+                        if (mandatoryFields.Length > 0)
+                        {
+                            mandatoryFields += " && ";
+                        }
+                        mandatoryFields += "_" + prettyName(df.FieldName);
+                    }
+                    if (!isFirst)
+                    {
+                        generateHelper.appendLine(",");
+                    }
+                    generateHelper.append(df.FieldType, "Type");
+                    generateHelper.append(String.Format(" _{0}", prettyName(df.FieldName)));
+                    isFirst = false;
+                }
+                generateHelper.appendLine(")");
+
+                //build method header
+                generateHelper.indentSetValue(0);
+                generateHelper.appendLine("{");
+                generateHelper.indentIncrease();
+
+                generateHelper.appendLine("boolean res;");
+                generateHelper.appendLine(";");
+
+                //check for mandatory fields
+                if (mandatoryFields != "")
+                {
+                    generateHelper.appendLine("if (" + mandatoryFields + ")");
+                    generateHelper.appendLine("{");
+                    generateHelper.indentIncrease();
+                }
+
+
+                //build select query
+                generateHelper.appendLine("res = (select firstonly RecId from " + this.TableName);
+                generateHelper.append("        where ");
+                generateHelper.indentSetAsCurrentPos();
+
+                isFirst = true;
+                foreach (AxTableField df in fields.OrderBy(x => x.Position))
+                {
+                    if (!isFirst)
+                    {
+                        generateHelper.appendLine(" && ");
+                    }
+                    generateHelper.append(this.TableName + ".");
+                    generateHelper.append(df.FieldName, "FieldName");
+
+                    generateHelper.append(" == _" + prettyName(df.FieldName));
+                    isFirst = false;
+                }
+                generateHelper.indentRestorePrev();
+                generateHelper.appendLine(").RecId != 0;");
+
+                //footer
+                if (mandatoryFields != "")
+                {
+                    generateHelper.indentDecrease();
+                    generateHelper.appendLine("}");
+
+                }
+                generateHelper.appendLine("");
+                generateHelper.appendLine("return res;");
+                generateHelper.indentDecrease();
+
+                generateHelper.appendLine("}");
             }
+            methodText = generateHelper.resultString.ToString();
 
             return methodText;
         }
