@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dynamics.AX.Application;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,7 +32,7 @@ namespace AddTableFindMethodTest
             CreateExtensionClassParms parms = new CreateExtensionClassParms();
 
             parms.ElementName = "CustTable";
-            parms.ElementType = "Form";
+            parms.ElementType = UtilElementType.Form;
             parms.Prefix = "MY";
             parms.ClassType = ExtensionClassType.EventHandler;
 

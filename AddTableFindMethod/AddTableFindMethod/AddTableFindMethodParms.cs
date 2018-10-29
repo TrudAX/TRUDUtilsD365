@@ -69,7 +69,7 @@ namespace TRUDUtilsD365.AddTableFindMethod
             return _value.PadRight(columnAllignMap[_formatStr]);
         }
 
-        public void addColumnAllignInt(string _name, int _value)
+        public void AddColumnAlignInt(string _name, int _value)
         {
             if (!columnAllignMap.ContainsKey(_name))
             {
@@ -84,7 +84,7 @@ namespace TRUDUtilsD365.AddTableFindMethod
         public void addColumnAllign(string _name, String _value)
         {
             int keyValue = _value.Length;
-            this.addColumnAllignInt(_name, keyValue);           
+            this.AddColumnAlignInt(_name, keyValue);           
         }
     }
     public class AxTableField
@@ -121,16 +121,14 @@ namespace TRUDUtilsD365.AddTableFindMethod
 
         public string generateResult()
         {
-            string methodText;// = "";
-
             int longestNameLength = (from x in fields select x.FieldName.Length).Max();
             int longestTypeLength = (from x in fields select x.FieldType.Length).Max();
             longestTypeLength = Math.Max("boolean".Length, longestTypeLength);
 
             CodeGenerateHelper generateHelper = new CodeGenerateHelper();
 
-            generateHelper.addColumnAllignInt("Type",      longestTypeLength);
-            generateHelper.addColumnAllignInt("FieldName", longestNameLength);
+            generateHelper.AddColumnAlignInt("Type",      longestTypeLength);
+            generateHelper.AddColumnAlignInt("FieldName", longestNameLength);
 
 
             string varName = AddTableFindMethodParms.prettyName(this.TableName);
@@ -159,7 +157,7 @@ namespace TRUDUtilsD365.AddTableFindMethod
                         generateHelper.appendLine(",");
                     }
                     generateHelper.append(df.FieldType, "Type");
-                    generateHelper.append(String.Format(" _{0}", prettyName(df.FieldName)));
+                    generateHelper.append($" _{prettyName(df.FieldName)}");
                     isFirst = false;
                 }
                 generateHelper.appendLine(",");
@@ -335,7 +333,7 @@ namespace TRUDUtilsD365.AddTableFindMethod
 
                 generateHelper.appendLine("}");
             }
-            methodText = generateHelper.resultString.ToString();
+            var methodText = generateHelper.resultString.ToString();
 
             return methodText;
         }

@@ -32,7 +32,6 @@
             this.ElementNameTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.ElementTypeTextBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.PrefixTextBox = new System.Windows.Forms.TextBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
@@ -41,6 +40,7 @@
             this.ResultClassNameTextBox = new System.Windows.Forms.TextBox();
             this.CreateClassButton = new System.Windows.Forms.Button();
             this.RestoreNameButton = new System.Windows.Forms.Button();
+            this.ElementTypeComboBox = new System.Windows.Forms.ComboBox();
             this.createExtensionClassParmsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.createExtensionClassParmsBindingSource)).BeginInit();
             this.SuspendLayout();
@@ -71,15 +71,6 @@
             this.label2.Size = new System.Drawing.Size(71, 13);
             this.label2.TabIndex = 3;
             this.label2.Text = "Element type:";
-            // 
-            // ElementTypeTextBox
-            // 
-            this.ElementTypeTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.createExtensionClassParmsBindingSource, "ElementType", true));
-            this.ElementTypeTextBox.Location = new System.Drawing.Point(95, 20);
-            this.ElementTypeTextBox.Name = "ElementTypeTextBox";
-            this.ElementTypeTextBox.Size = new System.Drawing.Size(121, 20);
-            this.ElementTypeTextBox.TabIndex = 2;
-            this.ElementTypeTextBox.TextChanged += new System.EventHandler(this.ElementTypeTextBox_TextChanged);
             // 
             // label3
             // 
@@ -146,6 +137,7 @@
             this.CreateClassButton.TabIndex = 10;
             this.CreateClassButton.Text = "Create class";
             this.CreateClassButton.UseVisualStyleBackColor = true;
+            this.CreateClassButton.Click += new System.EventHandler(this.CreateClassButton_Click);
             // 
             // RestoreNameButton
             // 
@@ -157,6 +149,17 @@
             this.RestoreNameButton.UseVisualStyleBackColor = true;
             this.RestoreNameButton.Click += new System.EventHandler(this.RestoreNameButton_Click);
             // 
+            // ElementTypeComboBox
+            // 
+            this.ElementTypeComboBox.DataBindings.Add(new System.Windows.Forms.Binding("SelectedItem", this.createExtensionClassParmsBindingSource, "ElementType", true));
+            this.ElementTypeComboBox.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.createExtensionClassParmsBindingSource, "ElementType", true));
+            this.ElementTypeComboBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.createExtensionClassParmsBindingSource, "ElementType", true));
+            this.ElementTypeComboBox.FormattingEnabled = true;
+            this.ElementTypeComboBox.Location = new System.Drawing.Point(95, 23);
+            this.ElementTypeComboBox.Name = "ElementTypeComboBox";
+            this.ElementTypeComboBox.Size = new System.Drawing.Size(121, 21);
+            this.ElementTypeComboBox.TabIndex = 12;
+            // 
             // createExtensionClassParmsBindingSource
             // 
             this.createExtensionClassParmsBindingSource.DataSource = typeof(TRUDUtilsD365.CreateExtensionClass.CreateExtensionClassParms);
@@ -164,6 +167,7 @@
             // CreateExtensionClassDialog
             // 
             this.ClientSize = new System.Drawing.Size(571, 200);
+            this.Controls.Add(this.ElementTypeComboBox);
             this.Controls.Add(this.RestoreNameButton);
             this.Controls.Add(this.CreateClassButton);
             this.Controls.Add(this.label5);
@@ -173,7 +177,6 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.PrefixTextBox);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.ElementTypeTextBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.ElementNameTextBox);
             this.Name = "CreateExtensionClassDialog";
@@ -190,7 +193,6 @@
         private System.Windows.Forms.BindingSource createExtensionClassParmsBindingSource;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox ElementTypeTextBox;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox PrefixTextBox;
         private System.Windows.Forms.ComboBox comboBox1;
@@ -199,5 +201,6 @@
         private System.Windows.Forms.TextBox ResultClassNameTextBox;
         private System.Windows.Forms.Button CreateClassButton;
         private System.Windows.Forms.Button RestoreNameButton;
+        private System.Windows.Forms.ComboBox ElementTypeComboBox;
     }
 }

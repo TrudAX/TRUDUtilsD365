@@ -24,7 +24,8 @@ namespace TRUDUtilsD365.CreateExtensionClass
             
             parms = _parms;
 
-            this.comboBox1.DataSource = Enum.GetValues(_parms.ClassType.GetType());
+            this.comboBox1.DataSource           = Enum.GetValues(_parms.ClassType.GetType());
+            this.ElementTypeComboBox.DataSource = Enum.GetValues(_parms.ElementType.GetType());
 
             this.createExtensionClassParmsBindingSource.Add(parms);
 
@@ -62,6 +63,12 @@ namespace TRUDUtilsD365.CreateExtensionClass
         private void comboBox1_TextChanged(object sender, EventArgs e)
         {
             this.UpdateResult();
+        }
+
+        private void CreateClassButton_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.OK;
+            this.Close();
         }
     }
 }
