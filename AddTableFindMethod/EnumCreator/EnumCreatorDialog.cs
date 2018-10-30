@@ -27,5 +27,23 @@ namespace TRUDUtilsD365.EnumCreator
             DialogResult = DialogResult.OK;
             Close();
         }
+
+
+        private void IsCreateTypeCheckBox_CheckStateChanged(object sender, EventArgs e)
+        {
+            if (_parms.IsCreateEnumTypeModified())
+            { 
+                enumCreatorParmsBindingSource.ResetBindings(false);
+            }
+        }
+
+        private void EnumLabelTextBox_Validated(object sender, EventArgs e)
+        {
+            if (_parms.EnumLabelModified())
+            { 
+                enumCreatorParmsBindingSource.ResetBindings(false);
+            }
+        }
+
     }
 }

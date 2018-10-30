@@ -41,7 +41,7 @@
             this.TypeNameTextBox = new System.Windows.Forms.TextBox();
             this.IsCreateTypeCheckBox = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.EnumLableTextBox = new System.Windows.Forms.TextBox();
+            this.EnumLabelTextBox = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -154,13 +154,14 @@
             // IsCreateTypeCheckBox
             // 
             this.IsCreateTypeCheckBox.AutoSize = true;
-            this.IsCreateTypeCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.enumCreatorParmsBindingSource, "IsCreateEnumType", true));
+            this.IsCreateTypeCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.enumCreatorParmsBindingSource, "IsCreateEnumType", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.IsCreateTypeCheckBox.Location = new System.Drawing.Point(503, 21);
             this.IsCreateTypeCheckBox.Name = "IsCreateTypeCheckBox";
             this.IsCreateTypeCheckBox.Size = new System.Drawing.Size(82, 17);
             this.IsCreateTypeCheckBox.TabIndex = 10;
             this.IsCreateTypeCheckBox.Text = "Create EDT";
             this.IsCreateTypeCheckBox.UseVisualStyleBackColor = true;
+            this.IsCreateTypeCheckBox.CheckStateChanged += new System.EventHandler(this.IsCreateTypeCheckBox_CheckStateChanged);
             // 
             // label5
             // 
@@ -172,13 +173,14 @@
             this.label5.Text = "EDT name:";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // EnumLableTextBox
+            // EnumLabelTextBox
             // 
-            this.EnumLableTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.enumCreatorParmsBindingSource, "EnumLabel", true));
-            this.EnumLableTextBox.Location = new System.Drawing.Point(280, 21);
-            this.EnumLableTextBox.Name = "EnumLableTextBox";
-            this.EnumLableTextBox.Size = new System.Drawing.Size(189, 20);
-            this.EnumLableTextBox.TabIndex = 13;
+            this.EnumLabelTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.enumCreatorParmsBindingSource, "EnumLabel", true));
+            this.EnumLabelTextBox.Location = new System.Drawing.Point(280, 21);
+            this.EnumLabelTextBox.Name = "EnumLabelTextBox";
+            this.EnumLabelTextBox.Size = new System.Drawing.Size(189, 20);
+            this.EnumLabelTextBox.TabIndex = 13;
+            this.EnumLabelTextBox.Validated += new System.EventHandler(this.EnumLabelTextBox_Validated);
             // 
             // label6
             // 
@@ -251,7 +253,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.EnumLableTextBox);
+            this.Controls.Add(this.EnumLabelTextBox);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.IsCreateTypeCheckBox);
@@ -287,7 +289,7 @@
         private System.Windows.Forms.TextBox TypeNameTextBox;
         private System.Windows.Forms.CheckBox IsCreateTypeCheckBox;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox EnumLableTextBox;
+        private System.Windows.Forms.TextBox EnumLabelTextBox;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label7;

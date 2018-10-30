@@ -15,6 +15,14 @@ namespace TRUDUtilsD365.Kernel
     [SuppressMessage("ReSharper", "ConvertIfStatementToNullCoalescingExpression")]
     public class AxHelper
     {
+        public static string GetTypeNameFromLabel(string typeName)
+        {
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+
+            string res = textInfo.ToTitleCase(typeName).Replace(" ", "");
+
+            return res;
+        }
         private IMetadataProvider  _metadataProvider;
         private IMetaModelService  _metaModelService;
         private ModelSaveInfo      _modelSaveInfo;

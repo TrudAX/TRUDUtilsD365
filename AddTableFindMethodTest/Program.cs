@@ -7,6 +7,7 @@ using System.Windows.Forms;
 
 using TRUDUtilsD365.AddTableFindMethod;
 using TRUDUtilsD365.CreateExtensionClass;
+using TRUDUtilsD365.EnumCreator;
 
 namespace AddTableFindMethodTest
 {
@@ -22,7 +23,8 @@ namespace AddTableFindMethodTest
             Application.SetCompatibleTextRenderingDefault(false);
 
             //TestAddTableFindMethod();
-            TestCreateExtensionClass();
+            //TestCreateExtensionClass();
+            TestEnumCreator();
         }
 
         private static void TestCreateExtensionClass()
@@ -35,6 +37,16 @@ namespace AddTableFindMethodTest
             parms.ElementType = UtilElementType.Form;
             parms.Prefix = "MY";
             parms.ClassType = ExtensionClassType.EventHandler;
+
+            dialog.SetParameters(parms);
+
+            Application.Run(dialog);
+        }
+
+        private static void TestEnumCreator()
+        {
+            EnumCreatorDialog dialog = new EnumCreatorDialog();
+            EnumCreatorParms parms = new EnumCreatorParms();
 
             dialog.SetParameters(parms);
 

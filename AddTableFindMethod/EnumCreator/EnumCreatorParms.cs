@@ -10,18 +10,18 @@ namespace TRUDUtilsD365.EnumCreator
 {
     public class EnumCreatorParms
     {
-        public string EnumName { get; set; }
+        public string EnumName { get; set; } = "";
 
-        public string EnumLabel { get; set; }
-        public string EnumHelpText { get; set; }
+        public string EnumLabel { get; set; } = "";
+        public string EnumHelpText { get; set; } = "";
 
         public int EnumValueStartIndex { get; set; } = 0;
 
         public string ValuesSeparator { get; set; } = "|";
-        public string EnumValuesStr { get; set; }
+        public string EnumValuesStr { get; set; } = "";
 
         public Boolean IsCreateEnumType { get; set; }
-        public string EnumTypeName { get; set; }
+        public string EnumTypeName { get; set; } = "";
 
         public string GetPreviewString()
         {
@@ -31,7 +31,37 @@ namespace TRUDUtilsD365.EnumCreator
             {
                 stringBuilder.AppendLine($"Element name:{enumValue.Name}; Element label:{enumValue.Label};");
             }
+
+            if (this.IsCreateEnumType)
+            {
+                stringBuilder.AppendLine($"EDT {this.EnumTypeName} will be created");
+            }
+
             return stringBuilder.ToString();
+        }
+
+        public bool EnumLabelModified()
+        {
+            bool res = false;
+            if (EnumName == "" && EnumLabel != "")
+            {
+                EnumName = AxHelper.GetTypeNameFromLabel(EnumLabel);
+                res = true;
+            }
+            return res;
+        }
+        public bool IsCreateEnumTypeModified()
+        {
+            bool res = false;
+            if (IsCreateEnumType)
+            {
+                if (EnumTypeName == "")
+                {
+                    EnumTypeName = $@"{EnumName}Type";
+                    res = true;
+                }
+            }
+            return res;
         }
 
         private List<AxEnumValue> GetAxEnumValues()
