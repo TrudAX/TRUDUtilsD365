@@ -74,7 +74,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AddTableFindMethod\TRUDUtilsD365.csproj">
+    <ProjectReference Include="..\TRUDUtilsD365\TRUDUtilsD365.csproj">
       <Project>{3a63594b-16da-4edd-93c5-a38d01abdb10}</Project>
       <Name>TRUDUtilsD365</Name>
     </ProjectReference>
