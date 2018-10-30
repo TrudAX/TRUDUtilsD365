@@ -1,74 +1,67 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace TRUDUtilsD365.CreateExtensionClass
 {
     public partial class CreateExtensionClassDialog : Form
     {
-        CreateExtensionClassParms parms;
+        private CreateExtensionClassParms _parms;
 
 
         public CreateExtensionClassDialog()
         {
             InitializeComponent();
         }
-        public void setParameters(CreateExtensionClassParms _parms)
+
+        public void SetParameters(CreateExtensionClassParms parms)
         {
-            
-            parms = _parms;
+            _parms = parms;
 
-            this.comboBox1.DataSource           = Enum.GetValues(_parms.ClassType.GetType());
-            this.ElementTypeComboBox.DataSource = Enum.GetValues(_parms.ElementType.GetType());
+            comboBox1.DataSource = Enum.GetValues(parms.ClassType.GetType());
+            ElementTypeComboBox.DataSource = Enum.GetValues(parms.ElementType.GetType());
 
-            this.createExtensionClassParmsBindingSource.Add(parms);
+            createExtensionClassParmsBindingSource.Add(_parms);
 
-            this.UpdateResult();
+            UpdateResult();
         }
 
-        void UpdateResult()
+        private void UpdateResult()
         {
-            parms.calcResultName();
-            ResultClassNameTextBox.Text = parms.ResultClassName;
+            _parms.CalcResultName();
+            ResultClassNameTextBox.Text = _parms.ResultClassName;
         }
 
 
         private void RestoreNameButton_Click(object sender, EventArgs e)
         {
-            this.UpdateResult();
+            UpdateResult();
             //this.createExtensionClassParmsBindingSource.
         }
 
         private void ElementTypeTextBox_TextChanged(object sender, EventArgs e)
         {
-            this.UpdateResult();
+            UpdateResult();
         }
 
         private void PrefixTextBox_TextChanged(object sender, EventArgs e)
         {
-            this.UpdateResult();
+            UpdateResult();
         }
 
         private void ElementNameTextBox_TextChanged(object sender, EventArgs e)
         {
-            this.UpdateResult();
+            UpdateResult();
         }
 
         private void comboBox1_TextChanged(object sender, EventArgs e)
         {
-            this.UpdateResult();
+            UpdateResult();
         }
 
         private void CreateClassButton_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            DialogResult = DialogResult.OK;
+            Close();
         }
     }
 }

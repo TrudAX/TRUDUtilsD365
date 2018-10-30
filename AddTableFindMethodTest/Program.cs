@@ -36,7 +36,7 @@ namespace AddTableFindMethodTest
             parms.Prefix = "MY";
             parms.ClassType = ExtensionClassType.EventHandler;
 
-            dialog.setParameters(parms);
+            dialog.SetParameters(parms);
 
             Application.Run(dialog);
         }
@@ -50,13 +50,13 @@ namespace AddTableFindMethodTest
             //parms.MethodName = "find3";
             parms.IsTestMode = true;
             parms.TableName = "MyTable";
-            parms.fields = new List<AxTableField> {
+            parms.Fields = new List<AxTableField> {
                 new AxTableField { FieldName = "Field1",    FieldType = "Type1",    IsMandatory = true },
                 new AxTableField { FieldName = "Field2Big", FieldType = "Type2Big", IsMandatory = true },
                 new AxTableField { FieldName = "F3",        FieldType = "T3",       IsMandatory = false }
             };
 
-            dialog.setParameters(parms);
+            dialog.SetParameters(parms);
 
             Application.Run(dialog);
         }

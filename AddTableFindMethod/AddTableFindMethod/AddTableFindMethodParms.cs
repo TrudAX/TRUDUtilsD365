@@ -2,102 +2,100 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace TRUDUtilsD365.AddTableFindMethod
 {
     public class CodeGenerateHelper
     {
-        int     currentIndent       = 0;
-        String  currentIndentStr    = "";
-
-        int     currentLinePos      = 0;
-        bool    isIndentAppended    = false;
-
-        int     savedIndent;
-
-        Dictionary<string, int> columnAllignMap =
+        private readonly Dictionary<string, int> _columnAlignMap =
             new Dictionary<string, int>();
 
-        public StringBuilder resultString = new StringBuilder();
+        private int    _currentIndent;
+        private string _currentIndentStr = "";
+        private int    _currentLinePos;
+        private bool   _isIndentAppended;
+        private int    _savedIndent;
 
-        public void indentSetValue(int _value)
-        {
-            currentIndent = _value;
-            currentIndentStr = new String(' ', currentIndent);
-        }
+        public StringBuilder ResultString = new StringBuilder();
 
-        public void indentIncrease()
+        public void IndentSetValue(int value)
         {
-            currentIndent += 4;
-            currentIndentStr = new String(' ', currentIndent);
-        }
-        public void indentDecrease()
-        {
-            currentIndent -= 4;
-            currentIndent = Math.Max(currentIndent, 0);
-            currentIndentStr = new String(' ', currentIndent);
-        }
-        public void indentRestorePrev()
-        {
-            this.indentSetValue(savedIndent);
-        }
-        public void indentSetAsCurrentPos()
-        {
-            savedIndent         = currentIndent;
-            currentIndent       = currentLinePos;
-            currentIndentStr    = new String(' ', currentIndent);
+            _currentIndent = value;
+            _currentIndentStr = new string(' ', _currentIndent);
         }
 
-        public void appendLine(String _line)
+        public void IndentIncrease()
         {
-            resultString.AppendLine((isIndentAppended ? "" : currentIndentStr) + _line);
-            currentLinePos = currentIndent;
-
-            isIndentAppended = false;
-        }
-        public void append(String _line, string  _format = "")
-        {
-            String textToAppend = (isIndentAppended ? "" : currentIndentStr) + (_format == "" ? _line : this.getFormatedValue(_line, _format));
-            resultString.Append(textToAppend);
-            currentLinePos = textToAppend.Length;
-            isIndentAppended = true;
+            _currentIndent += 4;
+            _currentIndentStr = new string(' ', _currentIndent);
         }
 
-        public string getFormatedValue(String _value, string _formatStr)
+        public void IndentDecrease()
         {
-            return _value.PadRight(columnAllignMap[_formatStr]);
+            _currentIndent -= 4;
+            _currentIndent = Math.Max(_currentIndent, 0);
+            _currentIndentStr = new string(' ', _currentIndent);
         }
 
-        public void AddColumnAlignInt(string _name, int _value)
+        public void IndentRestorePrev()
         {
-            if (!columnAllignMap.ContainsKey(_name))
-            {
-                columnAllignMap.Add(_name, _value);
-            }
-            if (columnAllignMap[_name] < _value)
-            {
-                columnAllignMap[_name] = _value;
-            }
-
+            IndentSetValue(_savedIndent);
         }
-        public void addColumnAllign(string _name, String _value)
+
+        public void IndentSetAsCurrentPos()
         {
-            int keyValue = _value.Length;
-            this.AddColumnAlignInt(_name, keyValue);           
+            _savedIndent = _currentIndent;
+            _currentIndent = _currentLinePos;
+            _currentIndentStr = new string(' ', _currentIndent);
+        }
+
+        public void AppendLine(string line)
+        {
+            ResultString.AppendLine((_isIndentAppended ? "" : _currentIndentStr) + line);
+            _currentLinePos = _currentIndent;
+
+            _isIndentAppended = false;
+        }
+
+        public void Append(string line, string format = "")
+        {
+            string textToAppend = (_isIndentAppended ? "" : _currentIndentStr) +
+                                  (format == "" ? line : GetFormattedValue(line, format));
+            ResultString.Append(textToAppend);
+            _currentLinePos = textToAppend.Length;
+            _isIndentAppended = true;
+        }
+
+        public string GetFormattedValue(string value, string formatStr)
+        {
+            return value.PadRight(_columnAlignMap[formatStr]);
+        }
+
+        public void AddColumnAlignInt(string name, int value)
+        {
+            if (!_columnAlignMap.ContainsKey(name)) _columnAlignMap.Add(name, value);
+            if (_columnAlignMap[name] < value) _columnAlignMap[name] = value;
+        }
+
+        public void AddColumnAlign(string name, string value)
+        {
+            int keyValue = value.Length;
+            AddColumnAlignInt(name, keyValue);
         }
     }
+
     public class AxTableField
     {
         public string FieldName { get; set; }
         public string FieldType { get; set; }
-        public bool   IsMandatory { get; set; }
+        public bool IsMandatory { get; set; }
 
         public int Position { get; set; }
-
     }
+
     public class AddTableFindMethodParms
     {
+        public List<AxTableField> Fields;
         public string TableName { get; set; }
         public string FieldsStr { get; set; }
         public string MethodName { get; set; } = "find";
@@ -106,234 +104,219 @@ namespace TRUDUtilsD365.AddTableFindMethod
         public bool IsCreateFindRecId { get; set; }
         public bool IsCreateExists { get; set; }
 
-        public List<AxTableField> fields;
-
         public bool IsTestMode { get; set; }
 
-        public static string prettyName(string _input)
+        public static string PrettyName(string input)
         {
-            if (String.IsNullOrEmpty(_input))
-            {
-                return "";
-            }
-            return _input.First().ToString().ToLower() + _input.Substring(1);
+            if (string.IsNullOrEmpty(input)) return "";
+            return input.First().ToString().ToLower() + input.Substring(1);
         }
 
-        public string generateResult()
+        public string GenerateResult()
         {
-            int longestNameLength = (from x in fields select x.FieldName.Length).Max();
-            int longestTypeLength = (from x in fields select x.FieldType.Length).Max();
+            int longestNameLength = (from x in Fields select x.FieldName.Length).Max();
+            int longestTypeLength = (from x in Fields select x.FieldType.Length).Max();
             longestTypeLength = Math.Max("boolean".Length, longestTypeLength);
 
             CodeGenerateHelper generateHelper = new CodeGenerateHelper();
 
-            generateHelper.AddColumnAlignInt("Type",      longestTypeLength);
+            generateHelper.AddColumnAlignInt("Type", longestTypeLength);
             generateHelper.AddColumnAlignInt("FieldName", longestNameLength);
 
 
-            string varName = AddTableFindMethodParms.prettyName(this.TableName);
+            string varName = PrettyName(TableName);
             string mandatoryFields;
 
-            if (this.IsCreateFind)
+            if (IsCreateFind)
             {
-                generateHelper.append($"public static {this.TableName} find(");
-                generateHelper.indentSetAsCurrentPos();
+                generateHelper.Append($"public static {TableName} find(");
+                generateHelper.IndentSetAsCurrentPos();
 
                 // build args and mandatory fields list
                 mandatoryFields = "";
                 bool isFirst = true;
-                foreach (AxTableField df in fields.OrderBy(x=>x.Position))
+                foreach (AxTableField df in Fields.OrderBy(x => x.Position))
                 {
                     if (df.IsMandatory || df.FieldName == "RecId")
                     {
-                        if (mandatoryFields.Length > 0)
-                        {
-                            mandatoryFields += " && ";
-                        }
-                        mandatoryFields += "_" + prettyName(df.FieldName);
+                        if (mandatoryFields.Length > 0) mandatoryFields += " && ";
+                        mandatoryFields += "_" + PrettyName(df.FieldName);
                     }
-                    if (!isFirst)
-                    {
-                        generateHelper.appendLine(",");
-                    }
-                    generateHelper.append(df.FieldType, "Type");
-                    generateHelper.append($" _{prettyName(df.FieldName)}");
+
+                    if (!isFirst) generateHelper.AppendLine(",");
+                    generateHelper.Append(df.FieldType, "Type");
+                    generateHelper.Append($" _{PrettyName(df.FieldName)}");
                     isFirst = false;
                 }
-                generateHelper.appendLine(",");
-                generateHelper.append("boolean", "Type");
-                generateHelper.appendLine(" _forUpdate = false)");
+
+                generateHelper.AppendLine(",");
+                generateHelper.Append("boolean", "Type");
+                generateHelper.AppendLine(" _forUpdate = false)");
 
                 //build method header
-                generateHelper.indentSetValue(0);
-                generateHelper.appendLine("{");
-                generateHelper.indentIncrease();
+                generateHelper.IndentSetValue(0);
+                generateHelper.AppendLine("{");
+                generateHelper.IndentIncrease();
 
-                generateHelper.appendLine(this.TableName + " " + varName + ";");
-                generateHelper.appendLine(";");
+                generateHelper.AppendLine(TableName + " " + varName + ";");
+                generateHelper.AppendLine(";");
 
                 //check for mandatory fields
                 if (mandatoryFields != "")
                 {
-                    generateHelper.appendLine("if (" + mandatoryFields + ")");
-                    generateHelper.appendLine("{");
-                    generateHelper.indentIncrease();
+                    generateHelper.AppendLine("if (" + mandatoryFields + ")");
+                    generateHelper.AppendLine("{");
+                    generateHelper.IndentIncrease();
                 }
 
                 //selectForUpdate
-                generateHelper.appendLine(varName + ".selectForUpdate(_forUpdate);");
-                generateHelper.appendLine("");
+                generateHelper.AppendLine(varName + ".selectForUpdate(_forUpdate);");
+                generateHelper.AppendLine("");
 
                 //build select query
-                generateHelper.appendLine("select firstonly " + varName);
-                generateHelper.append("    where ");
-                generateHelper.indentSetAsCurrentPos();
+                generateHelper.AppendLine("select firstonly " + varName);
+                generateHelper.Append("    where ");
+                generateHelper.IndentSetAsCurrentPos();
 
                 isFirst = true;
-                foreach (AxTableField df in fields.OrderBy(x => x.Position))
+                foreach (AxTableField df in Fields.OrderBy(x => x.Position))
                 {
-                    if (!isFirst)
-                    {
-                        generateHelper.appendLine(" && ");
-                    }
-                    generateHelper.append(varName + ".");
-                    generateHelper.append(df.FieldName, "FieldName");
+                    if (!isFirst) generateHelper.AppendLine(" && ");
+                    generateHelper.Append(varName + ".");
+                    generateHelper.Append(df.FieldName, "FieldName");
 
-                    generateHelper.append(" == _" + prettyName(df.FieldName));
+                    generateHelper.Append(" == _" + PrettyName(df.FieldName));
                     isFirst = false;
                 }
-                generateHelper.indentRestorePrev();
-                generateHelper.appendLine(";");
+
+                generateHelper.IndentRestorePrev();
+                generateHelper.AppendLine(";");
 
                 //footer
                 if (mandatoryFields != "")
                 {
-                    generateHelper.indentDecrease();
-                    generateHelper.appendLine("}");
-
+                    generateHelper.IndentDecrease();
+                    generateHelper.AppendLine("}");
                 }
-                generateHelper.appendLine("");
-                generateHelper.appendLine("return " + varName + ";");
-                generateHelper.indentDecrease();
 
-                generateHelper.appendLine("}");
+                generateHelper.AppendLine("");
+                generateHelper.AppendLine("return " + varName + ";");
+                generateHelper.IndentDecrease();
 
+                generateHelper.AppendLine("}");
             }
-            if (this.IsCreateFindRecId)
-            {
-                generateHelper.indentSetValue(0);
 
-                generateHelper.appendLine("");
-                generateHelper.appendLine($"public static {this.TableName} findRecId(RefRecId _recId,  _forUpdate = false)");
+            if (IsCreateFindRecId)
+            {
+                generateHelper.IndentSetValue(0);
+
+                generateHelper.AppendLine("");
+                generateHelper.AppendLine($"public static {TableName} findRecId(RefRecId _recId,  _forUpdate = false)");
 
                 //build method header
-                generateHelper.appendLine("{");
-                generateHelper.indentIncrease();
-                generateHelper.appendLine(this.TableName + " " + varName + ";");
-                generateHelper.appendLine(";");
+                generateHelper.AppendLine("{");
+                generateHelper.IndentIncrease();
+                generateHelper.AppendLine(TableName + " " + varName + ";");
+                generateHelper.AppendLine(";");
 
-                generateHelper.appendLine("if (_recId)");
-                generateHelper.appendLine("{");
-                generateHelper.indentIncrease();
+                generateHelper.AppendLine("if (_recId)");
+                generateHelper.AppendLine("{");
+                generateHelper.IndentIncrease();
 
                 //selectForUpdate
-                generateHelper.appendLine(varName + ".selectForUpdate(_forUpdate);");
-                generateHelper.appendLine("");
+                generateHelper.AppendLine(varName + ".selectForUpdate(_forUpdate);");
+                generateHelper.AppendLine("");
 
                 //build select query
-                generateHelper.appendLine("select firstonly " + varName);
-                generateHelper.appendLine("    where " + varName + ".RecId == _recId;");
-                generateHelper.indentDecrease();
-                generateHelper.appendLine("}");
-                generateHelper.appendLine("");
-                generateHelper.appendLine("return " + varName + ";");
-                generateHelper.indentDecrease();
+                generateHelper.AppendLine("select firstonly " + varName);
+                generateHelper.AppendLine("    where " + varName + ".RecId == _recId;");
+                generateHelper.IndentDecrease();
+                generateHelper.AppendLine("}");
+                generateHelper.AppendLine("");
+                generateHelper.AppendLine("return " + varName + ";");
+                generateHelper.IndentDecrease();
 
-                generateHelper.appendLine("}");
+                generateHelper.AppendLine("}");
             }
-            if (this.IsCreateExists)
-            {
-                generateHelper.indentSetValue(0);
-                generateHelper.appendLine("");
 
-                generateHelper.append($"public static boolean exists(");
-                generateHelper.indentSetAsCurrentPos();
+            if (IsCreateExists)
+            {
+                generateHelper.IndentSetValue(0);
+                generateHelper.AppendLine("");
+
+                generateHelper.Append("public static boolean exists(");
+                generateHelper.IndentSetAsCurrentPos();
 
                 // build args and mandatory fields list
                 mandatoryFields = "";
                 bool isFirst = true;
-                foreach (AxTableField df in fields.OrderBy(x => x.Position))
+                foreach (AxTableField df in Fields.OrderBy(x => x.Position))
                 {
                     if (df.IsMandatory || df.FieldName == "RecId")
                     {
-                        if (mandatoryFields.Length > 0)
-                        {
-                            mandatoryFields += " && ";
-                        }
-                        mandatoryFields += "_" + prettyName(df.FieldName);
+                        if (mandatoryFields.Length > 0) mandatoryFields += " && ";
+                        mandatoryFields += "_" + PrettyName(df.FieldName);
                     }
-                    if (!isFirst)
-                    {
-                        generateHelper.appendLine(",");
-                    }
-                    generateHelper.append(df.FieldType, "Type");
-                    generateHelper.append(String.Format(" _{0}", prettyName(df.FieldName)));
+
+                    if (!isFirst) generateHelper.AppendLine(",");
+                    generateHelper.Append(df.FieldType, "Type");
+                    generateHelper.Append($" _{PrettyName(df.FieldName)}");
                     isFirst = false;
                 }
-                generateHelper.appendLine(")");
+
+                generateHelper.AppendLine(")");
 
                 //build method header
-                generateHelper.indentSetValue(0);
-                generateHelper.appendLine("{");
-                generateHelper.indentIncrease();
+                generateHelper.IndentSetValue(0);
+                generateHelper.AppendLine("{");
+                generateHelper.IndentIncrease();
 
-                generateHelper.appendLine("boolean res;");
-                generateHelper.appendLine(";");
+                generateHelper.AppendLine("boolean res;");
+                generateHelper.AppendLine(";");
 
                 //check for mandatory fields
                 if (mandatoryFields != "")
                 {
-                    generateHelper.appendLine("if (" + mandatoryFields + ")");
-                    generateHelper.appendLine("{");
-                    generateHelper.indentIncrease();
+                    generateHelper.AppendLine("if (" + mandatoryFields + ")");
+                    generateHelper.AppendLine("{");
+                    generateHelper.IndentIncrease();
                 }
 
 
                 //build select query
-                generateHelper.appendLine("res = (select firstonly RecId from " + this.TableName);
-                generateHelper.append("        where ");
-                generateHelper.indentSetAsCurrentPos();
+                generateHelper.AppendLine("res = (select firstonly RecId from " + TableName);
+                generateHelper.Append("        where ");
+                generateHelper.IndentSetAsCurrentPos();
 
                 isFirst = true;
-                foreach (AxTableField df in fields.OrderBy(x => x.Position))
+                foreach (AxTableField df in Fields.OrderBy(x => x.Position))
                 {
-                    if (!isFirst)
-                    {
-                        generateHelper.appendLine(" && ");
-                    }
-                    generateHelper.append(this.TableName + ".");
-                    generateHelper.append(df.FieldName, "FieldName");
+                    if (!isFirst) generateHelper.AppendLine(" && ");
+                    generateHelper.Append(TableName + ".");
+                    generateHelper.Append(df.FieldName, "FieldName");
 
-                    generateHelper.append(" == _" + prettyName(df.FieldName));
+                    generateHelper.Append(" == _" + PrettyName(df.FieldName));
                     isFirst = false;
                 }
-                generateHelper.indentRestorePrev();
-                generateHelper.appendLine(").RecId != 0;");
+
+                generateHelper.IndentRestorePrev();
+                generateHelper.AppendLine(").RecId != 0;");
 
                 //footer
                 if (mandatoryFields != "")
                 {
-                    generateHelper.indentDecrease();
-                    generateHelper.appendLine("}");
-
+                    generateHelper.IndentDecrease();
+                    generateHelper.AppendLine("}");
                 }
-                generateHelper.appendLine("");
-                generateHelper.appendLine("return res;");
-                generateHelper.indentDecrease();
 
-                generateHelper.appendLine("}");
+                generateHelper.AppendLine("");
+                generateHelper.AppendLine("return res;");
+                generateHelper.IndentDecrease();
+
+                generateHelper.AppendLine("}");
             }
-            var methodText = generateHelper.resultString.ToString();
+
+            var methodText = generateHelper.ResultString.ToString();
 
             return methodText;
         }

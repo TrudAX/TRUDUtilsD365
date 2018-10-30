@@ -1,34 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace TRUDUtilsD365.AddTableFindMethod
 {
     public partial class AddTableFindMethodDialog : Form
     {
-        AddTableFindMethodParms parms;
+        private AddTableFindMethodParms _parms;
 
         public AddTableFindMethodDialog()
         {
             InitializeComponent();
         }
 
-        public void setParameters(AddTableFindMethodParms _parms)
+        public void SetParameters(AddTableFindMethodParms parms)
         {
-            parms = _parms;
+            _parms = parms;
 
-            this.addTableFindMethodParmsBindingSource.Add(parms);
+            addTableFindMethodParmsBindingSource.Add(_parms);
 
             MethodTypeCheckedListBox.Items.Clear();
-            MethodTypeCheckedListBox.Items.Add("find",      parms.IsCreateFind);
-            MethodTypeCheckedListBox.Items.Add("exists",    parms.IsCreateExists);
-            MethodTypeCheckedListBox.Items.Add("findRecId", parms.IsCreateFindRecId);
+            MethodTypeCheckedListBox.Items.Add("find", _parms.IsCreateFind);
+            MethodTypeCheckedListBox.Items.Add("exists", _parms.IsCreateExists);
+            MethodTypeCheckedListBox.Items.Add("findRecId", _parms.IsCreateFindRecId);
 
 
             //BindingList<AddTableFindMethodParms> bookProperty = new BindingList<AddTableFindMethodParms>();
@@ -36,47 +29,44 @@ namespace TRUDUtilsD365.AddTableFindMethod
             //MethodNameControl.DataBindings.Add("Text", bookProperty[0], "MethodName");
             //MethodNameControl.DataBindings.Add("Text", parms, "MethodName", false, DataSourceUpdateMode.OnPropertyChanged);
         }
-        void updateFromForm()
+
+        private void UpdateFromForm()
         {
-            for (int i = 0; i <= (MethodTypeCheckedListBox.Items.Count - 1); i++)
+            for (int i = 0; i <= MethodTypeCheckedListBox.Items.Count - 1; i++)
             {
                 var itemLoc = MethodTypeCheckedListBox.Items[i];
-                switch(itemLoc.ToString())
+                switch (itemLoc.ToString())
                 {
                     case "find":
-                        parms.IsCreateFind = MethodTypeCheckedListBox.GetItemChecked(i);
+                        _parms.IsCreateFind = MethodTypeCheckedListBox.GetItemChecked(i);
                         break;
                     case "findRecId":
-                        parms.IsCreateFindRecId = MethodTypeCheckedListBox.GetItemChecked(i);
+                        _parms.IsCreateFindRecId = MethodTypeCheckedListBox.GetItemChecked(i);
                         break;
                     case "exists":
-                        parms.IsCreateExists = MethodTypeCheckedListBox.GetItemChecked(i);
+                        _parms.IsCreateExists = MethodTypeCheckedListBox.GetItemChecked(i);
                         break;
                 }
-                
             }
         }
 
         private void ShowResultButton_Click(object sender, EventArgs e)
         {
-            this.updateFromForm();
+            UpdateFromForm();
 
-            ResultTextBox.Text = parms.generateResult();
+            ResultTextBox.Text = _parms.GenerateResult();
         }
 
         private void label3_Click(object sender, EventArgs e)
         {
-
         }
 
         private void MethodNameControl_TextChanged(object sender, EventArgs e)
         {
-
         }
 
         private void TableNameControl_TextChanged(object sender, EventArgs e)
         {
-
         }
     }
 }

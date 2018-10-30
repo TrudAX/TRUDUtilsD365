@@ -75,6 +75,14 @@
     </Compile>
     <Compile Include="CreateExtensionClass\CreateExtensionClassParms.cs" />
     <Compile Include="CreateExtensionClass\DesignerCreateExtensionClass.cs" />
+    <Compile Include="EnumCreator\EnumCreatorDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EnumCreator\EnumCreatorDialog.Designer.cs">
+      <DependentUpon>EnumCreatorDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EnumCreator\EnumCreatorMenu.cs" />
+    <Compile Include="EnumCreator\EnumCreatorParms.cs" />
     <Compile Include="Kernel\AxHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -85,10 +93,14 @@
     <EmbeddedResource Include="CreateExtensionClass\CreateExtensionClassDialog.resx">
       <DependentUpon>CreateExtensionClassDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="EnumCreator\EnumCreatorDialog.resx">
+      <DependentUpon>EnumCreatorDialog.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\DataSources\AddTableFindMethodParms.datasource" />
     <None Include="Properties\DataSources\TRUDUtilsD365.CreateExtensionClass.CreateExtensionClassParms.datasource" />
+    <None Include="Properties\DataSources\TRUDUtilsD365.EnumCreator.EnumCreatorParms.datasource" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

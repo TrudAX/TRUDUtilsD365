@@ -1,96 +1,90 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Dynamics.AX.Metadata.Core.MetaModel;
-using Microsoft.Dynamics.Framework.Tools.MetaModel.Core;
-using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation;
-using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Tables;
-using Microsoft.Dynamics.Framework.Tools.ProjectSystem;
-
-using Metadata = Microsoft.Dynamics.AX.Metadata;
-using Microsoft.Dynamics.AX.Metadata.MetaModel;
-using Microsoft.Dynamics.Framework.Tools.Extensibility;
-using EnvDTE;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using EnvDTE;
+using Microsoft.Dynamics.AX.Metadata.Core.MetaModel;
+using Microsoft.Dynamics.AX.Metadata.MetaModel;
+using Microsoft.Dynamics.AX.Metadata.Providers;
+using Microsoft.Dynamics.AX.Metadata.Service;
+using Microsoft.Dynamics.Framework.Tools.MetaModel.Core;
+using Microsoft.Dynamics.Framework.Tools.ProjectSystem;
 
 namespace TRUDUtilsD365.Kernel
 {
+    [SuppressMessage("ReSharper", "ConvertIfStatementToNullCoalescingExpression")]
     public class AxHelper
     {
-        private Metadata.Providers.IMetadataProvider metadataProvider = null;
-        private Metadata.Service.IMetaModelService metaModelService = null;
-        private Metadata.MetaModel.ModelSaveInfo modelSaveInfo = null;
+        private IMetadataProvider  _metadataProvider;
+        private IMetaModelService  _metaModelService;
+        private ModelSaveInfo      _modelSaveInfo;
 
-        public Metadata.Providers.IMetadataProvider MetadataProvider
+        public IMetadataProvider MetadataProvider
         {
             get
             {
-                if (this.metadataProvider == null)
+                if (_metadataProvider == null)
                 {
-                    this.metadataProvider = DesignMetaModelService.Instance.CurrentMetadataProvider;
+                    _metadataProvider = DesignMetaModelService.Instance.CurrentMetadataProvider;
                 }
-                return this.metadataProvider;
+
+                return _metadataProvider;
             }
         }
-        public Metadata.MetaModel.ModelSaveInfo ModelSaveInfo
+
+        public ModelSaveInfo ModelSaveInfo
         {
             get
             {
-                if (this.modelSaveInfo == null)
+                if (_modelSaveInfo == null)
                 {
-                    VSProjectNode activeProjectNode = AxHelper.GetActiveProjectNode();
+                    VSProjectNode activeProjectNode = GetActiveProjectNode();
                     var modelInfo = activeProjectNode.GetProjectsModelInfo(true);
-                    modelSaveInfo = new Metadata.MetaModel.ModelSaveInfo(modelInfo);
+                    _modelSaveInfo = new ModelSaveInfo(modelInfo);
                 }
 
-                return modelSaveInfo;
+                return _modelSaveInfo;
             }
         }
 
-        public Metadata.Service.IMetaModelService MetaModelService
+        public IMetaModelService MetaModelService
         {
             get
             {
-                if (this.metaModelService == null)
+                if (_metaModelService == null)
                 {
-                    this.metaModelService = DesignMetaModelService.Instance.CurrentMetaModelService;
+                    _metaModelService = DesignMetaModelService.Instance.CurrentMetaModelService;
                 }
-                return this.metaModelService;
+
+                return _metaModelService;
             }
         }
 
-        static VSProjectNode GetActiveProjectNode()
+        private static VSProjectNode GetActiveProjectNode()
         {
             DTE dte = CoreUtility.ServiceProvider.GetService(typeof(DTE)) as DTE;
             if (dte == null)
-            {
-                throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, "No service for DTE found. The DTE must be registered as a service for using this API.", new object[0]));
-            }
+                throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture,
+                    "No service for DTE found. The DTE must be registered as a service for using this API."));
 
             Array array = dte.ActiveSolutionProjects as Array;
             if (array != null && array.Length > 0)
             {
                 Project project = array.GetValue(0) as Project;
-                if (project != null)
-                {
-                    return project.Object as VSProjectNode;
-                }
+                if (project != null) return project.Object as VSProjectNode;
             }
+
             return null;
         }
 
-        public  void AppendToActiveProject(INamedObject edt)
+        public void AppendToActiveProject(INamedObject edt)
         {
-            
-            VSProjectNode activeProjectNode = AxHelper.GetActiveProjectNode();
+            VSProjectNode activeProjectNode = GetActiveProjectNode();
 
             activeProjectNode.AddModelElementsToProject(new List<MetadataReference>
             {
                 new MetadataReference(edt.Name, edt.GetType())
             });
-
         }
     }
 }
