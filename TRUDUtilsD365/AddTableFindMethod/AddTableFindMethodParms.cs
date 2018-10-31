@@ -16,25 +16,27 @@ namespace TRUDUtilsD365.AddTableFindMethod
         private bool   _isIndentAppended;
         private int    _savedIndent;
 
+        public int IndentGlobalValue { get; set; } = 0;
+
         public StringBuilder ResultString = new StringBuilder();
 
         public void IndentSetValue(int value)
         {
             _currentIndent = value;
-            _currentIndentStr = new string(' ', _currentIndent);
+            _currentIndentStr = new string(' ', _currentIndent + IndentGlobalValue);
         }
 
         public void IndentIncrease()
         {
             _currentIndent += 4;
-            _currentIndentStr = new string(' ', _currentIndent);
+            _currentIndentStr = new string(' ', _currentIndent + IndentGlobalValue);
         }
 
         public void IndentDecrease()
         {
             _currentIndent -= 4;
             _currentIndent = Math.Max(_currentIndent, 0);
-            _currentIndentStr = new string(' ', _currentIndent);
+            _currentIndentStr = new string(' ', _currentIndent + IndentGlobalValue);
         }
 
         public void IndentRestorePrev()
@@ -46,7 +48,7 @@ namespace TRUDUtilsD365.AddTableFindMethod
         {
             _savedIndent = _currentIndent;
             _currentIndent = _currentLinePos;
-            _currentIndentStr = new string(' ', _currentIndent);
+            _currentIndentStr = new string(' ', _currentIndent + IndentGlobalValue);
         }
 
         public void AppendLine(string line)
@@ -84,7 +86,7 @@ namespace TRUDUtilsD365.AddTableFindMethod
         }
     }
 
-    public class AxTableField
+    public class AxTableFieldParm
     {
         public string FieldName { get; set; }
         public string FieldType { get; set; }
@@ -95,7 +97,8 @@ namespace TRUDUtilsD365.AddTableFindMethod
 
     public class AddTableFindMethodParms
     {
-        public List<AxTableField> Fields;
+        public List<AxTableFieldParm> Fields;
+        public string VarName { get; set; } = "";
         public string TableName { get; set; }
         public string FieldsStr { get; set; }
         public string MethodName { get; set; } = "find";
@@ -119,12 +122,16 @@ namespace TRUDUtilsD365.AddTableFindMethod
             longestTypeLength = Math.Max("boolean".Length, longestTypeLength);
 
             CodeGenerateHelper generateHelper = new CodeGenerateHelper();
+            generateHelper.IndentGlobalValue = 4;
 
             generateHelper.AddColumnAlignInt("Type", longestTypeLength);
             generateHelper.AddColumnAlignInt("FieldName", longestNameLength);
 
+            if (VarName == "")
+            {            
+                VarName = PrettyName(TableName);
+            }
 
-            string varName = PrettyName(TableName);
             string mandatoryFields;
 
             if (IsCreateFind)
@@ -135,7 +142,7 @@ namespace TRUDUtilsD365.AddTableFindMethod
                 // build args and mandatory fields list
                 mandatoryFields = "";
                 bool isFirst = true;
-                foreach (AxTableField df in Fields.OrderBy(x => x.Position))
+                foreach (AxTableFieldParm df in Fields.OrderBy(x => x.Position))
                 {
                     if (df.IsMandatory || df.FieldName == "RecId")
                     {
@@ -158,7 +165,7 @@ namespace TRUDUtilsD365.AddTableFindMethod
                 generateHelper.AppendLine("{");
                 generateHelper.IndentIncrease();
 
-                generateHelper.AppendLine(TableName + " " + varName + ";");
+                generateHelper.AppendLine(TableName + " " + VarName + ";");
                 generateHelper.AppendLine(";");
 
                 //check for mandatory fields
@@ -170,19 +177,19 @@ namespace TRUDUtilsD365.AddTableFindMethod
                 }
 
                 //selectForUpdate
-                generateHelper.AppendLine(varName + ".selectForUpdate(_forUpdate);");
+                generateHelper.AppendLine(VarName + ".selectForUpdate(_forUpdate);");
                 generateHelper.AppendLine("");
 
                 //build select query
-                generateHelper.AppendLine("select firstonly " + varName);
+                generateHelper.AppendLine("select firstonly " + VarName);
                 generateHelper.Append("    where ");
                 generateHelper.IndentSetAsCurrentPos();
 
                 isFirst = true;
-                foreach (AxTableField df in Fields.OrderBy(x => x.Position))
+                foreach (AxTableFieldParm df in Fields.OrderBy(x => x.Position))
                 {
                     if (!isFirst) generateHelper.AppendLine(" && ");
-                    generateHelper.Append(varName + ".");
+                    generateHelper.Append(VarName + ".");
                     generateHelper.Append(df.FieldName, "FieldName");
 
                     generateHelper.Append(" == _" + PrettyName(df.FieldName));
@@ -200,7 +207,7 @@ namespace TRUDUtilsD365.AddTableFindMethod
                 }
 
                 generateHelper.AppendLine("");
-                generateHelper.AppendLine("return " + varName + ";");
+                generateHelper.AppendLine("return " + VarName + ";");
                 generateHelper.IndentDecrease();
 
                 generateHelper.AppendLine("}");
@@ -216,7 +223,7 @@ namespace TRUDUtilsD365.AddTableFindMethod
                 //build method header
                 generateHelper.AppendLine("{");
                 generateHelper.IndentIncrease();
-                generateHelper.AppendLine(TableName + " " + varName + ";");
+                generateHelper.AppendLine(TableName + " " + VarName + ";");
                 generateHelper.AppendLine(";");
 
                 generateHelper.AppendLine("if (_recId)");
@@ -224,16 +231,16 @@ namespace TRUDUtilsD365.AddTableFindMethod
                 generateHelper.IndentIncrease();
 
                 //selectForUpdate
-                generateHelper.AppendLine(varName + ".selectForUpdate(_forUpdate);");
+                generateHelper.AppendLine(VarName + ".selectForUpdate(_forUpdate);");
                 generateHelper.AppendLine("");
 
                 //build select query
-                generateHelper.AppendLine("select firstonly " + varName);
-                generateHelper.AppendLine("    where " + varName + ".RecId == _recId;");
+                generateHelper.AppendLine("select firstonly " + VarName);
+                generateHelper.AppendLine("    where " + VarName + ".RecId == _recId;");
                 generateHelper.IndentDecrease();
                 generateHelper.AppendLine("}");
                 generateHelper.AppendLine("");
-                generateHelper.AppendLine("return " + varName + ";");
+                generateHelper.AppendLine("return " + VarName + ";");
                 generateHelper.IndentDecrease();
 
                 generateHelper.AppendLine("}");
@@ -250,7 +257,7 @@ namespace TRUDUtilsD365.AddTableFindMethod
                 // build args and mandatory fields list
                 mandatoryFields = "";
                 bool isFirst = true;
-                foreach (AxTableField df in Fields.OrderBy(x => x.Position))
+                foreach (AxTableFieldParm df in Fields.OrderBy(x => x.Position))
                 {
                     if (df.IsMandatory || df.FieldName == "RecId")
                     {
@@ -289,7 +296,7 @@ namespace TRUDUtilsD365.AddTableFindMethod
                 generateHelper.IndentSetAsCurrentPos();
 
                 isFirst = true;
-                foreach (AxTableField df in Fields.OrderBy(x => x.Position))
+                foreach (AxTableFieldParm df in Fields.OrderBy(x => x.Position))
                 {
                     if (!isFirst) generateHelper.AppendLine(" && ");
                     generateHelper.Append(TableName + ".");

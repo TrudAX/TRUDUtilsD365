@@ -62,10 +62,10 @@ namespace AddTableFindMethodTest
             //parms.MethodName = "find3";
             parms.IsTestMode = true;
             parms.TableName = "MyTable";
-            parms.Fields = new List<AxTableField> {
-                new AxTableField { FieldName = "Field1",    FieldType = "Type1",    IsMandatory = true },
-                new AxTableField { FieldName = "Field2Big", FieldType = "Type2Big", IsMandatory = true },
-                new AxTableField { FieldName = "F3",        FieldType = "T3",       IsMandatory = false }
+            parms.Fields = new List<AxTableFieldParm> {
+                new AxTableFieldParm { FieldName = "Field1",    FieldType = "Type1",    IsMandatory = true },
+                new AxTableFieldParm { FieldName = "Field2Big", FieldType = "Type2Big", IsMandatory = true },
+                new AxTableFieldParm { FieldName = "F3",        FieldType = "T3",       IsMandatory = false }
             };
 
             dialog.SetParameters(parms);
