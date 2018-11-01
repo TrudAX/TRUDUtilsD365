@@ -94,7 +94,8 @@ namespace TRUDUtilsD365.EnumCreator
                 else
                 {
                     enumLabelLocal = lineImp.Trim();
-                    enumNameLocal = textInfo.ToTitleCase(enumLabelLocal).Replace(" ", "");
+                    enumNameLocal = AxHelper.GetTypeNameFromLabel(enumLabelLocal);
+                    //enumNameLocal = textInfo.ToTitleCase(enumLabelLocal).Replace(" ", "");
                 }
 
                 isFirstElement = false;

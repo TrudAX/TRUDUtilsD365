@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using TRUDUtilsD365.AddTableFindMethod;
 using TRUDUtilsD365.CreateExtensionClass;
 using TRUDUtilsD365.EnumCreator;
+using TRUDUtilsD365.TableFieldsBuilder;
 
 namespace AddTableFindMethodTest
 {
@@ -24,7 +25,20 @@ namespace AddTableFindMethodTest
 
             //TestAddTableFindMethod();
             //TestCreateExtensionClass();
-            TestEnumCreator();
+            //TestEnumCreator();
+            TestTableFieldsBuilder();
+        }
+
+        private static void TestTableFieldsBuilder()
+        {
+            TableFieldsBuilderDialog dialog = new TableFieldsBuilderDialog();
+
+            TableFieldsBuilderParms parms = new TableFieldsBuilderParms();
+            parms.TableName = "CustTable";            
+
+            dialog.SetParameters(parms);
+
+            Application.Run(dialog);
         }
 
         private static void TestCreateExtensionClass()

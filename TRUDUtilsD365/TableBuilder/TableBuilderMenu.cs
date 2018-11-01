@@ -47,7 +47,7 @@ namespace TRUDUtilsD365.TableBuilder
 
     [Export(typeof(IDesignerMenu))]
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(EdtString))]
-    internal class DesignerCreateExtensionClass : DesignerMenuBase
+    internal class DesignerTableBuilder : DesignerMenuBase
     {
         #region Properties
         /// <summary>

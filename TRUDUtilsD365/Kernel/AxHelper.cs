@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Text;
 using EnvDTE;
 using Microsoft.Dynamics.AX.Metadata.Core.MetaModel;
 using Microsoft.Dynamics.AX.Metadata.MetaModel;
@@ -15,11 +16,28 @@ namespace TRUDUtilsD365.Kernel
     [SuppressMessage("ReSharper", "ConvertIfStatementToNullCoalescingExpression")]
     public class AxHelper
     {
+        public static string RemoveSpecialCharacters(string str)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (char c in str)
+            {
+                if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ||  c == '_')
+                {
+                    sb.Append(c);
+                }
+                else
+                {
+                    sb.Append(" ");
+                }
+            }
+            return sb.ToString();
+        }
+
         public static string GetTypeNameFromLabel(string typeName)
         {
             TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 
-            string res = textInfo.ToTitleCase(typeName).Replace(" ", "");
+            string res = textInfo.ToTitleCase(RemoveSpecialCharacters(typeName)).Replace(" ", "");
 
             return res;
         }

@@ -93,6 +93,14 @@
     </Compile>
     <Compile Include="TableBuilder\TableBuilderMenu.cs" />
     <Compile Include="TableBuilder\TableBuilderParms.cs" />
+    <Compile Include="TableFieldsBuilder\TableFieldsBuilderDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TableFieldsBuilder\TableFieldsBuilderDialog.Designer.cs">
+      <DependentUpon>TableFieldsBuilderDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TableFieldsBuilder\TableFieldsBuilderMenu.cs" />
+    <Compile Include="TableFieldsBuilder\TableFieldsBuilderParms.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AddTableFindMethod\AddTableFindMethodDialog.resx">
@@ -107,12 +115,16 @@
     <EmbeddedResource Include="TableBuilder\TableBuilderDialog.resx">
       <DependentUpon>TableBuilderDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="TableFieldsBuilder\TableFieldsBuilderDialog.resx">
+      <DependentUpon>TableFieldsBuilderDialog.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\DataSources\AddTableFindMethodParms.datasource" />
     <None Include="Properties\DataSources\TRUDUtilsD365.CreateExtensionClass.CreateExtensionClassParms.datasource" />
     <None Include="Properties\DataSources\TRUDUtilsD365.EnumCreator.EnumCreatorParms.datasource" />
     <None Include="Properties\DataSources\TRUDUtilsD365.TableBuilder.TableBuilderParms.datasource" />
+    <None Include="Properties\DataSources\TRUDUtilsD365.TableFieldsBuilder.TableFieldsBuilderParms.datasource" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

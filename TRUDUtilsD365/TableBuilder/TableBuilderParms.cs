@@ -29,7 +29,7 @@ namespace TRUDUtilsD365.TableBuilder
 
         public void CreateTable()
         {
-            if (this.IsCreateTable)
+            if (IsCreateTable)
             {
                 DoTableCreate();
             }
@@ -76,6 +76,15 @@ namespace TRUDUtilsD365.TableBuilder
                 axTableIndex.AddField(axTableIndexField);
                 newTable.AddIndex(axTableIndex);
 
+                AxTableFieldGroup axTableFieldGroup = new AxTableFieldGroup();
+                axTableFieldGroup.Name = "Overview";
+                axTableFieldGroup.Label = "Overview";
+                AxTableFieldGroupField axTableFieldGroupField = new AxTableFieldGroupField();
+                axTableFieldGroupField.Name = KeyFieldName;
+                axTableFieldGroupField.DataField = KeyFieldName;
+                axTableFieldGroup.AddField(axTableFieldGroupField);
+                newTable.AddFieldGroup(axTableFieldGroup);
+                
                 AddTableFindMethodParms findMethodParms = new AddTableFindMethodParms();
                 findMethodParms.IsCreateFind = true;
                 findMethodParms.IsTestMode   = true;
