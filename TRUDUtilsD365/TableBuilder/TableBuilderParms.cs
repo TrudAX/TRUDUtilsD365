@@ -33,7 +33,68 @@ namespace TRUDUtilsD365.TableBuilder
             {
                 DoTableCreate();
             }
+
+            if (IsCreateForm)
+            {
+                DoFormCreate();
+                DoMenuItemCreate();
+            }
         }
+
+        void DoMenuItemCreate()
+        {
+            AxMenuItemDisplay axMenuItemDisplay =_axHelper.MetadataProvider.MenuItemDisplays.Read(FormName);
+            if (axMenuItemDisplay != null)
+            {
+                return;                
+            }
+
+            axMenuItemDisplay = new AxMenuItemDisplay { Name = FormName, Object = FormName, Label = FormLabel, HelpText = FormHelp };
+            _axHelper.MetaModelService.CreateMenuItemDisplay(axMenuItemDisplay, _axHelper.ModelSaveInfo);
+            _axHelper.AppendToActiveProject(axMenuItemDisplay);
+        }
+
+        void DoFormCreate()
+        {
+            AxForm newForm = _axHelper.MetadataProvider.Forms.Read(FormName);
+            if (newForm != null)
+            {
+                return;
+            }
+            newForm = new AxForm();
+            newForm.Name = FormName;
+
+            string dsName = TableName;
+
+            AxFormDataSourceRoot axFormDataSource = new AxFormDataSourceRoot();
+            axFormDataSource.Name = dsName;
+            axFormDataSource.Table = TableName;
+            axFormDataSource.InsertIfEmpty = NoYes.No;
+            newForm.AddDataSource(axFormDataSource);
+
+            newForm.Design.Pattern = "SimpleList";
+            newForm.Design.Caption = FormLabel;
+
+            newForm.Design.AddControl(new AxFormActionPaneControl { Name = "MainActionPane" });
+            var filterGrp = new AxFormGroupControl{Name = "FilterGroup",Pattern = "CustomAndQuickFilters"};
+
+            filterGrp.AddControl(new AxFormControl{Name = "QuickFilter",
+                FormControlExtension = new AxFormControlExtension { Name = "QuickFilterControl" }
+            });
+            AxFormGridControl axFormGridControl = new AxFormGridControl {Name = "MainGrid", DataSource = dsName};
+
+            AxFormGroupControl overviewGroupControl = new AxFormGroupControl
+            {
+                Name = "Overview", DataGroup = "Overview", DataSource = dsName
+            };
+
+            axFormGridControl.AddControl(overviewGroupControl);
+            newForm.Design.AddControl(axFormGridControl);
+
+            _axHelper.MetaModelService.CreateForm(newForm, _axHelper.ModelSaveInfo);
+            _axHelper.AppendToActiveProject(newForm);
+        }
+
 
         void DoTableCreate()
         {
@@ -49,7 +110,7 @@ namespace TRUDUtilsD365.TableBuilder
                 newTable.Name             = TableName;
                 newTable.Label            = TableLabel;
                 newTable.TitleField1      = KeyFieldName;
-                newTable.CacheLookup      = RecordCacheLevel.NotInTTS;
+                newTable.CacheLookup      = RecordCacheLevel.Found;
                 newTable.ClusteredIndex   = $"{KeyFieldName}Idx";
                 newTable.PrimaryIndex     = newTable.ClusteredIndex;
                 newTable.ReplacementKey   = newTable.ClusteredIndex;
@@ -76,15 +137,38 @@ namespace TRUDUtilsD365.TableBuilder
                 axTableIndex.AddField(axTableIndexField);
                 newTable.AddIndex(axTableIndex);
 
-                AxTableFieldGroup axTableFieldGroup = new AxTableFieldGroup();
-                axTableFieldGroup.Name = "Overview";
-                axTableFieldGroup.Label = "Overview";
-                AxTableFieldGroupField axTableFieldGroupField = new AxTableFieldGroupField();
-                axTableFieldGroupField.Name = KeyFieldName;
-                axTableFieldGroupField.DataField = KeyFieldName;
+                AxTableFieldGroup axTableFieldGroup;
+                AxTableFieldGroupField axTableFieldGroupField;
+
+                axTableFieldGroup = new AxTableFieldGroup { Name = "AutoReport", IsSystemGenerated = NoYes.Yes};
+                axTableFieldGroupField = new AxTableFieldGroupField
+                {
+                    Name      = KeyFieldName,
+                    DataField = KeyFieldName
+                };
                 axTableFieldGroup.AddField(axTableFieldGroupField);
                 newTable.AddFieldGroup(axTableFieldGroup);
-                
+
+                axTableFieldGroup = new AxTableFieldGroup { Name = "AutoLookup", IsSystemGenerated = NoYes.Yes };
+                newTable.AddFieldGroup(axTableFieldGroup);
+
+                axTableFieldGroup = new AxTableFieldGroup { Name = "AutoIdentification", IsSystemGenerated = NoYes.Yes, AutoPopulate = NoYes.Yes};
+                newTable.AddFieldGroup(axTableFieldGroup);
+
+                axTableFieldGroup = new AxTableFieldGroup { Name = "AutoSummary", IsSystemGenerated = NoYes.Yes };
+                newTable.AddFieldGroup(axTableFieldGroup);
+
+                axTableFieldGroup = new AxTableFieldGroup { Name = "AutoBrowse", IsSystemGenerated = NoYes.Yes };
+                newTable.AddFieldGroup(axTableFieldGroup);
+
+                axTableFieldGroup = new AxTableFieldGroup {Name = "Overview", Label = "Overview"};
+                axTableFieldGroupField = new AxTableFieldGroupField
+                {
+                    Name = KeyFieldName, DataField = KeyFieldName
+                };
+                axTableFieldGroup.AddField(axTableFieldGroupField);
+                newTable.AddFieldGroup(axTableFieldGroup);
+
                 AddTableFindMethodParms findMethodParms = new AddTableFindMethodParms();
                 findMethodParms.IsCreateFind = true;
                 findMethodParms.IsTestMode   = true;

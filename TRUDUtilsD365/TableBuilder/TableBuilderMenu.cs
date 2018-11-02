@@ -85,8 +85,11 @@ namespace TRUDUtilsD365.TableBuilder
                     dialog.SetParameters(parms);
                     DialogResult formRes = dialog.ShowDialog();
 
-                    if (formRes == DialogResult.OK) parms.CreateTable();
-
+                    if (formRes == DialogResult.OK)
+                    {
+                        parms.CreateTable();
+                        //CoreUtility.DisplayInfo(AddinResources.CreateDataEntity_SuccessMessage);
+                    }
                 }
 
                

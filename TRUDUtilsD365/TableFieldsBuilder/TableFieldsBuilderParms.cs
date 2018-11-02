@@ -321,6 +321,7 @@ namespace TRUDUtilsD365.TableFieldsBuilder
     public class TableFieldsBuilderParms
     {
         public string TableName { get; set; } = "";
+        public bool IsContainsHeader { get; set; } = true;
 
         public string TableFieldsTxt { get; set; } = "";
 
@@ -331,7 +332,10 @@ namespace TRUDUtilsD365.TableFieldsBuilder
             CheckData(fieldsValuesList, axHelperLocal);
 
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine("");
+            if (IsContainsHeader)
+            {
+                stringBuilder.AppendLine("");
+            }
 
             foreach (NewFieldEngine newFieldEngine in GetFieldsValues())
             {
@@ -353,7 +357,7 @@ namespace TRUDUtilsD365.TableFieldsBuilder
                 {
                     edtType = "No EDT      ";
                 }
-                stringBuilder.AppendLine($"{edtType}. FieldName name:{newFieldEngine.FieldName}; FieldType type:{newFieldEngine.FieldType};");
+                stringBuilder.AppendLine($"{edtType}.{newFieldEngine.EdtText} FieldName name:{newFieldEngine.FieldName}; FieldType type:{newFieldEngine.FieldType};");
             }
            
             return stringBuilder.ToString();
@@ -403,6 +407,11 @@ namespace TRUDUtilsD365.TableFieldsBuilder
             bool isFirstElement = true;
             TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 
+            if (IsContainsHeader == false)
+            {
+                isFirstElement = false;
+            }
+
             foreach (string lineImp in listImp)
             {             
                 List<string> listLineImp = new List<string>(
@@ -415,7 +424,7 @@ namespace TRUDUtilsD365.TableFieldsBuilder
 
                 if (isFirstElement)
                 {
-                    if (listLineImp[0].Trim() != "Field type")
+                    if (! string.Equals(listLineImp[0].Trim(), "Field type"))
                     {
                         throw new Exception($"Wrong input format");
                     }                    

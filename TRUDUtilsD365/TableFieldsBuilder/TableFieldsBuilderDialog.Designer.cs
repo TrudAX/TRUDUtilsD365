@@ -39,6 +39,9 @@
             this.button1 = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.GetTemplateButton = new System.Windows.Forms.Button();
+            this.saveFileDialogTemplate = new System.Windows.Forms.SaveFileDialog();
             this.tableFieldsBuilderParmsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -117,9 +120,9 @@
             // 
             this.UpdatePreviewButton.Location = new System.Drawing.Point(578, 53);
             this.UpdatePreviewButton.Name = "UpdatePreviewButton";
-            this.UpdatePreviewButton.Size = new System.Drawing.Size(75, 23);
+            this.UpdatePreviewButton.Size = new System.Drawing.Size(139, 23);
             this.UpdatePreviewButton.TabIndex = 6;
-            this.UpdatePreviewButton.Text = "Update";
+            this.UpdatePreviewButton.Text = "Update preview";
             this.UpdatePreviewButton.UseVisualStyleBackColor = true;
             this.UpdatePreviewButton.Click += new System.EventHandler(this.UpdatePreviewButton_Click);
             // 
@@ -161,6 +164,8 @@
             // 
             // splitContainer2.Panel1
             // 
+            this.splitContainer2.Panel1.Controls.Add(this.GetTemplateButton);
+            this.splitContainer2.Panel1.Controls.Add(this.checkBox1);
             this.splitContainer2.Panel1.Controls.Add(this.label2);
             this.splitContainer2.Panel1.Controls.Add(this.label1);
             this.splitContainer2.Panel1.Controls.Add(this.button1);
@@ -174,6 +179,33 @@
             this.splitContainer2.Size = new System.Drawing.Size(946, 412);
             this.splitContainer2.SplitterDistance = 85;
             this.splitContainer2.TabIndex = 9;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.tableFieldsBuilderParmsBindingSource, "IsContainsHeader", true));
+            this.checkBox1.Location = new System.Drawing.Point(337, 55);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(147, 21);
+            this.checkBox1.TabIndex = 8;
+            this.checkBox1.Text = "Contains header";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // GetTemplateButton
+            // 
+            this.GetTemplateButton.Location = new System.Drawing.Point(215, 53);
+            this.GetTemplateButton.Name = "GetTemplateButton";
+            this.GetTemplateButton.Size = new System.Drawing.Size(116, 23);
+            this.GetTemplateButton.TabIndex = 9;
+            this.GetTemplateButton.Text = "Get template";
+            this.GetTemplateButton.UseVisualStyleBackColor = true;
+            this.GetTemplateButton.Click += new System.EventHandler(this.GetTemplateButton_Click);
+            // 
+            // saveFileDialogTemplate
+            // 
+            this.saveFileDialogTemplate.DefaultExt = "xlsx";
+            this.saveFileDialogTemplate.FileName = "TableFieldsBuilderTemplate.xlsx";
+            this.saveFileDialogTemplate.Title = "Get excel template";
             // 
             // tableFieldsBuilderParmsBindingSource
             // 
@@ -217,5 +249,8 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.BindingSource tableFieldsBuilderParmsBindingSource;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Button GetTemplateButton;
+        private System.Windows.Forms.SaveFileDialog saveFileDialogTemplate;
     }
 }
