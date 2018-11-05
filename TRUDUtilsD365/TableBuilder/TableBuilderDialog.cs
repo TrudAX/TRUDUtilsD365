@@ -26,8 +26,20 @@ namespace TRUDUtilsD365.TableBuilder
 
         private void button1_Click(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.OK;
-            Close();
+            try
+            {                
+                _parms.CreateTable();
+
+                _parms.DisplayLog();
+
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, @"An exception occurred:", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
         }
     }
 }

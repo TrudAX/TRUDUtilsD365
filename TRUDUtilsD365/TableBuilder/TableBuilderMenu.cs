@@ -15,7 +15,7 @@ namespace TRUDUtilsD365.TableBuilder
         /// <summary>
         ///     Caption for the menu item. This is what users would see in the menu.
         /// </summary>
-        public override string Caption => "Table builder";
+        public override string Caption => "TRUDUtils - Table builder";
 
         private const string AddinName = "TRUDUtilsD365.TableBuilder";
         /// <summary>
@@ -33,9 +33,6 @@ namespace TRUDUtilsD365.TableBuilder
 
                 dialog.SetParameters(parms);
                 DialogResult formRes = dialog.ShowDialog();
-
-                if (formRes == DialogResult.OK) parms.CreateTable();
-
             }
             catch (Exception ex)
             {
@@ -53,7 +50,7 @@ namespace TRUDUtilsD365.TableBuilder
         /// <summary>
         ///     Caption for the menu item. This is what users would see in the menu.
         /// </summary>
-        public override string Caption => "Table builder";
+        public override string Caption => "TRUDUtils - Table builder";
 
         private const string AddinName = "TRUDUtilsD365.TableBuilderEDT";
         /// <summary>
@@ -80,19 +77,12 @@ namespace TRUDUtilsD365.TableBuilder
 
                     TableBuilderDialog dialog = new TableBuilderDialog();
                     TableBuilderParms parms = new TableBuilderParms();
-                    parms.PrimaryKeyEDTName = form.Name;
+                    parms.PrimaryKeyEdtName = form.Name;
 
                     dialog.SetParameters(parms);
                     DialogResult formRes = dialog.ShowDialog();
 
-                    if (formRes == DialogResult.OK)
-                    {
-                        parms.CreateTable();
-                        //CoreUtility.DisplayInfo(AddinResources.CreateDataEntity_SuccessMessage);
-                    }
                 }
-
-               
             }
             catch (Exception ex)
             {
@@ -101,7 +91,6 @@ namespace TRUDUtilsD365.TableBuilder
         }
 
         #endregion
-
 
     }
 }

@@ -18,7 +18,7 @@ namespace TRUDUtilsD365.TableFieldsBuilder
         /// <summary>
         ///     Caption for the menu item. This is what users would see in the menu.
         /// </summary>
-        public override string Caption => "Fields builder";
+        public override string Caption => "TRUDUtils - Fields builder";
 
         private const string AddinName = "TRUDUtilsD365.TableFieldsBuilder";
         /// <summary>
@@ -48,9 +48,6 @@ namespace TRUDUtilsD365.TableFieldsBuilder
 
                     dialog.SetParameters(parms);
                     DialogResult formRes = dialog.ShowDialog();
-
-                    if (formRes == DialogResult.OK) parms.AddFields();
-
                 }
             }
             catch (Exception ex)

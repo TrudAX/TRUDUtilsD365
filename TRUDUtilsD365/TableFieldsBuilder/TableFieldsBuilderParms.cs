@@ -6,6 +6,7 @@ using Microsoft.Dynamics.AX.Metadata.MetaModel;
 using System.Globalization;
 using System.Text;
 using Microsoft.Dynamics.AX.Metadata.Core.Collections;
+using Microsoft.Dynamics.Framework.Tools.MetaModel.Core;
 using TRUDUtilsD365.Kernel;
 
 namespace TRUDUtilsD365.TableFieldsBuilder
@@ -262,6 +263,50 @@ namespace TRUDUtilsD365.TableFieldsBuilder
             return edt;
         }
 
+        protected AxTableRelationForeignKey AddTableRelation(AxTableField field)
+        {
+            if (! string.IsNullOrEmpty(field.ExtendedDataType))
+            {
+                var edt = _axHelper.MetadataProvider.Edts.Read(field.ExtendedDataType);
+                if (edt == null)
+                {
+                    return null;
+                }
+
+                if (string.IsNullOrEmpty(edt.ReferenceTable))
+                {
+                    return null;
+                }
+
+                AxEdtTableReference  firstRef = edt.TableReferences.First();
+                if (firstRef == null)
+                {
+                    return null;
+                }
+
+                AxTableRelationForeignKey axTableRelation = new AxTableRelationForeignKey();
+                axTableRelation.Name         = edt.ReferenceTable; //needs to be improved
+                axTableRelation.EDTRelation  = NoYes.Yes;
+                axTableRelation.Cardinality  = Cardinality.ZeroMore;
+                axTableRelation.OnDelete     = DeleteAction.Restricted;
+                axTableRelation.RelatedTable = edt.ReferenceTable;
+                axTableRelation.RelatedTableCardinality =
+                    IsMandatory ? RelatedTableCardinality.ExactlyOne : RelatedTableCardinality.ZeroOne;
+                axTableRelation.RelationshipType = RelationshipType.Association;
+                AxTableRelationConstraintField axTableRelationConstraint = new AxTableRelationConstraintField();
+                axTableRelationConstraint.Name         = field.Name;
+                axTableRelationConstraint.Field        = field.Name;
+                axTableRelationConstraint.SourceEDT    = field.ExtendedDataType;
+                axTableRelationConstraint.RelatedField = firstRef.RelatedField;
+
+                axTableRelation.AddConstraint(axTableRelationConstraint);
+
+                return axTableRelation;
+                
+            }
+            return null;
+        }
+
         protected void AddField(AxTableField field)
         {
             AxTableFieldGroup axTableFieldGroup;
@@ -289,6 +334,12 @@ namespace TRUDUtilsD365.TableFieldsBuilder
                     }
                 }
 
+                AxTableRelationForeignKey axTableRelationForeignKey = AddTableRelation(field);
+                if (axTableRelationForeignKey != null)
+                {
+                    axTable.AddRelation(axTableRelationForeignKey);
+                }
+
                 _axHelper.MetadataProvider.Tables.Update(axTable, _axHelper.ModelSaveInfo);
             }
             else
@@ -309,6 +360,11 @@ namespace TRUDUtilsD365.TableFieldsBuilder
                         axTableFieldGroup.AddField(axTableFieldGroupField);
                         axTableExtension.FieldGroups.Add(axTableFieldGroup);
                     }
+                }
+                AxTableRelationForeignKey axTableRelationForeignKey = AddTableRelation(field);
+                if (axTableRelationForeignKey != null)
+                {
+                    axTableExtension.Relations.Add(axTableRelationForeignKey);
                 }
 
                 _axHelper.MetadataProvider.TableExtensions.Update(axTableExtension, _axHelper.ModelSaveInfo);
@@ -393,6 +449,11 @@ namespace TRUDUtilsD365.TableFieldsBuilder
 
                 newFieldsList.Add(newFieldEngine.FieldName);
             }
+        }
+
+        public void DisplayLog()
+        {
+            CoreUtility.DisplayInfo($"Field were added into {TableName} table");
         }
 
 
