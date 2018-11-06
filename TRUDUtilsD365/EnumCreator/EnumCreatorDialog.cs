@@ -24,8 +24,21 @@ namespace TRUDUtilsD365.EnumCreator
 
         private void button1_Click(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.OK;
-            Close();
+            try
+            {
+                _parms.CreateEnum();
+
+                _parms.DisplayLog();
+
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, @"An exception occurred:", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+
         }
 
 

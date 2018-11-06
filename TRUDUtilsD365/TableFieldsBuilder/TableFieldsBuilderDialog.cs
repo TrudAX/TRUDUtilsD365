@@ -56,15 +56,18 @@ namespace TRUDUtilsD365.TableFieldsBuilder
             }
         }
 
+
+
         private void GetTemplateButton_Click(object sender, EventArgs e)
         {
-            
             if (saveFileDialogTemplate.ShowDialog() == DialogResult.OK)
             {
                 string fileName = saveFileDialogTemplate.FileName;
                 var byteRes = Properties.Resources.TableFieldsBuilderTemplateV1;
 
                 File.WriteAllBytes(fileName, byteRes);
+
+                System.Diagnostics.Process.Start(fileName);
             }
         }
     }

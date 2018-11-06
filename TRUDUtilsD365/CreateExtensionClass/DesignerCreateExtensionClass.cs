@@ -21,7 +21,7 @@ namespace TRUDUtilsD365.CreateExtensionClass
         /// <summary>
         ///     Caption for the menu item. This is what users would see in the menu.
         /// </summary>
-        public override string Caption => "Create extension class";
+        public override string Caption => "TRUDUtils - Create extension class";
 
         private const string AddinName = "TRUDUtilsD365.CreateExtensionClass";
         /// <summary>
@@ -47,21 +47,21 @@ namespace TRUDUtilsD365.CreateExtensionClass
                 if (e.SelectedElement is IForm)
                 {
                     var form = (IForm) e.SelectedElement;
-                    parms.ElementType = UtilElementType.Form;
+                    parms.ElementType = ExtensionClassObject.Formstr;
                     parms.ElementName = form.Name;
                 }
 
                 if (e.SelectedElement is ClassItem)
                 {
                     var form = (ClassItem) e.SelectedElement;
-                    parms.ElementType = UtilElementType.Class;
+                    parms.ElementType = ExtensionClassObject.Classstr;
                     parms.ElementName = form.Name;
                 }
 
                 if (e.SelectedElement is Table)
                 {
                     var form = (Table) e.SelectedElement;
-                    parms.ElementType = UtilElementType.Table;
+                    parms.ElementType = ExtensionClassObject.Tablestr;
                     parms.ElementName = form.Name;
                 }
 

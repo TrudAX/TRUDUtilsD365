@@ -63,5 +63,6 @@ namespace TRUDUtilsD365.CreateExtensionClass
             DialogResult = DialogResult.OK;
             Close();
         }
+
     }
 }

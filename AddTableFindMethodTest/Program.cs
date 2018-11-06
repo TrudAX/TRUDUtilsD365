@@ -24,9 +24,9 @@ namespace AddTableFindMethodTest
             Application.SetCompatibleTextRenderingDefault(false);
 
             //TestAddTableFindMethod();
-            //TestCreateExtensionClass();
+            TestCreateExtensionClass();
             //TestEnumCreator();
-            TestTableFieldsBuilder();
+            //TestTableFieldsBuilder();
         }
 
         private static void TestTableFieldsBuilder()
@@ -48,7 +48,7 @@ namespace AddTableFindMethodTest
             CreateExtensionClassParms parms = new CreateExtensionClassParms();
 
             parms.ElementName = "CustTable";
-            parms.ElementType = UtilElementType.Form;
+            parms.ElementType = ExtensionClassObject.Formstr;
             parms.Prefix = "MY";
             parms.ClassType = ExtensionClassType.EventHandler;
 

@@ -29,6 +29,8 @@ namespace TRUDUtilsD365.TableFieldsBuilder
         public string GroupName { get; set; } = "";
         public bool IsMandatory { get; set; } = false;
 
+        public bool IsDisplayMethod { get; set; } = false;
+
         public int NewStrEdtLen { get; set; } = 0;
 
         public string TableName { get; set; } = "";
@@ -263,7 +265,7 @@ namespace TRUDUtilsD365.TableFieldsBuilder
             return edt;
         }
 
-        protected AxTableRelationForeignKey AddTableRelation(AxTableField field)
+        protected AxTableRelationForeignKey AddTableRelation(AxTableField field, KeyedObjectCollection<AxTableRelation> existingRelations)
         {
             if (! string.IsNullOrEmpty(field.ExtendedDataType))
             {
@@ -283,9 +285,14 @@ namespace TRUDUtilsD365.TableFieldsBuilder
                 {
                     return null;
                 }
+                string newRelationName = edt.ReferenceTable;
+                if (existingRelations.Contains(newRelationName))
+                {
+                    newRelationName = edt.ReferenceTable + "_" + field.Name;
+                }
 
                 AxTableRelationForeignKey axTableRelation = new AxTableRelationForeignKey();
-                axTableRelation.Name         = edt.ReferenceTable; //needs to be improved
+                axTableRelation.Name = newRelationName;
                 axTableRelation.EDTRelation  = NoYes.Yes;
                 axTableRelation.Cardinality  = Cardinality.ZeroMore;
                 axTableRelation.OnDelete     = DeleteAction.Restricted;
@@ -317,8 +324,19 @@ namespace TRUDUtilsD365.TableFieldsBuilder
             if (TableName.Contains(".") == false)
             {
                 AxTable axTable = _axHelper.MetadataProvider.Tables.Read(TableName);
-                axTable.Fields.Add(field);
+                if (IsDisplayMethod)
+                {
+                    AxMethod  axMethod = new AxMethod();
+                    axMethod.Name = field.Name;
+                    axMethod.Source = $"public display {field.ExtendedDataType} {field.Name}() " +
+                                      Environment.NewLine + "{" + Environment.NewLine + "    return '';" + Environment.NewLine + "}";
 
+                    axTable.AddMethod(axMethod);
+                }
+                else
+                {
+                    axTable.Fields.Add(field);
+                }
                 if (GroupName != String.Empty)
                 {
                     if (axTable.FieldGroups.Contains(GroupName))
@@ -334,10 +352,13 @@ namespace TRUDUtilsD365.TableFieldsBuilder
                     }
                 }
 
-                AxTableRelationForeignKey axTableRelationForeignKey = AddTableRelation(field);
-                if (axTableRelationForeignKey != null)
+                if (!IsDisplayMethod)
                 {
-                    axTable.AddRelation(axTableRelationForeignKey);
+                    AxTableRelationForeignKey axTableRelationForeignKey = AddTableRelation(field, axTable.Relations);
+                    if (axTableRelationForeignKey != null)
+                    {
+                        axTable.AddRelation(axTableRelationForeignKey);
+                    }
                 }
 
                 _axHelper.MetadataProvider.Tables.Update(axTable, _axHelper.ModelSaveInfo);
@@ -345,7 +366,10 @@ namespace TRUDUtilsD365.TableFieldsBuilder
             else
             {
                 AxTableExtension axTableExtension = _axHelper.MetadataProvider.TableExtensions.Read(TableName);
-                axTableExtension.Fields.Add(field);
+                if (!IsDisplayMethod)
+                {
+                    axTableExtension.Fields.Add(field);
+                }
 
                 if (GroupName != String.Empty)
                 {
@@ -361,10 +385,14 @@ namespace TRUDUtilsD365.TableFieldsBuilder
                         axTableExtension.FieldGroups.Add(axTableFieldGroup);
                     }
                 }
-                AxTableRelationForeignKey axTableRelationForeignKey = AddTableRelation(field);
-                if (axTableRelationForeignKey != null)
+
+                if (!IsDisplayMethod)
                 {
-                    axTableExtension.Relations.Add(axTableRelationForeignKey);
+                    AxTableRelationForeignKey axTableRelationForeignKey = AddTableRelation(field, axTableExtension.Relations);
+                    if (axTableRelationForeignKey != null)
+                    {
+                        axTableExtension.Relations.Add(axTableRelationForeignKey);
+                    }
                 }
 
                 _axHelper.MetadataProvider.TableExtensions.Update(axTableExtension, _axHelper.ModelSaveInfo);
@@ -478,7 +506,7 @@ namespace TRUDUtilsD365.TableFieldsBuilder
                 List<string> listLineImp = new List<string>(
                     lineImp.Split(new[] { '\t' },
                         StringSplitOptions.None));
-                if (listLineImp.Count != 9)
+                if (listLineImp.Count != 10)
                 {
                     break;
                 }
@@ -507,6 +535,10 @@ namespace TRUDUtilsD365.TableFieldsBuilder
                 if (string.Equals(listLineImp[8].Trim(), "yes", StringComparison.OrdinalIgnoreCase))
                 {
                     fieldEngine.IsMandatory = true;
+                }
+                if (string.Equals(listLineImp[9].Trim(), "yes", StringComparison.OrdinalIgnoreCase))
+                {
+                    fieldEngine.IsDisplayMethod = true;
                 }
 
                 fieldEngine.TableName = TableName;

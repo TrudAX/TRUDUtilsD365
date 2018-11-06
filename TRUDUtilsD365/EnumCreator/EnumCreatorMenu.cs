@@ -13,7 +13,7 @@ namespace TRUDUtilsD365.EnumCreator
         /// <summary>
         ///     Caption for the menu item. This is what users would see in the menu.
         /// </summary>
-        public override string Caption => "Enum builder";
+        public override string Caption => "TRUDUtils - Enum builder";
 
         private const string AddinName = "TRUDUtilsD365.EnumCreator";
         /// <summary>
@@ -31,8 +31,6 @@ namespace TRUDUtilsD365.EnumCreator
 
                 dialog.SetParameters(parms);
                 DialogResult formRes = dialog.ShowDialog();
-
-                if (formRes == DialogResult.OK) parms.CreateEnum();
 
             }
             catch (Exception ex)

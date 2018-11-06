@@ -12,12 +12,22 @@ namespace TRUDUtilsD365.CreateExtensionClass
         EventHandler
     }
 
+    public enum ExtensionClassObject
+    {
+        Formstr,
+        Tablestr,
+        Classstr,
+        FormDataFieldStr,
+        Formdatasourcestr,
+        Formcontrolstr
+    }
+
     public class CreateExtensionClassParms
     {
         public string Prefix { get; set; }
 
         public string ElementName { get; set; }
-        public UtilElementType ElementType { get; set; }
+        public ExtensionClassObject ElementType { get; set; }
 
         public ExtensionClassType ClassType { get; set; }
 
@@ -27,7 +37,14 @@ namespace TRUDUtilsD365.CreateExtensionClass
         {
             string res = "";
             res += ElementName;
-            if (ElementType == UtilElementType.Form) res += "Form";
+            if (ElementType == ExtensionClassObject.Formstr ||
+                ElementType == ExtensionClassObject.Formdatasourcestr ||
+                ElementType == ExtensionClassObject.FormDataFieldStr ||
+                ElementType == ExtensionClassObject.Formcontrolstr)
+            {
+                res += "Form";
+            }
+
             res += Prefix;
             switch (ClassType)
             {
@@ -60,14 +77,23 @@ namespace TRUDUtilsD365.CreateExtensionClass
             string typeStr = "";
             switch (ElementType)
             {
-                case UtilElementType.Form:
+                case ExtensionClassObject.Formstr:
                     typeStr = "formstr";
                     break;
-                case UtilElementType.Class:
+                case ExtensionClassObject.Classstr:
                     typeStr = "classstr";
                     break;
-                case UtilElementType.Table:
+                case ExtensionClassObject.Tablestr:
                     typeStr = "tablestr";
+                    break;
+                case ExtensionClassObject.FormDataFieldStr:
+                    typeStr = "formdatafieldstr";
+                    break;
+                case ExtensionClassObject.Formdatasourcestr:
+                    typeStr = "formdatasourcestr";
+                    break;
+                case ExtensionClassObject.Formcontrolstr:
+                    typeStr = "formcontrolstr";
                     break;
             }
 

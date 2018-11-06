@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Dynamics.AX.Metadata.Core.MetaModel;
 using TRUDUtilsD365.Kernel;
 using Microsoft.Dynamics.AX.Metadata.MetaModel;
+using Microsoft.Dynamics.Framework.Tools.MetaModel.Core;
 
 namespace TRUDUtilsD365.EnumCreator
 {
@@ -23,6 +24,18 @@ namespace TRUDUtilsD365.EnumCreator
         public Boolean IsCreateEnumType { get; set; }
         public string EnumTypeName { get; set; } = "";
 
+        private string _logString;
+
+        void AddLog(string logLocal)
+        {
+            _logString += logLocal;
+        }
+
+        public void DisplayLog()
+        {
+            CoreUtility.DisplayInfo($"The following elements({_logString}) were created and added to the project");
+        }
+
         public string GetPreviewString()
         {
             StringBuilder stringBuilder = new StringBuilder();
@@ -34,7 +47,18 @@ namespace TRUDUtilsD365.EnumCreator
 
             if (this.IsCreateEnumType)
             {
-                stringBuilder.AppendLine($"EDT {this.EnumTypeName} will be created");
+                stringBuilder.AppendLine($"EDT {EnumTypeName} will be created");
+            }
+            AxHelper axHelper = new AxHelper();
+            AxEnum newEnum = axHelper.MetadataProvider.Enums.Read(EnumName);
+
+            if (newEnum == null)
+            {
+                stringBuilder.AppendLine($"Enum {EnumName} will be created");
+            }
+            else
+            {
+                stringBuilder.AppendLine($"Existing enum {EnumName} will be updated");
             }
 
             return stringBuilder.ToString();
@@ -116,6 +140,7 @@ namespace TRUDUtilsD365.EnumCreator
 
         public void CreateEnum()
         {
+            _logString = "";
             AxHelper axHelper = new AxHelper();
 
             AxEnum newEnum = axHelper.MetadataProvider.Enums.Read(EnumName);
@@ -127,6 +152,8 @@ namespace TRUDUtilsD365.EnumCreator
                 axHelper.MetaModelService.CreateEnum(newEnum, axHelper.ModelSaveInfo);
                 axHelper.AppendToActiveProject(newEnum);
 
+                AddLog($"Enum {newEnum.Name};");
+
                 if (IsCreateEnumType)
                 {
                     AxEdtEnum  newAxEdtEnum = axHelper.MetadataProvider.Edts.Read(EnumTypeName) as AxEdtEnum;
@@ -136,6 +163,8 @@ namespace TRUDUtilsD365.EnumCreator
 
                         axHelper.MetaModelService.CreateExtendedDataType(newAxEdtEnum, axHelper.ModelSaveInfo);
                         axHelper.AppendToActiveProject(newAxEdtEnum);
+
+                        AddLog($"Enum type {newAxEdtEnum.Name};");
                     }
                 }
                 newEnum = axHelper.MetadataProvider.Enums.Read(EnumName);

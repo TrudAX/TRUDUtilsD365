@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.ElementNameTextBox = new System.Windows.Forms.TextBox();
+            this.createExtensionClassParmsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -41,7 +42,6 @@
             this.CreateClassButton = new System.Windows.Forms.Button();
             this.RestoreNameButton = new System.Windows.Forms.Button();
             this.ElementTypeComboBox = new System.Windows.Forms.ComboBox();
-            this.createExtensionClassParmsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.createExtensionClassParmsBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -53,6 +53,10 @@
             this.ElementNameTextBox.Size = new System.Drawing.Size(249, 20);
             this.ElementNameTextBox.TabIndex = 0;
             this.ElementNameTextBox.TextChanged += new System.EventHandler(this.ElementNameTextBox_TextChanged);
+            // 
+            // createExtensionClassParmsBindingSource
+            // 
+            this.createExtensionClassParmsBindingSource.DataSource = typeof(TRUDUtilsD365.CreateExtensionClass.CreateExtensionClassParms);
             // 
             // label1
             // 
@@ -159,10 +163,6 @@
             this.ElementTypeComboBox.Name = "ElementTypeComboBox";
             this.ElementTypeComboBox.Size = new System.Drawing.Size(121, 21);
             this.ElementTypeComboBox.TabIndex = 12;
-            // 
-            // createExtensionClassParmsBindingSource
-            // 
-            this.createExtensionClassParmsBindingSource.DataSource = typeof(TRUDUtilsD365.CreateExtensionClass.CreateExtensionClassParms);
             // 
             // CreateExtensionClassDialog
             // 
