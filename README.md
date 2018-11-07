@@ -6,10 +6,12 @@ A set of Visual Studio Add-Ins for Microsoft Dynamics 365 for Operation that can
 Used for quick enum creation
 
 - Generates an enum
+
 - Adds values with labels from text entry form
+
 - Generates EDT type for this enum
 
-![1541575661402](C:\Users\Administrator\Documents\Visual Studio 2015\Projects\TRUDTools\TRUDUtilsD365\assets\EnumBuilder.png)
+  ![](assets/EnumBuilder.png)
 
 Executed from the Dynamics 365 - Addins menu
 
