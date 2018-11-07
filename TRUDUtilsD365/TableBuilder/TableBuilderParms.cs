@@ -11,17 +11,24 @@ namespace TRUDUtilsD365.TableBuilder
 {
     public class TableBuilderParms
     {
-        public Boolean IsCreateTable { get; set; }
+        public Boolean IsCreateTable { get; set; } = true;
         public string TableName { get; set; } = "";
         public string TableLabel { get; set; } = "";
         public string TableVarName { get; set; } = "";
 
-        public Boolean IsCreateForm { get; set; }
+        public Boolean IsCreateForm { get; set; }=true;
         public string FormName { get; set; } = "";
         public string FormLabel { get; set; } = "";
         public string FormHelp { get; set; } = "";
 
         public string PrimaryKeyEdtName { get; set; } = "";
+        public string EdtExtends { get; set; } = "SysGroup";
+        public int EdtStrLen { get; set; } = 10;
+        public string EdtLabel { get; set; } = "";
+        public string EdtHelpText { get; set; } = "";
+
+
+
         public string KeyFieldName { get; set; } = "Id";
 
         private AxHelper _axHelper;
@@ -38,14 +45,26 @@ namespace TRUDUtilsD365.TableBuilder
             CoreUtility.DisplayInfo($"The following elements({_logString}) were created and added to the project");
         }
 
+        public void ValidateData()
+        {
+            if (IsCreateForm)
+            {
+                if (string.IsNullOrEmpty(TableName) || string.IsNullOrEmpty(FormName))
+                {
+                    throw new Exception($"Table name and Form name should be specified");
+                }
+            }
+        }
+
         public void CreateTable()
         {
             _logString = "";
+            ValidateData();
             if (_axHelper == null)
             {
                 _axHelper = new AxHelper();
             }
-
+            
             if (IsCreateTable)
             {
                 DoEdtCreate();
@@ -61,15 +80,21 @@ namespace TRUDUtilsD365.TableBuilder
 
         void DoEdtCreate()
         {
-            AxEdt newEdt = _axHelper.MetadataProvider.Edts.Read(PrimaryKeyEdtName);
-            if (newEdt != null)
+            if (_axHelper.MetadataProvider.Edts.Read(PrimaryKeyEdtName) != null)
             {
                 return;
             }
             //need to create a EDT
-            newEdt = new AxEdtString();
+            AxEdtString newEdt = new AxEdtString();
             newEdt.Name = PrimaryKeyEdtName;
-            newEdt.Extends ="SysGroup" ;
+            newEdt.Extends = EdtExtends;
+            if (EdtStrLen > 0 && newEdt.Extends == String.Empty)
+            {
+                newEdt.StringSize = EdtStrLen;
+            }
+
+            newEdt.Label = EdtLabel;
+            newEdt.HelpText = EdtHelpText;
 
             _axHelper.MetaModelService.CreateExtendedDataType(newEdt, _axHelper.ModelSaveInfo);
             _axHelper.AppendToActiveProject(newEdt);
@@ -100,8 +125,8 @@ namespace TRUDUtilsD365.TableBuilder
             {
                 return;
             }
-            newForm = new AxForm();
-            newForm.Name = FormName;
+
+            newForm = new AxForm {Name = FormName};
 
             AxMethod axMethod = new AxMethod();
             axMethod.Name = "classDeclaration";
