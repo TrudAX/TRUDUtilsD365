@@ -1,5 +1,5 @@
 # TRUDUtilsD365
-A set of Visual Studio Add-ins for Microsoft Dynamics 365 for Operation that will allow you to quickly solve common development tasks. 
+A set of Visual Studio Add-ins for Microsoft Dynamics 365 for Operation that will allow you to quickly perform common development tasks. 
 
 You are more than welcome to contribute! 
 
