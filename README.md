@@ -1,11 +1,13 @@
 # TRUDUtilsD365
-A set of Visual Studio Add-Ins for Microsoft Dynamics 365 for Operation that can help perform quicker typical development tasks. 
+A set of Visual Studio Add-ins for Microsoft Dynamics 365 for Operation that will allow you to quickly solve common development tasks. 
 
 You are more than welcome to contribute! 
 
 ## Enum builder
 
 Used for quick enum creation
+
+The tool does the following:
 
 - Generates an enum
 
@@ -15,7 +17,7 @@ Used for quick enum creation
 
   ![](assets/EnumBuilder.png)
 
-You can run this tool from **Dynamics 365 - Addins** menu
+You can run this tool from Main menu **Dynamics 365 - Addins** 
 
 ## Fields builder
 
@@ -25,18 +27,18 @@ Usually while adding new fields you have some specification document for the dev
 
 The tool does the following:
 
-- Creates EDT if it doesn't not exists (Label, Help text, Extends and String length properties supported)
+- Creates EDT if it doesn't not exist (Label, Help text, Extends and String length properties supported)
 - Adds a field or empty display method with this EDT to the table
 - Adds new field or method to the specified Field group
 - Creates a relation for the table if EDT has a Reference table property
 
 ![1541642572075](assets/TableFieldsBuilder.png)
 
-This tool can be run using Right click-AddIns on Table or Table extension object
+This tool can be run using Right-click AddIns on Table or Table extension object
 
 ## Table builder
 
-Tool helps you create a basic dictionary table (table with ID and Description fields based on "Simple list" template)
+The tool helps you create a basic dictionary table (table with ID and Description fields based on "Simple list" template)
 
 The tool does the following:
 
@@ -49,17 +51,37 @@ The tool does the following:
 
 ![](assets/TableBuilder.jpg)
 
-## Create extension class
+## Create an extension class
 
-This tool works for standard Forms, Tables and Classes and allows you to create extension class in one click
+This Add-in works for standard Forms, Tables and Classes and allows you to create an extension class in one click.
 
 What you need to do is to enter your project prefix
 
 ![](assets/CreateExtenisonClass.jpg)
 
+This tool can be run using Right-click AddIns on Table, Class or Form(other elements are coming) 
+
 ## Troubleshooting
 
-All tools require that you have opened project with your current model. First project for the solution is used 
+All tools require that you have an active project with your current model. The first project in the solution is used.
+
+Only basic data validation is currently implemented. In case of any problem try to debug an issue. 
+
+One of the ways to do this:
+
+- Download and install dnSpy debugger [dnSpy]: https://github.com/0xd4d/dnSpy
+
+- Run **dnSpy-x86.exe** file and open **TRUDUtilsD365.dll** from the VS AddinExtensions folder
+
+- Set the required breakpoints. Most of the logic located in ..Parms classes
+
+- Go to main menu Debug - Attach to process and choose Visual Studio with D365 project
+
+- Run Add-in in VS. The debugger should pop up
+
+  ![1541661226759](assets/DebugWindow.png)
+
+​      
 
 ## Installation
 
