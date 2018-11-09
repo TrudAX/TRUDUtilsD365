@@ -23,7 +23,7 @@ You can run this tool from Main menu **Dynamics 365 - Addins**
 
 Prepare your fields in Excel and add them to the table(or table extension) in one click. 
 
-Usually while adding new fields you have some specification document for the development task and can just Copy-Paste from this document to this tool.
+Usually while adding new fields you have some specification document for the development task and can just Copy-Paste from this document to this tool. Also Excel functions can be used to auto-generate the names(like generate SlitWidth for "Slit width" label) 
 
 The tool does the following:
 
@@ -62,6 +62,8 @@ What you need to do is to enter your project prefix
 This tool can be run using Right-click AddIns on Table, Class or Form(other elements are coming) 
 
 ## Troubleshooting
+
+Current solution was tested on 8.0U15.
 
 All tools require that you have an active project with your current model. The first project in the solution is used.
 
