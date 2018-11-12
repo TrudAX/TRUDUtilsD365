@@ -1,9 +1,13 @@
 # TRUDUtilsD365
 A set of Visual Studio Add-ins for Microsoft Dynamics 365 for Operation that will allow you to quickly perform common development tasks. 
 
-*[Enum builder]: #enum-builder
-*[Fields builder]: #fields-builder
-
+* [Enum builder](#enum-builder)
+* [Fields builder](#fields-builder)
+* [Table builder](#table-builder)
+* [Create extension class](#create-extension-class)
+* [Copy extension method](#copy-extension-method)
+* [Troubleshooting](#troubleshooting)
+* [Installation](#installation)
 
 You are more than welcome to contribute! 
 
@@ -101,20 +105,16 @@ One of the ways to do this:
 
 Another option (this will run new instance of VS)
 
-- Got to the Project->Property->Debug.
+- Open the solution and set required breakpoints
+- Got to the Project->Property->Debug (for TRUDUtilsD365 project)
 - Set start action to "start external program" and specify parameter C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe
 - Run the project
 
 ## Installation
 
-Copy TRUDUtilsD365.dll and TRUDUtilsD365.pdb to the following folders
-
-For 8.0 local DEV VM:
-
-C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\agk3do44.e2i\AddinExtensions
-
-For 8.1 local DEV VM:
-
-C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\ugjn0jrw.pfb\AddinExtensions
+Download all 3 files and run InstallToVS.exe. It will copy TRUDUtilsD365.dll and TRUDUtilsD365.pdb to the VS AddinExtensions folders.
 
 Restart VS
+
+You can also copy these files manually, but extension path will be different for different VMs. (for 8.0 local DEV VM it will be C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\agk3do44.e2i\AddinExtensions, for 8.1 local DEV VM: C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\ugjn0jrw.pfb\AddinExtensions )
+
