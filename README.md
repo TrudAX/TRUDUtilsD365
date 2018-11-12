@@ -1,6 +1,8 @@
 # TRUDUtilsD365
 A set of Visual Studio Add-ins for Microsoft Dynamics 365 for Operation that will allow you to quickly perform common development tasks. 
 
+[TOC]
+
 You are more than welcome to contribute! 
 
 ## Enum builder
@@ -51,7 +53,7 @@ The tool does the following:
 
 ![](assets/TableBuilder.jpg)
 
-## Create an extension class
+## Create extension class
 
 This Add-in works for standard Forms, Tables and Classes and allows you to create an extension class in one click.
 
@@ -60,6 +62,16 @@ What you need to do is to enter your project prefix
 ![](assets/CreateExtenisonClass.jpg)
 
 This tool can be run using Right-click AddIns on Table, Class or Form(other elements are coming) 
+
+## Copy extension method
+
+This Addins copies to the clipboard template for the method extension(with next call)
+
+![](assets/CopyExtensionMethod.png)
+
+Tool can be run by Right-click method in the designer view
+
+
 
 ## Troubleshooting
 
@@ -84,6 +96,12 @@ One of the ways to do this:
   ![1541661226759](assets/DebugWindow.png)
 
 ​      
+
+Another option (this will run new instance of VS)
+
+- Got to the Project->Property->Debug.
+- Set start action to "start external program" and specify parameter C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe
+- Run the project
 
 ## Installation
 

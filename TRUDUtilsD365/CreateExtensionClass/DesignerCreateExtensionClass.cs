@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.Composition;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
-using Dynamics.AX.Application;
 using Microsoft.Dynamics.Framework.Tools.Extensibility;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Classes;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Forms;

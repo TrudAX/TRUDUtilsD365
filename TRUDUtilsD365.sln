@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TRUDUtilsD365", "TRUDUtilsD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddTableFindMethodTest", "AddTableFindMethodTest\AddTableFindMethodTest.csproj", "{B6E6E027-FF26-4E9E-B03B-DB07570C77DF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstallToVS", "InstallToVS\InstallToVS.csproj", "{2470C9A5-2F02-4BF3-8C13-1BEB08707476}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{B6E6E027-FF26-4E9E-B03B-DB07570C77DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6E6E027-FF26-4E9E-B03B-DB07570C77DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6E6E027-FF26-4E9E-B03B-DB07570C77DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2470C9A5-2F02-4BF3-8C13-1BEB08707476}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2470C9A5-2F02-4BF3-8C13-1BEB08707476}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2470C9A5-2F02-4BF3-8C13-1BEB08707476}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2470C9A5-2F02-4BF3-8C13-1BEB08707476}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
