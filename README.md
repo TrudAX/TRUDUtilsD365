@@ -1,7 +1,9 @@
 # TRUDUtilsD365
 A set of Visual Studio Add-ins for Microsoft Dynamics 365 for Operation that will allow you to quickly perform common development tasks. 
 
-[TOC]
+*[Enum builder]: #enum-builder
+*[Fields builder]: #fields-builder
+
 
 You are more than welcome to contribute! 
 
