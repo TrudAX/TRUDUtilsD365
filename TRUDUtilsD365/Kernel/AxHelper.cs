@@ -36,9 +36,13 @@ namespace TRUDUtilsD365.Kernel
         public static string GetTypeNameFromLabel(string typeName)
         {
             TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            string noCharsStr = RemoveSpecialCharacters(typeName);
 
-            string res = textInfo.ToTitleCase(RemoveSpecialCharacters(typeName)).Replace(" ", "");
-
+            string res = textInfo.ToTitleCase(noCharsStr).Replace(" ", "");
+            if (char.IsDigit(res[0]))
+            {
+                res = "V" + res;
+            }
             return res;
         }
         private IMetadataProvider  _metadataProvider;

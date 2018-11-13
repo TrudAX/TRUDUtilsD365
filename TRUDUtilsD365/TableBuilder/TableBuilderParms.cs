@@ -145,6 +145,8 @@ namespace TRUDUtilsD365.TableBuilder
             //newForm.Design.Pattern = "SimpleList"; add apply pattern
             //newForm.Design.PatternVersion = "1.1";
             newForm.Design.Caption = FormLabel;
+            newForm.Design.TitleDataSource = dsName;
+            newForm.Design.DataSource      = dsName;
 
             newForm.Design.AddControl(new AxFormActionPaneControl { Name = "MainActionPane" });
 
