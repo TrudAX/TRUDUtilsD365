@@ -39,7 +39,7 @@ The tool does the following:
 
 - Generates an enum
 
-- Adds values with labels from text entry form(tries to generate element Name from the label automatically or you can specify it manually)
+- Adds values with labels from the text entry form(tries to generate element Name from the label automatically or you can specify it manually)
 
 - Generates EDT type for this enum
 

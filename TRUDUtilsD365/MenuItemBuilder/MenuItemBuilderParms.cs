@@ -47,7 +47,6 @@ namespace TRUDUtilsD365.MenuItemBuilder
 
         public void InitFromSelectedElement(object selectedElement)
         {
-            _axHelper = new AxHelper();
             if (selectedElement is IForm)
             {
                 var form = selectedElement as IForm;

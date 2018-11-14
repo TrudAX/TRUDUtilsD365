@@ -32,7 +32,6 @@ namespace TRUDUtilsD365.MenuItemBuilder
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, @"An exception occurred:", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
             }
         }
 

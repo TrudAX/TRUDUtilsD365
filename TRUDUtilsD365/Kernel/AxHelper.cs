@@ -32,13 +32,39 @@ namespace TRUDUtilsD365.Kernel
             }
             return sb.ToString();
         }
+        static string UppercaseWords(string value)
+        {
+            char[] array = value.ToCharArray();
+            // Handle the first letter in the string.
+            if (array.Length >= 1)
+            {
+                if (char.IsLower(array[0]))
+                {
+                    array[0] = char.ToUpper(array[0]);
+                }
+            }
+            // Scan through the letters, checking for spaces.
+            // ... Uppercase the lowercase letters following spaces.
+            for (int i = 1; i < array.Length; i++)
+            {
+                if (array[i - 1] == ' ')
+                {
+                    if (char.IsLower(array[i]))
+                    {
+                        array[i] = char.ToUpper(array[i]);
+                    }
+                }
+            }
+            return new string(array);
+        }
 
         public static string GetTypeNameFromLabel(string typeName)
         {
-            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            //TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
             string noCharsStr = RemoveSpecialCharacters(typeName);
 
-            string res = textInfo.ToTitleCase(noCharsStr).Replace(" ", "");
+            string res = UppercaseWords(noCharsStr).Replace(" ", "");
+            //string res = textInfo.ToTitleCase(noCharsStr).Replace(" ", "");
             if (char.IsDigit(res[0]))
             {
                 res = "V" + res;
