@@ -1,34 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace TRUDUtilsD365.FormBuilder
+namespace TRUDUtilsD365.MenuItemBuilder
 {
-    public partial class FormBuilderDialog : Form
+    public partial class MenuItemBuilderDialog : Form
     {
-        private FormBuilderParms _parms;
+        private MenuItemBuilderParms _parms;
 
-        public FormBuilderDialog()
+        public MenuItemBuilderDialog()
         {
             InitializeComponent();
         }
-        public void SetParameters(FormBuilderParms parms)
+        public void SetParameters(MenuItemBuilderParms parms)
         {
             _parms = parms;
-            formBuilderParmsBindingSource.Add(parms);
+            comboBox1.DataSource = Enum.GetValues(_parms.MenuItemType.GetType());
+            menuItemBuilderParmsBindingSource.Add(parms);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             try
             {
-                _parms.TemplateType = (FormTemplateType) Enum.Parse(typeof(FormTemplateType), tabControl1.SelectedTab.Tag.ToString());
                 _parms.Run();
 
                 _parms.DisplayLog();
@@ -42,6 +35,6 @@ namespace TRUDUtilsD365.FormBuilder
 
             }
         }
-   
+
     }
 }

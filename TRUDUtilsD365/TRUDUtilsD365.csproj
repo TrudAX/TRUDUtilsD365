@@ -77,6 +77,13 @@
     </Compile>
     <Compile Include="CreateExtensionClass\CreateExtensionClassParms.cs" />
     <Compile Include="CreateExtensionClass\DesignerCreateExtensionClass.cs" />
+    <Compile Include="MenuItemBuilder\MenuItemBuilderDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MenuItemBuilder\MenuItemBuilderDialog.Designer.cs">
+      <DependentUpon>MenuItemBuilderDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MenuItemBuilder\MenuItemBuilderParms.cs" />
     <Compile Include="EnumCreator\EnumCreatorDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -94,6 +101,7 @@
     </Compile>
     <Compile Include="FormBuilder\FormBuilderMenu.cs" />
     <Compile Include="Kernel\AxHelper.cs" />
+    <Compile Include="MenuItemBuilder\MenuItemBuilderMenu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -130,6 +138,9 @@
     <EmbeddedResource Include="FormBuilder\FormBuilderDialog.resx">
       <DependentUpon>FormBuilderDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MenuItemBuilder\MenuItemBuilderDialog.resx">
+      <DependentUpon>MenuItemBuilderDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -146,6 +157,7 @@
     <None Include="Properties\DataSources\TRUDUtilsD365.CreateExtensionClass.CreateExtensionClassParms.datasource" />
     <None Include="Properties\DataSources\TRUDUtilsD365.EnumCreator.EnumCreatorParms.datasource" />
     <None Include="Properties\DataSources\TRUDUtilsD365.FormBuilder.FormBuilderParms.datasource" />
+    <None Include="Properties\DataSources\TRUDUtilsD365.MenuItemBuilder.MenuItemBuilderParms.datasource" />
     <None Include="Properties\DataSources\TRUDUtilsD365.TableBuilder.TableBuilderParms.datasource" />
     <None Include="Properties\DataSources\TRUDUtilsD365.TableFieldsBuilder.TableFieldsBuilderParms.datasource" />
     <None Include="Resource\TableFieldsBuilderTemplateV1.xlsx" />

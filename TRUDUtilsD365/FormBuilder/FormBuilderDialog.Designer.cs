@@ -79,7 +79,6 @@
             this.label3.Size = new System.Drawing.Size(82, 18);
             this.label3.TabIndex = 2;
             this.label3.Text = "Grid group:";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // label4
             // 
@@ -91,7 +90,6 @@
             this.label4.Size = new System.Drawing.Size(102, 18);
             this.label4.TabIndex = 3;
             this.label4.Text = "Header group:";
-            this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // label5
             // 
@@ -153,7 +151,6 @@
             this.GridGroupNameTextBox1.Name = "GridGroupNameTextBox1";
             this.GridGroupNameTextBox1.Size = new System.Drawing.Size(212, 24);
             this.GridGroupNameTextBox1.TabIndex = 23;
-            this.GridGroupNameTextBox1.TextChanged += new System.EventHandler(this.GridGroupNameTextBox1_TextChanged);
             // 
             // HeaderGroupTextBox
             // 
@@ -162,7 +159,6 @@
             this.HeaderGroupTextBox.Name = "HeaderGroupTextBox";
             this.HeaderGroupTextBox.Size = new System.Drawing.Size(212, 24);
             this.HeaderGroupTextBox.TabIndex = 24;
-            this.HeaderGroupTextBox.TextChanged += new System.EventHandler(this.HeaderGroupTextBox_TextChanged);
             // 
             // FormHelpTextBox
             // 

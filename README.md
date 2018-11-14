@@ -1,15 +1,35 @@
 # TRUDUtilsD365
 A set of Visual Studio Add-ins for Microsoft Dynamics 365 for Operation that will allow you to quickly perform common development tasks. 
 
+* [Create extension class](#create-extension-class)
+* [Copy extension method](#copy-extension-method)
 * [Enum builder](#enum-builder)
 * [Fields builder](#fields-builder)
 * [Table builder](#table-builder)
-* [Create extension class](#create-extension-class)
-* [Copy extension method](#copy-extension-method)
+* [Create menu item](#create-menu-item)
 * [Troubleshooting](#troubleshooting)
 * [Installation](#installation)
 
 You are more than welcome to contribute! 
+
+## Create extension class
+
+This Add-in works for standard Forms, Tables and Classes and allows you to create an extension class in one click.
+
+What you need to do is to enter your project prefix
+
+![](assets/CreateExtenisonClass.jpg)
+
+This tool can be run using Right-click AddIns on Table, Class or Form(other elements are coming) 
+
+## Copy extension method
+
+This Addins copies to the clipboard template for the method extension(with next call)
+
+![](assets/CopyExtensionMethod.png)
+
+Tool can be run by Right-click method in the designer view
+
 
 ## Enum builder
 
@@ -59,24 +79,11 @@ The tool does the following:
 
 ![](assets/TableBuilder.jpg)
 
-## Create extension class
+## Create menu item
 
-This Add-in works for standard Forms, Tables and Classes and allows you to create an extension class in one click.
+This Add-in works for Forms, Reports and Classes and creates Menu item for the selected object
 
-What you need to do is to enter your project prefix
-
-![](assets/CreateExtenisonClass.jpg)
-
-This tool can be run using Right-click AddIns on Table, Class or Form(other elements are coming) 
-
-## Copy extension method
-
-This Addins copies to the clipboard template for the method extension(with next call)
-
-![](assets/CopyExtensionMethod.png)
-
-Tool can be run by Right-click method in the designer view
-
+![](assets/MenuItemBuilder.png)
 
 
 ## Troubleshooting
