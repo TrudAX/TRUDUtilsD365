@@ -1,5 +1,5 @@
 # TRUDUtilsD365
-A set of Visual Studio Add-ins for Microsoft Dynamics 365 for Operation that will allow you to quickly perform common development tasks. 
+A set of Visual Studio Add-ins for Microsoft Dynamics 365 for Operation that will allow you to perform quickly common development tasks. 
 
 * [Create extension class](#create-extension-class)
 * [Copy extension method](#copy-extension-method)
@@ -56,8 +56,8 @@ Usually while adding new fields you have some specification document for the dev
 The tool does the following:
 
 - Creates EDT if it doesn't not exist (Label, Help text, Extends and String length properties supported)
-- Adds a field or empty display method with this EDT to the table
-- Adds new field or method to the specified Field group
+- Adds a field or an empty display method with this EDT to the table
+- Adds a new field or a method to the specified Field group
 - Creates a relation for the table if EDT has a Reference table property
 
 ![1541642572075](assets/TableFieldsBuilder.png)
@@ -110,11 +110,11 @@ One of the ways to do this:
 
 ​      
 
-Another option (this will run new instance of VS)
+Another option (this will run a new instance of VS)
 
-- Open the solution and set required breakpoints
+- Open the solution and set the required breakpoints
 - Got to the Project->Property->Debug (for TRUDUtilsD365 project)
-- Set start action to "start external program" and specify parameter C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe
+- Set start action to "start external program" and specify the parameter "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe"
 - Run the project
 
 ## Installation
