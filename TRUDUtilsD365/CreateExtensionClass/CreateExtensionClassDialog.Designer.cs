@@ -56,7 +56,6 @@
             this.ElementNameTextBox.Name = "ElementNameTextBox";
             this.ElementNameTextBox.Size = new System.Drawing.Size(404, 24);
             this.ElementNameTextBox.TabIndex = 101;
-            this.ElementNameTextBox.TextChanged += new System.EventHandler(this.ElementNameTextBox_TextChanged);
             // 
             // label1
             // 
@@ -92,19 +91,17 @@
             this.PrefixTextBox.Name = "PrefixTextBox";
             this.PrefixTextBox.Size = new System.Drawing.Size(104, 24);
             this.PrefixTextBox.TabIndex = 4;
-            this.PrefixTextBox.TextChanged += new System.EventHandler(this.PrefixTextBox_TextChanged);
+            this.PrefixTextBox.Validated += new System.EventHandler(this.PrefixTextBox_Validated);
             // 
             // comboBox1
             // 
-            this.comboBox1.DataBindings.Add(new System.Windows.Forms.Binding("SelectedItem", this.createExtensionClassParmsBindingSource, "ClassType", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.comboBox1.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.createExtensionClassParmsBindingSource, "ClassType", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.comboBox1.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.createExtensionClassParmsBindingSource, "ClassType", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(343, 119);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(196, 26);
             this.comboBox1.TabIndex = 6;
-            this.comboBox1.TextChanged += new System.EventHandler(this.comboBox1_TextChanged);
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // label4
             // 

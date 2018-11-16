@@ -35,11 +35,22 @@ namespace TRUDUtilsD365.CreateExtensionClass
         public string SubElementName { get; set; } = "";
         public ExtensionClassObject ElementType { get; set; }
 
-        public ExtensionClassType ClassType { get; set; }
+        public ExtensionClassType ClassType { get; set; } = ExtensionClassType.Extension;
 
         public string ResultClassName { get; set; } = "";
 
         private string _logString;
+
+        public bool ClassTypeModified()
+        {
+            CalcResultName();
+            return true;
+        }
+        public bool PrefixModified()
+        {
+            CalcResultName();
+            return true;
+        }
 
         void AddLog(string logLocal)
         {

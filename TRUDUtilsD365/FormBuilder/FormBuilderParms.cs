@@ -100,7 +100,7 @@ namespace TRUDUtilsD365.FormBuilder
             AxForm newForm = _axHelper.MetadataProvider.Forms.Read(FormName);
             if (newForm != null)
             {
-                return;
+                throw new Exception($"Form {FormName} already exists");
             }
 
             newForm = new AxForm {Name = FormName};
@@ -210,7 +210,7 @@ namespace TRUDUtilsD365.FormBuilder
             _axHelper.MetaModelService.CreateForm(newForm, _axHelper.ModelSaveInfo);
             _axHelper.AppendToActiveProject(newForm);
 
-            AddLog($"Form: {newForm.Name}; ");
+            AddLog($"Form: {newForm.Name} - Restore it before use;");
         }
 
 

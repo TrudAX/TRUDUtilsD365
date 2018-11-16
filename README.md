@@ -1,4 +1,4 @@
-# TRUDUtilsD365
+﻿# TRUDUtilsD365
 A set of Visual Studio Add-ins for Microsoft Dynamics 365 for Operation that will allow you to perform quickly common development tasks. 
 
 * [Create extension class](#create-extension-class)
@@ -6,6 +6,7 @@ A set of Visual Studio Add-ins for Microsoft Dynamics 365 for Operation that wil
 * [Enum builder](#enum-builder)
 * [Fields builder](#fields-builder)
 * [Table builder](#table-builder)
+* [Form builder](#form-builder)
 * [Create menu item](#create-menu-item)
 * [Troubleshooting](#troubleshooting)
 * [Installation](#installation)
@@ -14,13 +15,23 @@ You are more than welcome to contribute!
 
 ## Create extension class
 
-This Add-in works for standard Forms, Tables and Classes and allows you to create an extension class in one click.
+This Add-in works for standard Tables, Classes, Forms, Forms DS and Controls and allows you to create an extension class in one click.
 
 What you need to do is to enter your project prefix
 
-![](assets/CreateExtenisonClass.jpg)
+It also allow you to follow naming conventions. The following standard is proposed
 
-This tool can be run using Right-click AddIns on Table, Class or Form(other elements are coming) 
+| Standard element name | Extension Class Name                                         |
+| --------------------- | ------------------------------------------------------------ |
+| Table CustTable       | [ExtensionOf(tablestr(CustTable))]<br/>final class CustTableTST_Extension |
+| Form CustTable        | [ExtensionOf(formstr(CustTable))]<br/>final class CustTableFormTST_Extension |
+| Form data source      | [ExtensionOf(formdatasourcestr(CustTable, DataSource1))]<br/>final class CustTableFormTST_DataSource1_Extension |
+| Form data fields      | [ExtensionOf(formdatafieldstr(CustTable, DataSource1, Field1))]<br/>final class CustTableFormTST_DataSource1Field1_Extension |
+| Button1               | [ExtensionOf(formcontrolstr(CustTable, Button1))]<br/>final class CustTableFormTST_Button1_Extension |
+
+![](assets/CreateExtensionClass.png)
+
+This tool can be run using Right-click AddIns on Table, Class or Form 
 
 ## Copy extension method
 
@@ -78,6 +89,19 @@ The tool does the following:
 - Creates a new menu item for this form
 
 ![](assets/TableBuilder.jpg)
+
+## Form Builder
+
+This tool helps you create a standard form for the selected table
+
+The tool does the following:
+
+- Creates field groups on the selected table
+- Creates a new form
+- Adds all required controls based on the selected template (you need to restore the form and manually apply the template after the creation)
+- Creates a Menu item for the created form
+
+![](assets/FormBuilder.png)
 
 ## Create menu item
 
