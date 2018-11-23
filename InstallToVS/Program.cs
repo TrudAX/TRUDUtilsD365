@@ -38,6 +38,7 @@ namespace InstallToVS
         }
         private static string FindExtensionFolder()
         {
+            /*
             using (var extensionsRegKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\VisualStudio\14.0\ExtensionManager\EnabledExtensions"))
             {
                 string path = "";
@@ -50,13 +51,28 @@ namespace InstallToVS
                         path = (string) extensionsRegKey.GetValue(axToolsKeyName);
                     }
                 }
+                */
+            string path = "";
+            RegistryKey d365Key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\VisualStudio\14.0_Config\AutomationProperties\Dynamics 365");
+            if (d365Key != null)
+            {
+                string package = (string) d365Key.GetValue("Package");
 
-                if (string.IsNullOrEmpty(path))
+                RegistryKey pathKey =
+                    Registry.CurrentUser.OpenSubKey(
+                        $@"SOFTWARE\Microsoft\VisualStudio\14.0_Config\BindingPaths\{package}");
+                if (pathKey != null)
                 {
-                    throw new ApplicationException("Could not find D365FO tools in Windows registry.");
+                    path = pathKey.GetValueNames()[0];
                 }
-                return Path.Combine(path, AddinFolder);
             }
+
+            if (string.IsNullOrEmpty(path))
+            {
+                throw new ApplicationException("Could not find D365FO tools in Windows registry.");
+            }
+            return Path.Combine(path, AddinFolder);
+            //}
 
         }
     }
