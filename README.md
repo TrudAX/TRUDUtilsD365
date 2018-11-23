@@ -143,7 +143,7 @@ Another option (this will run a new instance of VS)
 
 ## Installation
 
-Download all 3 files and run InstallToVS.exe. It will copy TRUDUtilsD365.dll and TRUDUtilsD365.pdb to the VS AddinExtensions folders.
+Download all 3 files and run **InstallToVS.exe**(Run as Administrator). It will copy **TRUDUtilsD365.dll** and **TRUDUtilsD365.pdb** to the VS AddinExtensions folders.
 
 Restart VS
 
