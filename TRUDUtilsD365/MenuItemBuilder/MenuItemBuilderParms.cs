@@ -21,6 +21,8 @@ namespace TRUDUtilsD365.MenuItemBuilder
         public string FormLabel { get; set; } = "";
         public string FormHelp { get; set; } = "";
 
+        private MenuItemObjectType ObjectTypeCaller;
+
 
         private AxHelper _axHelper;
 
@@ -52,7 +54,8 @@ namespace TRUDUtilsD365.MenuItemBuilder
                 var form = selectedElement as IForm;
                 ObjectName    = form.Name;
                 FormLabel     = form.FormDesign.Caption;
-                MenuItemType  = UtilElementType.DisplayTool;               
+                MenuItemType  = UtilElementType.DisplayTool;
+                ObjectTypeCaller = MenuItemObjectType.Form;
             }
             if (selectedElement is ClassItem)
             {
@@ -61,6 +64,7 @@ namespace TRUDUtilsD365.MenuItemBuilder
                 ObjectName   = form.Name;
                 //FormLabel    = form.FormDesign.Caption;//add description here
                 MenuItemType = UtilElementType.ActionTool;
+                ObjectTypeCaller = MenuItemObjectType.Class;
             }
             if (selectedElement is IReport)
             {
@@ -69,6 +73,7 @@ namespace TRUDUtilsD365.MenuItemBuilder
                 ObjectName = form.Name;
                 //FormLabel    = form.FormDesign.Caption;
                 MenuItemType = UtilElementType.OutputTool;
+                ObjectTypeCaller = MenuItemObjectType.SSRSReport;
             }
 
             MenuItemName = ObjectName;
@@ -99,7 +104,7 @@ namespace TRUDUtilsD365.MenuItemBuilder
                     {
                         throw new Exception($"MenuItem: {MenuItemName} already exists");
                     }
-                    axMenuItem = new AxMenuItemDisplay { Name = MenuItemName, Object = ObjectName, Label = FormLabel, HelpText = FormHelp, ObjectType = MenuItemObjectType.Form};
+                    axMenuItem = new AxMenuItemDisplay { Name = MenuItemName, Object = ObjectName, Label = FormLabel, HelpText = FormHelp, ObjectType = ObjectTypeCaller };
                     _axHelper.MetaModelService.CreateMenuItemDisplay((AxMenuItemDisplay)axMenuItem, _axHelper.ModelSaveInfo);
                     break;
 
@@ -109,7 +114,7 @@ namespace TRUDUtilsD365.MenuItemBuilder
                     {
                         throw new Exception($"MenuItem: {MenuItemName} already exists");
                     }
-                    axMenuItem = new AxMenuItemOutput { Name = MenuItemName, Object = ObjectName, Label = FormLabel, HelpText = FormHelp, ObjectType = MenuItemObjectType.SSRSReport };
+                    axMenuItem = new AxMenuItemOutput { Name = MenuItemName, Object = ObjectName, Label = FormLabel, HelpText = FormHelp, ObjectType = ObjectTypeCaller };
                     _axHelper.MetaModelService.CreateMenuItemOutput((AxMenuItemOutput)axMenuItem, _axHelper.ModelSaveInfo);
                     break;
 
@@ -119,7 +124,7 @@ namespace TRUDUtilsD365.MenuItemBuilder
                     {
                         throw new Exception($"MenuItem: {MenuItemName} already exists");
                     }
-                    axMenuItem = new AxMenuItemAction { Name = MenuItemName, Object = ObjectName, Label = FormLabel, HelpText = FormHelp, ObjectType = MenuItemObjectType.Class };
+                    axMenuItem = new AxMenuItemAction { Name = MenuItemName, Object = ObjectName, Label = FormLabel, HelpText = FormHelp, ObjectType = ObjectTypeCaller };
                     _axHelper.MetaModelService.CreateMenuItemAction((AxMenuItemAction)axMenuItem, _axHelper.ModelSaveInfo);                    
                     break;
 
