@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using EnvDTE;
 using Microsoft.Dynamics.AX.Metadata.Core.MetaModel;
@@ -71,6 +72,43 @@ namespace TRUDUtilsD365.Kernel
             }
             return res;
         }
+
+        public static string PrettyName(string input)
+        {
+            if (string.IsNullOrEmpty(input)) return "";
+            return input.First().ToString().ToLower() + input.Substring(1);
+        }
+        //AAACustTable  --> custTable
+        //AAA_CustTable --> custTable
+        //CustTable     --> custTable
+        public static string GetVarNameFromType(string typeName)
+        {
+            if (typeName.Length <= 6)
+            {
+                return PrettyName(typeName);
+            }
+
+            int prefixPos = 0;
+            for (int i = 0; i <= 5; i++)
+            {
+                if (typeName[i] != '_' && Char.IsUpper(typeName[i]) && Char.IsLower(typeName[i + 1]))
+                {
+                    prefixPos = i;
+                    break;
+                }
+            }
+
+            if (prefixPos == 0)
+            {
+                return PrettyName(typeName);
+            }
+
+            string res = PrettyName(typeName.Substring(prefixPos));
+
+            return res;
+
+        }
+
         private IMetadataProvider  _metadataProvider;
         private IMetaModelService  _metaModelService;
         private ModelSaveInfo      _modelSaveInfo;

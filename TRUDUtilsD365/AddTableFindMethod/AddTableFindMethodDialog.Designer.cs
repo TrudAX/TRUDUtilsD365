@@ -70,8 +70,9 @@
             // 
             // FieldsControl
             // 
+            this.FieldsControl.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.FieldsControl.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.addTableFindMethodParmsBindingSource, "FieldsStr", true));
-            this.FieldsControl.Location = new System.Drawing.Point(21, 80);
+            this.FieldsControl.Location = new System.Drawing.Point(21, 122);
             this.FieldsControl.Multiline = true;
             this.FieldsControl.Name = "FieldsControl";
             this.FieldsControl.Size = new System.Drawing.Size(178, 97);
@@ -80,7 +81,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(18, 64);
+            this.label2.Location = new System.Drawing.Point(18, 106);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(34, 13);
             this.label2.TabIndex = 3;
@@ -88,8 +89,8 @@
             // 
             // MethodNameControl
             // 
-            this.MethodNameControl.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.addTableFindMethodParmsBindingSource, "MethodName", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.MethodNameControl.Location = new System.Drawing.Point(24, 287);
+            this.MethodNameControl.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.addTableFindMethodParmsBindingSource, "VarName", true));
+            this.MethodNameControl.Location = new System.Drawing.Point(21, 80);
             this.MethodNameControl.Name = "MethodNameControl";
             this.MethodNameControl.Size = new System.Drawing.Size(175, 20);
             this.MethodNameControl.TabIndex = 4;
@@ -98,20 +99,20 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(21, 271);
+            this.label3.Location = new System.Drawing.Point(18, 64);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(94, 13);
+            this.label3.Size = new System.Drawing.Size(52, 13);
             this.label3.TabIndex = 5;
-            this.label3.Text = "Find method name";
+            this.label3.Text = "Var name";
             this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // ShowResultButton
             // 
-            this.ShowResultButton.Location = new System.Drawing.Point(24, 314);
+            this.ShowResultButton.Location = new System.Drawing.Point(403, 19);
             this.ShowResultButton.Name = "ShowResultButton";
             this.ShowResultButton.Size = new System.Drawing.Size(75, 23);
             this.ShowResultButton.TabIndex = 6;
-            this.ShowResultButton.Text = "Show result";
+            this.ShowResultButton.Text = "Refresh";
             this.ShowResultButton.UseVisualStyleBackColor = true;
             this.ShowResultButton.Click += new System.EventHandler(this.ShowResultButton_Click);
             // 
@@ -130,12 +131,12 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ResultTextBox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ResultTextBox.Location = new System.Drawing.Point(267, 40);
+            this.ResultTextBox.Location = new System.Drawing.Point(267, 43);
             this.ResultTextBox.MaxLength = 327670;
             this.ResultTextBox.Multiline = true;
             this.ResultTextBox.Name = "ResultTextBox";
             this.ResultTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.ResultTextBox.Size = new System.Drawing.Size(446, 297);
+            this.ResultTextBox.Size = new System.Drawing.Size(446, 375);
             this.ResultTextBox.TabIndex = 9;
             this.ResultTextBox.WordWrap = false;
             // 
@@ -147,7 +148,7 @@
             "find",
             "exists",
             "findRecId"});
-            this.MethodTypeCheckedListBox.Location = new System.Drawing.Point(21, 204);
+            this.MethodTypeCheckedListBox.Location = new System.Drawing.Point(21, 238);
             this.MethodTypeCheckedListBox.Name = "MethodTypeCheckedListBox";
             this.MethodTypeCheckedListBox.Size = new System.Drawing.Size(178, 64);
             this.MethodTypeCheckedListBox.TabIndex = 10;
@@ -155,7 +156,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(21, 188);
+            this.label5.Location = new System.Drawing.Point(21, 222);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(66, 13);
             this.label5.TabIndex = 11;
@@ -170,12 +171,13 @@
             this.linkLabel1.TabIndex = 12;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "Copy to clipboard";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // AddTableFindMethodDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(725, 349);
+            this.ClientSize = new System.Drawing.Size(725, 430);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.MethodTypeCheckedListBox);
@@ -189,7 +191,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.TableNameControl);
             this.Name = "AddTableFindMethodDialog";
-            this.Text = "AddTableFindMethodDialog";
+            this.Text = "Create table Find method";
             ((System.ComponentModel.ISupportInitialize)(this.addTableFindMethodParmsBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

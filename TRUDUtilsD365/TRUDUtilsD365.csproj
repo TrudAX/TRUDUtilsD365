@@ -66,7 +66,7 @@
       <DependentUpon>AddTableFindMethodDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="AddTableFindMethod\AddTableFindMethodParms.cs" />
-    <Compile Include="AddTableFindMethod\DesignerAddTableFindMethod.cs" />
+    <Compile Include="AddTableFindMethod\AddTableFindMethodMenu.cs" />
     <Compile Include="CopyExtensionMethod\CopyExtensionMethodParams.cs" />
     <Compile Include="CopyExtensionMethod\DesignerCopyExtensionMethod.cs" />
     <Compile Include="CreateExtensionClass\CreateExtensionClassDialog.cs">

@@ -23,11 +23,9 @@ namespace TRUDUtilsD365.AddTableFindMethod
             MethodTypeCheckedListBox.Items.Add("exists", _parms.IsCreateExists);
             MethodTypeCheckedListBox.Items.Add("findRecId", _parms.IsCreateFindRecId);
 
+            UpdateFromForm();
+            ResultTextBox.Text = _parms.GenerateResult();
 
-            //BindingList<AddTableFindMethodParms> bookProperty = new BindingList<AddTableFindMethodParms>();
-            //bookProperty.Add(parms);
-            //MethodNameControl.DataBindings.Add("Text", bookProperty[0], "MethodName");
-            //MethodNameControl.DataBindings.Add("Text", parms, "MethodName", false, DataSourceUpdateMode.OnPropertyChanged);
         }
 
         private void UpdateFromForm()
@@ -67,6 +65,11 @@ namespace TRUDUtilsD365.AddTableFindMethod
 
         private void TableNameControl_TextChanged(object sender, EventArgs e)
         {
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Windows.Forms.Clipboard.SetText(ResultTextBox.Text);
         }
     }
 }

@@ -7,6 +7,7 @@ A set of Visual Studio Add-ins for Microsoft Dynamics 365 for Operation that wil
 * [Fields builder](#fields-builder)
 * [Table builder](#table-builder)
 * [Form builder](#form-builder)
+* [Create find method](#create-find-method)
 * [Create menu item](#create-menu-item)
 * [Troubleshooting](#troubleshooting)
 * [Installation](#installation)
@@ -102,6 +103,14 @@ The tool does the following:
 - Creates a Menu item for the created form
 
 ![](assets/FormBuilder.png)
+
+## Create find method
+
+For this Add-in you will need to select several fields(for the table or table extension)
+
+![](assets/CreateFindMethod.png)
+
+Text for the standard **find()**, **findRecId()** and **exists()** will be generated
 
 ## Create menu item
 
