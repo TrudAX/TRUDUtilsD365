@@ -9,6 +9,7 @@ A set of Visual Studio Add-ins for Microsoft Dynamics 365 for Operation that wil
 * [Form builder](#form-builder)
 * [Create find method](#create-find-method)
 * [Create menu item](#create-menu-item)
+* [Create security privilege](#create-security-privilege)
 * [Troubleshooting](#troubleshooting)
 * [Installation](#installation)
 
@@ -118,6 +119,11 @@ This Add-in works for Forms, Reports and Classes and creates Menu item for the s
 
 ![](assets/MenuItemBuilder.png)
 
+## Create security privilege
+
+This Add-in works for the selected Menu Item and creates new security privilege for this Menu Item. Label and Name are automatically updated when you change Access Level
+
+![](assets/SecurityPrivilegeBuilder.png)
 
 ## Troubleshooting
 
