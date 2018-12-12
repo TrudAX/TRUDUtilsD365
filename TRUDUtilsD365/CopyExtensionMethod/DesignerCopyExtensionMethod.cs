@@ -9,7 +9,6 @@ namespace TRUDUtilsD365.CopyExtensionMethod
 {
     [Export(typeof(IDesignerMenu))]
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(IMethodBase), CanSelectMultiple = false)]
-
     internal class DesignerCopyExtensionMethod : DesignerMenuBase
     {
         #region Properties
@@ -37,11 +36,9 @@ namespace TRUDUtilsD365.CopyExtensionMethod
             {
                 if (e.SelectedElement is IMethodBase)
                 {
-
                     var methodBase = (IMethodBase) e.SelectedElement;
                     string methodTxt = new CopyExtensionMethodParams().CreateMethod(methodBase);
                     Clipboard.SetText(methodTxt);
-
                 }
             }
             catch (Exception ex)
@@ -49,7 +46,6 @@ namespace TRUDUtilsD365.CopyExtensionMethod
                 CoreUtility.HandleExceptionWithErrorMessage(ex);
             }
         }
-
 
         #endregion
     }
