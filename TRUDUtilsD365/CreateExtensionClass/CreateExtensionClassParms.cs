@@ -59,7 +59,7 @@ namespace TRUDUtilsD365.CreateExtensionClass
 
         public void DisplayLog()
         {
-            CoreUtility.DisplayInfo($"The following elements({_logString}) were created and added to the project");
+            CoreUtility.DisplayInfo($"The following element({_logString}) was created and added to the project");
         }
 
         public void InitFromSelectedElement(object selectedElement)
@@ -69,6 +69,13 @@ namespace TRUDUtilsD365.CreateExtensionClass
                 var form = (IForm)selectedElement;
                 ElementType = ExtensionClassObject.Form;
                 ElementName = form.Name;
+            }
+            else
+            if (selectedElement is FormExtension)
+            {
+                var form = (FormExtension)selectedElement;
+                ElementType = ExtensionClassObject.Form;
+                ElementName = form.Name.Split('.')[0];
             }
             else
             if (selectedElement is ClassItem)
@@ -83,6 +90,12 @@ namespace TRUDUtilsD365.CreateExtensionClass
                 var form = (Table)selectedElement;
                 ElementType = ExtensionClassObject.Table;
                 ElementName = form.Name;
+            }
+            if (selectedElement is TableExtension)
+            {
+                var form = (TableExtension)selectedElement;
+                ElementType = ExtensionClassObject.Table;
+                ElementName = form.Name.Split('.')[0];
             }
             else if (selectedElement is FormDataSourceField)
             {
