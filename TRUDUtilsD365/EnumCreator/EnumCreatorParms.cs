@@ -97,7 +97,6 @@ namespace TRUDUtilsD365.EnumCreator
                     StringSplitOptions.RemoveEmptyEntries));
 
             bool isFirstElement = true;
-            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
             int currentIndex = EnumValueStartIndex;
             foreach (string lineImp in listImp)
             {

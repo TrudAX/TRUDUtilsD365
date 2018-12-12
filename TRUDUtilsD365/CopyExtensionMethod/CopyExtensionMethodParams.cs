@@ -10,11 +10,13 @@ namespace TRUDUtilsD365.CopyExtensionMethod
     {
         #region Member variables
 
-        private const string staticString = " static";
+
+        private const string StaticString = " static";
 
         #endregion
 
-        public string createMethod(IMethodBase sourceMethod)
+        public string CreateMethod(IMethodBase sourceMethod)
+
         {
             if (sourceMethod == null)
             {
@@ -26,14 +28,20 @@ namespace TRUDUtilsD365.CopyExtensionMethod
                 throw new Exception("Final method could not be extended");
             }
 
-            if (!(sourceMethod.Visibility == CompilerVisibility.Protected || sourceMethod.Visibility == CompilerVisibility.Public))
+
+            if (!(sourceMethod.Visibility == CompilerVisibility.Protected ||
+                  sourceMethod.Visibility == CompilerVisibility.Public))
+
             {
                 throw new Exception("Only protected and public methods can be extended");
             }
 
             var attributes = sourceMethod.DataContractAttributes.OfType<IAttributeItem>();
 
-            if (attributes != null && attributes.Any(attribute => attribute.Name == "Wrappable" && string.Equals(attribute.Parameters[0].TypeValue, Boolean.FalseString)))
+            if (attributes != null && attributes.Any(attribute =>
+                    attribute.Name == "Wrappable" &&
+                    string.Equals(attribute.Parameters[0].TypeValue, Boolean.FalseString)))
+
             {
                 throw new Exception("Only Wrappable methods could be extended");
             }
@@ -49,16 +57,20 @@ namespace TRUDUtilsD365.CopyExtensionMethod
             var parameters = sourceMethod.Parameters.OfType<IMethodParameter>();
             if (parameters != null && parameters.Any())
             {
-                parametersString = string.Join(", ", parameters.Select(parameter => GetTypeNameFromCompilerType(parameter.TypeCompiler, parameter.TypeName) + " " + parameter.Name + (parameter.IsArray ? "[]" : string.Empty)));
-                nextParameters = string.Join(", ", parameters.Select(parameter => parameter.Name + (parameter.IsArray ? "[]" : string.Empty)));
+                parametersString = string.Join(", ",
+                    parameters.Select(parameter =>
+                        GetTypeNameFromCompilerType(parameter.TypeCompiler, parameter.TypeName) + " " + parameter.Name +
+                        (parameter.IsArray ? "[]" : string.Empty)));
+                nextParameters = string.Join(", ",
+                    parameters.Select(parameter => parameter.Name + (parameter.IsArray ? "[]" : string.Empty)));
             }
+
             string nextString = $"next {sourceMethod.Name}({nextParameters});";
-
             StringBuilder methodText = new StringBuilder();
-
-            string returnType = GetTypeNameFromCompilerType(sourceMethod.ReturnType.TypeCompiler, sourceMethod.ReturnType.TypeName);
-
-            methodText.AppendLine($"{sourceMethod.Visibility.ToString().ToLower()}{(sourceMethod.IsStatic ? staticString : string.Empty)} {returnType} {sourceMethod.Name}({parametersString})");
+            string returnType =
+                GetTypeNameFromCompilerType(sourceMethod.ReturnType.TypeCompiler, sourceMethod.ReturnType.TypeName);
+            methodText.AppendLine(
+                $"{sourceMethod.Visibility.ToString().ToLower()}{(sourceMethod.IsStatic ? StaticString : string.Empty)} {returnType} {sourceMethod.Name}({parametersString})");
             methodText.AppendLine("{");
 
             if (sourceMethod.ReturnType.TypeCompiler != CompilerBaseType.Void)
@@ -73,6 +85,7 @@ namespace TRUDUtilsD365.CopyExtensionMethod
             }
 
             methodText.AppendLine("}");
+
 
             return methodText.ToString();
         }
@@ -114,4 +127,6 @@ namespace TRUDUtilsD365.CopyExtensionMethod
             }
         }
     }
+
 }
+

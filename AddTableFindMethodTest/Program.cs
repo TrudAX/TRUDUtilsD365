@@ -48,9 +48,9 @@ namespace AddTableFindMethodTest
             CreateExtensionClassParms parms = new CreateExtensionClassParms();
 
             parms.ElementName = "CustTable";
-            parms.ElementType = ExtensionClassObject.Formstr;
+            parms.ElementType = ExtensionClassObject.Form;
             parms.Prefix = "MY";
-            parms.ClassType = ExtensionClassType.EventHandler;
+            //parms.ClassType = ExtensionClassType.EventHandler;
 
             dialog.SetParameters(parms);
 

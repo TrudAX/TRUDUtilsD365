@@ -9,12 +9,20 @@ namespace TRUDUtilsD365.CopyExtensionMethod
 {
     [Export(typeof(IDesignerMenu))]
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(IMethodBase), CanSelectMultiple = false)]
-    class DesignerCopyExtensionMethod : DesignerMenuBase
+
+    internal class DesignerCopyExtensionMethod : DesignerMenuBase
     {
-        #region Member variables
+        #region Properties
+        /// <summary>
+        ///     Caption for the menu item. This is what users would see in the menu.
+        /// </summary>
+        public override string Caption => "TRUDUtils - Copy extension method";
 
-        private const string addinName = "CopyExtensionMethod";
-
+        private const string AddinName = "TRUDUtilsD365.CopyExtensionMethod";
+        /// <summary>
+        ///     Unique name of the add-in
+        /// </summary>
+        public override string Name => AddinName;
         #endregion
 
         #region Callbacks
@@ -29,9 +37,11 @@ namespace TRUDUtilsD365.CopyExtensionMethod
             {
                 if (e.SelectedElement is IMethodBase)
                 {
-                    var methodBase = e.SelectedElement as IMethodBase;
-                    string methodTxt = new CopyExtensionMethodParams().createMethod(methodBase);
-                    Clipboard.SetText(methodTxt.ToString());
+
+                    var methodBase = (IMethodBase) e.SelectedElement;
+                    string methodTxt = new CopyExtensionMethodParams().CreateMethod(methodBase);
+                    Clipboard.SetText(methodTxt);
+
                 }
             }
             catch (Exception ex)
@@ -39,27 +49,7 @@ namespace TRUDUtilsD365.CopyExtensionMethod
                 CoreUtility.HandleExceptionWithErrorMessage(ex);
             }
         }
-        
 
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        ///     Caption for the menu item. This is what users would see in the menu.
-        /// </summary>
-        public override string Caption
-        {
-            get { return "Copy extension method"; }
-        }
-
-        /// <summary>
-        ///     Unique name of the add-in
-        /// </summary>
-        public override string Name
-        {
-            get { return addinName; }
-        }
 
         #endregion
     }

@@ -1,7 +1,48 @@
-# TRUDUtilsD365
-A set of Visual Studio Add-ins for Microsoft Dynamics 365 for Operation that will allow you to quickly perform common development tasks. 
+﻿# TRUDUtilsD365
+A set of Visual Studio Add-ins for Microsoft Dynamics 365 for Operation that will allow you to perform quickly common development tasks. 
+
+* [Create extension class](#create-extension-class)
+* [Copy extension method](#copy-extension-method)
+* [Enum builder](#enum-builder)
+* [Fields builder](#fields-builder)
+* [Table builder](#table-builder)
+* [Form builder](#form-builder)
+* [Create find method](#create-find-method)
+* [Create menu item](#create-menu-item)
+* [Create security privilege](#create-security-privilege)
+* [Troubleshooting](#troubleshooting)
+* [Installation](#installation)
 
 You are more than welcome to contribute! 
+
+## Create extension class
+
+This Add-in works for standard Tables, Classes, Forms, Forms DS and Controls and allows you to create an extension class in one click.
+
+What you need to do is to enter your project prefix
+
+It also allow you to follow naming conventions. The following standard is proposed
+
+| Standard element name | Extension Class Name                                         |
+| --------------------- | ------------------------------------------------------------ |
+| Table CustTable       | [ExtensionOf(tablestr(CustTable))]<br/>final class CustTableTST_Extension |
+| Form CustTable        | [ExtensionOf(formstr(CustTable))]<br/>final class CustTableFormTST_Extension |
+| Form data source      | [ExtensionOf(formdatasourcestr(CustTable, DataSource1))]<br/>final class CustTableFormTST_DataSource1_Extension |
+| Form data fields      | [ExtensionOf(formdatafieldstr(CustTable, DataSource1, Field1))]<br/>final class CustTableFormTST_DataSource1Field1_Extension |
+| Button1               | [ExtensionOf(formcontrolstr(CustTable, Button1))]<br/>final class CustTableFormTST_Button1_Extension |
+
+![](assets/CreateExtensionClass.png)
+
+This tool can be run using Right-click AddIns on Table, Class or Form 
+
+## Copy extension method
+
+This Addins copies to the clipboard template for the method extension(with next call)
+
+![](assets/CopyExtensionMethod.png)
+
+Tool can be run by Right-click method in the designer view
+
 
 ## Enum builder
 
@@ -11,7 +52,7 @@ The tool does the following:
 
 - Generates an enum
 
-- Adds values with labels from text entry form(tries to generate element Name from the label automatically or you can specify it manually)
+- Adds values with labels from the text entry form(tries to generate element Name from the label automatically or you can specify it manually)
 
 - Generates EDT type for this enum
 
@@ -28,8 +69,8 @@ Usually while adding new fields you have some specification document for the dev
 The tool does the following:
 
 - Creates EDT if it doesn't not exist (Label, Help text, Extends and String length properties supported)
-- Adds a field or empty display method with this EDT to the table
-- Adds new field or method to the specified Field group
+- Adds a field or an empty display method with this EDT to the table
+- Adds a new field or a method to the specified Field group
 - Creates a relation for the table if EDT has a Reference table property
 
 ![1541642572075](assets/TableFieldsBuilder.png)
@@ -51,15 +92,38 @@ The tool does the following:
 
 ![](assets/TableBuilder.jpg)
 
-## Create an extension class
+## Form Builder
 
-This Add-in works for standard Forms, Tables and Classes and allows you to create an extension class in one click.
+This tool helps you create a standard form for the selected table
 
-What you need to do is to enter your project prefix
+The tool does the following:
 
-![](assets/CreateExtenisonClass.jpg)
+- Creates field groups on the selected table
+- Creates a new form
+- Adds all required controls based on the selected template (you need to restore the form and manually apply the template after the creation)
+- Creates a Menu item for the created form
 
-This tool can be run using Right-click AddIns on Table, Class or Form(other elements are coming) 
+![](assets/FormBuilder.png)
+
+## Create find method
+
+For this Add-in you will need to select several fields(for the table or table extension)
+
+![](assets/CreateFindMethod.png)
+
+Text for the standard **find()**, **findRecId()** and **exists()** will be generated
+
+## Create menu item
+
+This Add-in works for Forms, Reports and Classes and creates Menu item for the selected object
+
+![](assets/MenuItemBuilder.png)
+
+## Create security privilege
+
+This Add-in works for the selected Menu Item and creates new security privilege for this Menu Item. Label and Name are automatically updated when you change Access Level
+
+![](assets/SecurityPrivilegeBuilder.png)
 
 ## Troubleshooting
 
@@ -85,16 +149,18 @@ One of the ways to do this:
 
 ​      
 
+Another option (this will run a new instance of VS)
+
+- Open the solution and set the required breakpoints
+- Got to the Project->Property->Debug (for TRUDUtilsD365 project)
+- Set start action to "start external program" and specify the parameter "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe"
+- Run the project
+
 ## Installation
 
-Copy TRUDUtilsD365.dll and TRUDUtilsD365.pdb to the following folders
-
-For 8.0 local DEV VM:
-
-C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\agk3do44.e2i\AddinExtensions
-
-For 8.1 local DEV VM:
-
-C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\ugjn0jrw.pfb\AddinExtensions
+Download all 3 files and run **InstallToVS.exe**(Run as Administrator). It will copy **TRUDUtilsD365.dll** and **TRUDUtilsD365.pdb** to the VS AddinExtensions folders.
 
 Restart VS
+
+You can also copy these files manually, but extension path will be different for different VMs. (for 8.0 local DEV VM it will be C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\agk3do44.e2i\AddinExtensions, for 8.1 local DEV VM: C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\ugjn0jrw.pfb\AddinExtensions )
+

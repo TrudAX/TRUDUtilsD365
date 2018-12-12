@@ -1,8 +1,12 @@
 ﻿using System.Text;
-using Dynamics.AX.Application;
 using Microsoft.Dynamics.AX.Metadata.MetaModel;
+using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Classes;
+using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Forms;
+using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Tables;
+using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.DataEntityViews;
 using TRUDUtilsD365.Kernel;
 using Exception = System.Exception;
+using Microsoft.Dynamics.Framework.Tools.MetaModel.Core;
 
 namespace TRUDUtilsD365.CreateExtensionClass
 {
@@ -14,38 +18,123 @@ namespace TRUDUtilsD365.CreateExtensionClass
 
     public enum ExtensionClassObject
     {
-        Formstr,
-        Tablestr,
-        Classstr,
-        FormDataFieldStr,
-        Formdatasourcestr,
-        Formcontrolstr
+        Form,
+        Table,
+        Class,
+        FormDataField,
+        FormDataSource,
+        FormControl,
+        DataEntityView
     }
 
     public class CreateExtensionClassParms
     {
-        public string Prefix { get; set; }
+        public string Prefix { get; set; } = "TST";
 
         public string ElementName { get; set; }
+        public string SubElementName { get; set; } = "";
         public ExtensionClassObject ElementType { get; set; }
 
-        public ExtensionClassType ClassType { get; set; }
+        public ExtensionClassType ClassType { get; set; } = ExtensionClassType.Extension;
 
-        public string ResultClassName { get; set; }
+        public string ResultClassName { get; set; } = "";
+
+        private string _logString;
+
+        public bool ClassTypeModified()
+        {
+            CalcResultName();
+            return true;
+        }
+        public bool PrefixModified()
+        {
+            CalcResultName();
+            return true;
+        }
+
+        void AddLog(string logLocal)
+        {
+            _logString += logLocal;
+        }
+
+        public void DisplayLog()
+        {
+            CoreUtility.DisplayInfo($"The following elements({_logString}) were created and added to the project");
+        }
+
+        public void InitFromSelectedElement(object selectedElement)
+        {
+            if (selectedElement is IForm)
+            {
+                var form = (IForm)selectedElement;
+                ElementType = ExtensionClassObject.Form;
+                ElementName = form.Name;
+            }
+            else
+            if (selectedElement is ClassItem)
+            {
+                var form = (ClassItem)selectedElement;
+                ElementType = ExtensionClassObject.Class;
+                ElementName = form.Name;
+            }
+            else
+            if (selectedElement is Table)
+            {
+                var form = (Table)selectedElement;
+                ElementType = ExtensionClassObject.Table;
+                ElementName = form.Name;
+            }
+            else if (selectedElement is FormDataSourceField)
+            {
+                var form = (FormDataSourceField)selectedElement;
+                ElementType    = ExtensionClassObject.FormDataField;
+                ElementName    = form.FormDataSource.RootElement.Name;
+                SubElementName = $"{form.FormDataSource.Name}, {form.DataField}";
+            }
+            else if (selectedElement is FormDataSource)
+            {
+                var form = (FormDataSource)selectedElement;
+                ElementType    = ExtensionClassObject.FormDataSource;
+                ElementName    = form.RootElement.Name;
+                SubElementName = $"{form.Name}";
+            }
+            else if (selectedElement is FormControl)
+            {
+                var form = (FormControl)selectedElement;
+                ElementType    = ExtensionClassObject.FormControl;
+                ElementName    = form.RootElement.Name;
+                SubElementName = $"{form.Name}";
+            }
+            else if (selectedElement is DataEntityView)
+            {
+                var form = (DataEntityView)selectedElement;
+                ElementType = ExtensionClassObject.DataEntityView;
+                ElementName = form.Name;
+            }
+        }
 
         public void CalcResultName()
         {
             string res = "";
             res += ElementName;
-            if (ElementType == ExtensionClassObject.Formstr ||
-                ElementType == ExtensionClassObject.Formdatasourcestr ||
-                ElementType == ExtensionClassObject.FormDataFieldStr ||
-                ElementType == ExtensionClassObject.Formcontrolstr)
+            if (ElementType == ExtensionClassObject.Form ||
+                ElementType == ExtensionClassObject.FormDataSource ||
+                ElementType == ExtensionClassObject.FormDataField ||
+                ElementType == ExtensionClassObject.FormControl)
             {
                 res += "Form";
             }
 
             res += Prefix;
+
+            if (ClassType == ExtensionClassType.Extension)
+            {
+                if (!string.IsNullOrWhiteSpace(SubElementName))
+                {
+                    res += "_" + AxHelper.GetTypeNameFromLabel(SubElementName);
+                }
+            }
+
             switch (ClassType)
             {
                 case ExtensionClassType.Extension:
@@ -59,7 +148,7 @@ namespace TRUDUtilsD365.CreateExtensionClass
             ResultClassName = res;
         }
 
-        public void CreateClass()
+        public void Run()
         {
             AxHelper axHelper = new AxHelper();
 
@@ -77,28 +166,42 @@ namespace TRUDUtilsD365.CreateExtensionClass
             string typeStr = "";
             switch (ElementType)
             {
-                case ExtensionClassObject.Formstr:
+                case ExtensionClassObject.Form:
                     typeStr = "formstr";
                     break;
-                case ExtensionClassObject.Classstr:
+                case ExtensionClassObject.Class:
                     typeStr = "classstr";
                     break;
-                case ExtensionClassObject.Tablestr:
+                case ExtensionClassObject.Table:
                     typeStr = "tablestr";
                     break;
-                case ExtensionClassObject.FormDataFieldStr:
+                case ExtensionClassObject.FormDataField:
                     typeStr = "formdatafieldstr";
                     break;
-                case ExtensionClassObject.Formdatasourcestr:
+                case ExtensionClassObject.FormDataSource:
                     typeStr = "formdatasourcestr";
                     break;
-                case ExtensionClassObject.Formcontrolstr:
+                case ExtensionClassObject.FormControl:
                     typeStr = "formcontrolstr";
+                    break;
+                case ExtensionClassObject.DataEntityView:
+                    typeStr = "dataentityviewstr";
                     break;
             }
 
             StringBuilder declarationText = new StringBuilder();
-            declarationText.AppendLine($"[ExtensionOf({typeStr}({ElementName}))]");
+            if (ClassType == ExtensionClassType.Extension)
+            {
+                if (string.IsNullOrWhiteSpace(SubElementName))
+                {
+                    declarationText.AppendLine($"[ExtensionOf({typeStr}({ElementName}))]");
+                }
+                else
+                {
+                    declarationText.AppendLine($"[ExtensionOf({typeStr}({ElementName}, {SubElementName}))]");
+                }
+            }
+
             declarationText.AppendLine($"final{(newClass.IsStatic ? " static " : " ")}class {newClass.Name}");
             declarationText.AppendLine("{");
             declarationText.AppendLine("}");
@@ -106,6 +209,8 @@ namespace TRUDUtilsD365.CreateExtensionClass
             newClass.SourceCode.Declaration = declarationText.ToString();
             axHelper.MetaModelService.CreateClass(newClass, axHelper.ModelSaveInfo);
             axHelper.AppendToActiveProject(newClass);
+
+            AddLog($"Class: {newClass.Name}; ");
         }
     }
 }

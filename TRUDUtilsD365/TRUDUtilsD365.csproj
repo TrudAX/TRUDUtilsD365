@@ -66,8 +66,10 @@
       <DependentUpon>AddTableFindMethodDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="AddTableFindMethod\AddTableFindMethodParms.cs" />
-    <Compile Include="AddTableFindMethod\DesignerAddTableFindMethod.cs" />
+
+    <Compile Include="AddTableFindMethod\AddTableFindMethodMenu.cs" />
     <Compile Include="CopyExtensionMethod\CopyExtensionMethodParams.cs" />
+    <Compile Include="CopyExtensionMethod\DesignerCopyExtensionMethod.cs" />
     <Compile Include="CreateExtensionClass\CreateExtensionClassDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -76,7 +78,14 @@
     </Compile>
     <Compile Include="CreateExtensionClass\CreateExtensionClassParms.cs" />
     <Compile Include="CreateExtensionClass\DesignerCreateExtensionClass.cs" />
-    <Compile Include="CopyExtensionMethod\DesignerCopyExtensionMethod.cs" />
+
+    <Compile Include="MenuItemBuilder\MenuItemBuilderDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MenuItemBuilder\MenuItemBuilderDialog.Designer.cs">
+      <DependentUpon>MenuItemBuilderDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MenuItemBuilder\MenuItemBuilderParms.cs" />
     <Compile Include="EnumCreator\EnumCreatorDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -85,13 +94,30 @@
     </Compile>
     <Compile Include="EnumCreator\EnumCreatorMenu.cs" />
     <Compile Include="EnumCreator\EnumCreatorParms.cs" />
+    <Compile Include="FormBuilder\FormBuilderParms.cs" />
+    <Compile Include="FormBuilder\FormBuilderDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormBuilder\FormBuilderDialog.Designer.cs">
+      <DependentUpon>FormBuilderDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormBuilder\FormBuilderMenu.cs" />
     <Compile Include="Kernel\AxHelper.cs" />
+    <Compile Include="MenuItemBuilder\MenuItemBuilderMenu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SecurityPrivilegeBuilder\SecurityPrivilegeBuilderMenu.cs" />
+    <Compile Include="SecurityPrivilegeBuilder\SecurityPrivilegeBuilderDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SecurityPrivilegeBuilder\SecurityPrivilegeBuilderDialog.Designer.cs">
+      <DependentUpon>SecurityPrivilegeBuilderDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SecurityPrivilegeBuilder\SecurityPrivilegeBuilderParms.cs" />
     <Compile Include="TableBuilder\TableBuilderDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -119,9 +145,18 @@
     <EmbeddedResource Include="EnumCreator\EnumCreatorDialog.resx">
       <DependentUpon>EnumCreatorDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormBuilder\FormBuilderDialog.resx">
+      <DependentUpon>FormBuilderDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MenuItemBuilder\MenuItemBuilderDialog.resx">
+      <DependentUpon>MenuItemBuilderDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SecurityPrivilegeBuilder\SecurityPrivilegeBuilderDialog.resx">
+      <DependentUpon>SecurityPrivilegeBuilderDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TableBuilder\TableBuilderDialog.resx">
       <DependentUpon>TableBuilderDialog.cs</DependentUpon>
@@ -134,6 +169,9 @@
     <None Include="Properties\DataSources\AddTableFindMethodParms.datasource" />
     <None Include="Properties\DataSources\TRUDUtilsD365.CreateExtensionClass.CreateExtensionClassParms.datasource" />
     <None Include="Properties\DataSources\TRUDUtilsD365.EnumCreator.EnumCreatorParms.datasource" />
+    <None Include="Properties\DataSources\TRUDUtilsD365.FormBuilder.FormBuilderParms.datasource" />
+    <None Include="Properties\DataSources\TRUDUtilsD365.MenuItemBuilder.MenuItemBuilderParms.datasource" />
+    <None Include="Properties\DataSources\TRUDUtilsD365.SecurityPrivilegeBuilder.SecurityPrivilegeBuilderParms.datasource" />
     <None Include="Properties\DataSources\TRUDUtilsD365.TableBuilder.TableBuilderParms.datasource" />
     <None Include="Properties\DataSources\TRUDUtilsD365.TableFieldsBuilder.TableFieldsBuilderParms.datasource" />
     <None Include="Resource\TableFieldsBuilderTemplateV1.xlsx" />
