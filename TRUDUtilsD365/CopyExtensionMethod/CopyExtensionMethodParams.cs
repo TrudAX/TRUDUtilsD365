@@ -10,11 +10,13 @@ namespace TRUDUtilsD365.CopyExtensionMethod
     {
         #region Member variables
 
+
         private const string StaticString = " static";
 
         #endregion
 
         public string CreateMethod(IMethodBase sourceMethod)
+
         {
             if (sourceMethod == null)
             {
@@ -26,16 +28,20 @@ namespace TRUDUtilsD365.CopyExtensionMethod
                 throw new Exception("Final method could not be extended");
             }
 
+
             if (!(sourceMethod.Visibility == CompilerVisibility.Protected ||
                   sourceMethod.Visibility == CompilerVisibility.Public))
+
             {
                 throw new Exception("Only protected and public methods can be extended");
             }
 
             var attributes = sourceMethod.DataContractAttributes.OfType<IAttributeItem>();
+
             if (attributes != null && attributes.Any(attribute =>
                     attribute.Name == "Wrappable" &&
                     string.Equals(attribute.Parameters[0].TypeValue, Boolean.FalseString)))
+
             {
                 throw new Exception("Only Wrappable methods could be extended");
             }
@@ -47,6 +53,7 @@ namespace TRUDUtilsD365.CopyExtensionMethod
 
             string parametersString = string.Empty;
             string nextParameters = string.Empty;
+
             var parameters = sourceMethod.Parameters.OfType<IMethodParameter>();
             if (parameters != null && parameters.Any())
             {
@@ -65,6 +72,7 @@ namespace TRUDUtilsD365.CopyExtensionMethod
             methodText.AppendLine(
                 $"{sourceMethod.Visibility.ToString().ToLower()}{(sourceMethod.IsStatic ? StaticString : string.Empty)} {returnType} {sourceMethod.Name}({parametersString})");
             methodText.AppendLine("{");
+
             if (sourceMethod.ReturnType.TypeCompiler != CompilerBaseType.Void)
             {
                 methodText.AppendLine($"\t{returnType} ret = {nextString}");
@@ -77,6 +85,8 @@ namespace TRUDUtilsD365.CopyExtensionMethod
             }
 
             methodText.AppendLine("}");
+
+
             return methodText.ToString();
         }
 
@@ -117,4 +127,6 @@ namespace TRUDUtilsD365.CopyExtensionMethod
             }
         }
     }
+
 }
+
