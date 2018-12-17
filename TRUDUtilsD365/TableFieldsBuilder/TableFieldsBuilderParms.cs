@@ -275,38 +275,87 @@ namespace TRUDUtilsD365.TableFieldsBuilder
                     return null;
                 }
 
-                if (string.IsNullOrEmpty(edt.ReferenceTable))
+                AxTableRelationForeignKey axTableRelation = null;
+
+                if (!string.IsNullOrEmpty(edt.ReferenceTable))
                 {
-                    return null;
+
+                    AxEdtTableReference firstRef = edt.TableReferences.First();
+                    if (firstRef == null)
+                    {
+                        return null;
+                    }
+
+                    string newRelationName = edt.ReferenceTable;
+                    if (existingRelations.Contains(newRelationName))
+                    {
+                        newRelationName = edt.ReferenceTable + "_" + field.Name;
+                    }
+
+                    axTableRelation = new AxTableRelationForeignKey();
+                    axTableRelation.Name         = newRelationName;
+                    axTableRelation.EDTRelation  = NoYes.Yes;
+                    axTableRelation.Cardinality  = Cardinality.ZeroMore;
+                    axTableRelation.OnDelete     = DeleteAction.Restricted;
+                    axTableRelation.RelatedTable = edt.ReferenceTable;
+                    axTableRelation.RelatedTableCardinality =
+                        IsMandatory ? RelatedTableCardinality.ExactlyOne : RelatedTableCardinality.ZeroOne;
+                    axTableRelation.RelationshipType = RelationshipType.Association;
+
+                    foreach (AxEdtTableReference tableRefLine in edt.TableReferences)
+                    {
+                        var localLineRef = tableRefLine as AxEdtTableReferenceFilter;
+                        if (localLineRef != null)
+                        {
+                            AxTableRelationConstraintRelatedFixed axTableRelationConstraint = new AxTableRelationConstraintRelatedFixed();
+                            axTableRelationConstraint.Name         = localLineRef.RelatedField;
+                            axTableRelationConstraint.RelatedField = localLineRef.RelatedField;
+                            axTableRelationConstraint.Value        = localLineRef.Value;
+                            axTableRelation.AddConstraint(axTableRelationConstraint);
+                        }
+                        else
+                        {
+                            AxTableRelationConstraintField axTableRelationConstraint = new AxTableRelationConstraintField();
+                            axTableRelationConstraint.Name         = field.Name;
+                            axTableRelationConstraint.Field        = field.Name;
+                            axTableRelationConstraint.SourceEDT    = field.ExtendedDataType;
+                            axTableRelationConstraint.RelatedField = tableRefLine.RelatedField;
+                            axTableRelation.AddConstraint(axTableRelationConstraint);
+                        }
+                    }
+                    
+                }
+                else
+                {
+                    if (edt.Relations != null && edt.Relations.Count > 0) //old style relation
+                    {
+                        AxEdtRelation firstEdtRelation = edt.Relations.First();
+
+                        string newRelationName = firstEdtRelation.Table;
+                        if (existingRelations.Contains(newRelationName))
+                        {
+                            newRelationName = edt.ReferenceTable + "_" + field.Name;
+                        }
+
+                        axTableRelation              = new AxTableRelationForeignKey();
+                        axTableRelation.Name         = newRelationName;
+                        axTableRelation.EDTRelation  = NoYes.Yes;
+                        axTableRelation.Cardinality  = Cardinality.ZeroMore;
+                        axTableRelation.OnDelete     = DeleteAction.Restricted;
+                        axTableRelation.RelatedTable = firstEdtRelation.Table;
+                        axTableRelation.RelatedTableCardinality =
+                            IsMandatory ? RelatedTableCardinality.ExactlyOne : RelatedTableCardinality.ZeroOne;
+                        axTableRelation.RelationshipType = RelationshipType.Association;
+                        AxTableRelationConstraintField axTableRelationConstraint = new AxTableRelationConstraintField();
+                        axTableRelationConstraint.Name         = field.Name;
+                        axTableRelationConstraint.Field        = field.Name;
+                        axTableRelationConstraint.SourceEDT    = field.ExtendedDataType;
+                        axTableRelationConstraint.RelatedField = firstEdtRelation.RelatedField;
+
+                        axTableRelation.AddConstraint(axTableRelationConstraint);
+                    }
                 }
 
-                AxEdtTableReference  firstRef = edt.TableReferences.First();
-                if (firstRef == null)
-                {
-                    return null;
-                }
-                string newRelationName = edt.ReferenceTable;
-                if (existingRelations.Contains(newRelationName))
-                {
-                    newRelationName = edt.ReferenceTable + "_" + field.Name;
-                }
-
-                AxTableRelationForeignKey axTableRelation = new AxTableRelationForeignKey();
-                axTableRelation.Name = newRelationName;
-                axTableRelation.EDTRelation  = NoYes.Yes;
-                axTableRelation.Cardinality  = Cardinality.ZeroMore;
-                axTableRelation.OnDelete     = DeleteAction.Restricted;
-                axTableRelation.RelatedTable = edt.ReferenceTable;
-                axTableRelation.RelatedTableCardinality =
-                    IsMandatory ? RelatedTableCardinality.ExactlyOne : RelatedTableCardinality.ZeroOne;
-                axTableRelation.RelationshipType = RelationshipType.Association;
-                AxTableRelationConstraintField axTableRelationConstraint = new AxTableRelationConstraintField();
-                axTableRelationConstraint.Name         = field.Name;
-                axTableRelationConstraint.Field        = field.Name;
-                axTableRelationConstraint.SourceEDT    = field.ExtendedDataType;
-                axTableRelationConstraint.RelatedField = firstRef.RelatedField;
-
-                axTableRelation.AddConstraint(axTableRelationConstraint);
 
                 return axTableRelation;
                 

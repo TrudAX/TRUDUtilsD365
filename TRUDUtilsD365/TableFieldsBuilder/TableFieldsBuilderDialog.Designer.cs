@@ -203,8 +203,8 @@
             // 
             // saveFileDialogTemplate
             // 
-            this.saveFileDialogTemplate.DefaultExt = "xlsx";
-            this.saveFileDialogTemplate.FileName = "TableFieldsBuilderTemplate.xlsx";
+            this.saveFileDialogTemplate.DefaultExt = "xlsm";
+            this.saveFileDialogTemplate.FileName = "TableFieldsBuilderTemplate.xlsm";
             this.saveFileDialogTemplate.Title = "Get excel template";
             // 
             // tableFieldsBuilderParmsBindingSource

@@ -63,7 +63,7 @@ namespace TRUDUtilsD365.TableFieldsBuilder
             if (saveFileDialogTemplate.ShowDialog() == DialogResult.OK)
             {
                 string fileName = saveFileDialogTemplate.FileName;
-                var byteRes = Properties.Resources.TableFieldsBuilderTemplateV1;
+                var byteRes = Properties.Resources.TableFieldsBuilderTemplateV11;
 
                 File.WriteAllBytes(fileName, byteRes);
 

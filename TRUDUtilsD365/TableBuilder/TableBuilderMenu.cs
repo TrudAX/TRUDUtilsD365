@@ -32,7 +32,7 @@ namespace TRUDUtilsD365.TableBuilder
                 TableBuilderParms parms = new TableBuilderParms();
 
                 dialog.SetParameters(parms);
-                DialogResult formRes = dialog.ShowDialog();
+                dialog.Show();
             }
             catch (Exception ex)
             {

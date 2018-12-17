@@ -287,11 +287,17 @@ namespace TRUDUtilsD365.TableBuilder
                 AxEdt edtLocal = _axHelper.MetadataProvider.Edts.Read(PrimaryKeyEdtName);
                 if (edtLocal != null)
                 {
-                    edtLocal.ReferenceTable = TableName;
-                    edtLocal.AddTableReference(TableName, KeyFieldName);
+                    if (String.IsNullOrEmpty(edtLocal.ReferenceTable))//check for the existing EDT. Do not modify it
+                    {
+                        if (edtLocal.Relations == null || edtLocal.Relations.Count == 0) //no old style relations
+                        {
+                            edtLocal.ReferenceTable = TableName;
+                            edtLocal.AddTableReference(TableName, KeyFieldName);
 
-                    _axHelper.MetaModelService.UpdateExtendedDataType(edtLocal, _axHelper.ModelSaveInfo);
-                    _axHelper.AppendToActiveProject(edtLocal);
+                            _axHelper.MetaModelService.UpdateExtendedDataType(edtLocal, _axHelper.ModelSaveInfo);
+                            _axHelper.AppendToActiveProject(edtLocal);
+                        }
+                    }
 
                     //AddLog($"EDT: {edtLocal.Name}; ");
                 }

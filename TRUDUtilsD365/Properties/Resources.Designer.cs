@@ -69,5 +69,15 @@ namespace TRUDUtilsD365.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] TableFieldsBuilderTemplateV11 {
+            get {
+                object obj = ResourceManager.GetObject("TableFieldsBuilderTemplateV11", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

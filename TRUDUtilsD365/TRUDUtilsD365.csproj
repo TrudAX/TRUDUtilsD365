@@ -172,6 +172,7 @@
     <None Include="Properties\DataSources\TRUDUtilsD365.SecurityPrivilegeBuilder.SecurityPrivilegeBuilderParms.datasource" />
     <None Include="Properties\DataSources\TRUDUtilsD365.TableBuilder.TableBuilderParms.datasource" />
     <None Include="Properties\DataSources\TRUDUtilsD365.TableFieldsBuilder.TableFieldsBuilderParms.datasource" />
+    <None Include="Resources\TableFieldsBuilderTemplateV1.xlsm" />
     <None Include="Resource\TableFieldsBuilderTemplateV1.xlsx" />
   </ItemGroup>
   <ItemGroup />
