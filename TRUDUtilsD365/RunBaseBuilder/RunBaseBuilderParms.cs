@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using Microsoft.Dynamics.AX.Metadata.Core.MetaModel;
 using TRUDUtilsD365.Kernel;
@@ -16,39 +17,34 @@ namespace TRUDUtilsD365.RunBaseBuilder
         public string Label { get; set; } = "";
         public string LabelHelp { get; set; } = "";
         public Boolean IsMandatory { get; set; } = false;
-        public int LineNum { get; set; }//??
+
+        public override string ToString()
+        {
+            return $"Type:{Type}, varName:{Name}, Mandatory:{IsMandatory}, Label:{Label}, Help:{LabelHelp}";
+        }
 
     }
 
-    public class RunBaseBuilder
+    public class RunBaseBuilder : SnippedCreateAction
     {        
         public string ClassName { get; set; } = "";
         public string ClassDescription { get; set; } = "";
         public string QueryTable { get; set; } = "";
         public string ExternalTable { get; set; } = "";
         public Boolean IsAddFileUpload { get; set; } = false;
+        public Boolean IsCreateMenuItem { get; set; } = false;
 
-        public List<RunBaseBuilderVars> Fields;
+        public List<RunBaseBuilderVars> FieldsList;
 
-        protected const string ClassNameParm = "Class name";
-        protected const string DescriptionParmName = "Description";
-        protected const string QueryTableParmName = "Query table";
+        protected const char   MandatoryPropertySym      = '*';
+        protected const string ClassNameParm             = "Class name";
+        protected const string DescriptionParmName       = "Description";
+        protected const string QueryTableParmName        = "Query table";
         protected const string ExternalTableNameParmName = "External table name";
-        protected const string AddFileUploadParmName = "Add file upload(y)";
-        protected const string CreateMenuItemParmName = "Create menu item(y)";
-        protected const string ParametersParmName = "Parameters..";
+        protected const string AddFileUploadParmName     = "Add file upload(y)";
+        protected const string CreateMenuItemParmName    = "Create menu item(y)";
+        protected const string ParametersParmName        = "Parameters..";
 
-        private string _logString;
-
-        void AddLog(string logLocal)
-        {
-            _logString += logLocal;
-        }
-
-        public void DisplayLog()
-        {
-            CoreUtility.DisplayInfo($"The following elements({_logString}) were created and added to the project");
-        }
 
         public string GetPreviewString()
         {
@@ -61,77 +57,82 @@ namespace TRUDUtilsD365.RunBaseBuilder
         {
             snippetsParms.SnippetName = "Create RunBase class";
 
-            snippetsParms.AddParametersValue(ClassNameParm,     "AATestRunBase");
-            snippetsParms.AddParametersValue(DescriptionParmName ,     "Class description");
-            snippetsParms.AddParametersValue(QueryTableParmName ,     "CustTable");
-            snippetsParms.AddParametersValue(ExternalTableNameParmName,   "");
-            snippetsParms.AddParametersValue(AddFileUploadParmName,  "");
+            snippetsParms.AddParametersValue(ClassNameParm, "AATestRunBase");
+            snippetsParms.AddParametersValue(DescriptionParmName, "Class description");
+            snippetsParms.AddParametersValue(QueryTableParmName, "CustTable");
+            snippetsParms.AddParametersValue(ExternalTableNameParmName, "");
+            snippetsParms.AddParametersValue(AddFileUploadParmName, "");
             snippetsParms.AddParametersValue(CreateMenuItemParmName, "");
 
-            snippetsParms.AddParametersValue(ParametersParmName,       $"CustAccount" + Environment.NewLine +
+            snippetsParms.AddParametersValue(ParametersParmName,       $"CustAccount" + MandatoryPropertySym + Environment.NewLine +
                                                                    $"NoYesId {snippetsParms.ValuesSeparator} useCurrentDate {snippetsParms.ValuesSeparator} Use current date");
 
             snippetsParms.Description = "Util creates a RunBase type class. You can specify multiple parameters - each as a separate line in the following format EDTType | Variable name | " +
-                                        "Label | Help text | Mandatory(y for yes). You can specify only EDTType";
+                                        "Label | Help text. You can specify only EDTType. For the Mandatory property add * to the EDTType";
 
             snippetsParms.IsFieldsSeparatorVisible = true;
             snippetsParms.IsCreateButtonVisible = true;
+
+            snippetsParms.CreateAction = this;
+            snippetsParms.PreviewAction = this;
         }
-
-        /*
-        private List<AxEnumValue> GetAxEnumValues()
+        public override void InitFromSnippetsParms(SnippetsParms snippetsParms)
         {
-            List<AxEnumValue> resList = new List<AxEnumValue>();
+            ClassName        = snippetsParms.GetParmStr(ClassNameParm);
+            ClassDescription = snippetsParms.GetParmStr(DescriptionParmName);
+            QueryTable       = snippetsParms.GetParmStr(QueryTableParmName);
+            ExternalTable    = snippetsParms.GetParmStr(ExternalTableNameParmName);
+            IsAddFileUpload  = snippetsParms.GetParmBool(AddFileUploadParmName);
+            IsCreateMenuItem = snippetsParms.GetParmBool(CreateMenuItemParmName);
 
-            List<string> listImp = new List<string>(
-                EnumValuesStr.Split(new[] { Environment.NewLine },
-                    StringSplitOptions.RemoveEmptyEntries));
+            List<List<string>> parmList = snippetsParms.GetParmListSeparated(ParametersParmName);
+            FieldsList = new List<RunBaseBuilderVars>();
 
-            bool isFirstElement = true;
-            int currentIndex = EnumValueStartIndex;
-            foreach (string lineImp in listImp)
+            foreach (List<string> subList in parmList)
             {
-                string enumLabelLocal = "", enumNameLocal = "";
+                RunBaseBuilderVars runBaseBuilderVars = new RunBaseBuilderVars();
 
-                if (lineImp.Contains(ValuesSeparator))
+                string item = subList[0];                
+                if (item[item.Length - 1] == MandatoryPropertySym)//check mandatory
                 {
-                    List<string> listLineImp = new List<string>(
-                    lineImp.Split(new[] { ValuesSeparator },
-                            StringSplitOptions.None));
-                    enumLabelLocal = listLineImp[0].Trim();
-                    enumNameLocal  = listLineImp[1].Trim();
-                    if (enumLabelLocal == "" && enumNameLocal == "" && isFirstElement)
-                    {
-                        enumNameLocal = "None";
-                    }
+                    runBaseBuilderVars.IsMandatory = true;
+                    runBaseBuilderVars.Type        = item.Remove(item.Length - 1).Trim();
                 }
                 else
                 {
-                    enumLabelLocal = lineImp.Trim();
-                    enumNameLocal = AxHelper.GetTypeNameFromLabel(enumLabelLocal);
-                    //enumNameLocal = textInfo.ToTitleCase(enumLabelLocal).Replace(" ", "");
+                    runBaseBuilderVars.IsMandatory = false;
+                    runBaseBuilderVars.Type        = item;
                 }
 
-                isFirstElement = false;
-                if (enumNameLocal != "")
+                if (String.IsNullOrEmpty(runBaseBuilderVars.Type))
                 {
-                    AxEnumValue enumValue = new AxEnumValue {Label = enumLabelLocal, Name = enumNameLocal};
-                    enumValue.Value = currentIndex;
-                    currentIndex++;
-                    resList.Add(enumValue);
+                    throw new Exception("Type should be specified");
+                }
+
+                if (subList.Count > 1 && ! String.IsNullOrWhiteSpace(subList[1])) //check var name
+                {
+                    runBaseBuilderVars.Name = subList[1];
                 }
                 else
                 {
-                    break;
+                    runBaseBuilderVars.Name = AxHelper.GetVarNameFromType(runBaseBuilderVars.Type);
                 }
+                if (subList.Count > 2 && !String.IsNullOrWhiteSpace(subList[2])) 
+                {
+                    runBaseBuilderVars.Label = subList[2];
+                }
+                if (subList.Count > 3 && !String.IsNullOrWhiteSpace(subList[3]))
+                {
+                    runBaseBuilderVars.LabelHelp = subList[3];
+                }
+                FieldsList.Add(runBaseBuilderVars);
             }
-            return resList;
-        }
-        */
 
-        public void CreateRunBase()
+        }
+
+
+        public override void RunCreate()
         {
-            _logString = "";
             AxHelper axHelper = new AxHelper();
 
             /*
@@ -142,6 +143,21 @@ namespace TRUDUtilsD365.RunBaseBuilder
                 
             }
             */
+        }
+
+
+
+        public override string RunPreview()
+        {
+          
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"class {ClassName}");
+            foreach (var field in FieldsList)
+            {
+                sb.AppendLine(field.ToString());
+            }
+
+            return sb.ToString();
         }
     }
 }

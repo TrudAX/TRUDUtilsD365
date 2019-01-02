@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.ValuesControl = new System.Windows.Forms.TextBox();
+            this.snippetsParmsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.label3 = new System.Windows.Forms.Label();
             this.ShowResultButton = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
@@ -44,7 +45,6 @@
             this.label5 = new System.Windows.Forms.Label();
             this.SeparatorTextBox = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.snippetsParmsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.snippetsParmsBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -70,6 +70,10 @@
             this.ValuesControl.Size = new System.Drawing.Size(269, 265);
             this.ValuesControl.TabIndex = 2;
             this.ValuesControl.WordWrap = false;
+            // 
+            // snippetsParmsBindingSource
+            // 
+            this.snippetsParmsBindingSource.DataSource = typeof(TRUDUtilsD365.Kernel.SnippetsParms);
             // 
             // label3
             // 
@@ -150,6 +154,7 @@
             this.CreateButton.TabIndex = 15;
             this.CreateButton.Text = "Create";
             this.CreateButton.UseVisualStyleBackColor = true;
+            this.CreateButton.Click += new System.EventHandler(this.CreateButton_Click);
             // 
             // SnippetNameBox
             // 
@@ -209,10 +214,6 @@
             this.label6.TabIndex = 20;
             this.label6.Text = "Separator:";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // snippetsParmsBindingSource
-            // 
-            this.snippetsParmsBindingSource.DataSource = typeof(TRUDUtilsD365.Kernel.SnippetsParms);
             // 
             // SnippetsDialog
             // 
