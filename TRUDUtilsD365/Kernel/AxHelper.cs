@@ -33,7 +33,7 @@ namespace TRUDUtilsD365.Kernel
             }
             return sb.ToString();
         }
-        static string UppercaseWords(string value)
+        public static string UppercaseWords(string value)
         {
             char[] array = value.ToCharArray();
             // Handle the first letter in the string.

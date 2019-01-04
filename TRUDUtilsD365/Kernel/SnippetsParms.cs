@@ -35,7 +35,7 @@ namespace TRUDUtilsD365.Kernel
             RunCreate();
         }
 
-        void AddLog(string logLocal)
+        public void AddLog(string logLocal)
         {
             _logString += logLocal;
         }
@@ -44,7 +44,7 @@ namespace TRUDUtilsD365.Kernel
         {
             if (!String.IsNullOrWhiteSpace(_logString))
             {
-                CoreUtility.DisplayInfo($"The following elements({_logString}) were created and added to the project");
+                CoreUtility.DisplayInfo($"The following element(s)({_logString}) created and added to the project");
             }
         }
     }
