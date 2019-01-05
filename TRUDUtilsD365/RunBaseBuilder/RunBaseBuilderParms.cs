@@ -23,8 +23,9 @@ namespace TRUDUtilsD365.RunBaseBuilder
         {
             return $"Type:{Type}, varName:{Name}, Mandatory:{IsMandatory}, Label:{Label}, Help:{LabelHelp}";
         }
-
     }
+
+
 
     public class RunBaseBuilder : SnippedCreateAction
     {        
@@ -47,6 +48,9 @@ namespace TRUDUtilsD365.RunBaseBuilder
         protected const string ParametersParmName        = "Parameters..";
 
         protected CodeGenerateHelper CodeGenerate;
+
+        private AxClass newAxClass;
+        protected bool IsPreviewMode;
 
         public string GetPreviewString()
         {
@@ -150,8 +154,9 @@ namespace TRUDUtilsD365.RunBaseBuilder
             CodeGenerate.AddColumnAlignInt("DlgName", longestNameLength + 2);
         }
 
-        private string SrcClassDeclaration()
+        private void SrcClassDeclaration()
         {
+            CodeGenerate.SetMethodName("ClassDeclaration", ClassMethodType.ClassDeclaration);
             CodeGenerate.AppendLine($"class {ClassName} extends RunBaseBatch");
             CodeGenerate.BeginBlock();
             foreach (RunBaseBuilderVars df in FieldsList)
@@ -170,7 +175,10 @@ namespace TRUDUtilsD365.RunBaseBuilder
                 CodeGenerate.Append("DialogField", "Type").AppendLine($" {df.DlgName};");
             }
             CodeGenerate.AppendLine("");
-
+            if (QueryTable != "")
+            {
+                CodeGenerate.AppendLine("QueryRun       queryRun;");
+            }
             // source += strFmt('    %1            %2;', #SysQueryRun, #queryRun)                                      + #newLine;
             CodeGenerate.AppendLine("#define.CurrentVersion(1)");
             CodeGenerate.AppendLine("#localmacro.CurrentList").IndentIncrease();
@@ -186,116 +194,31 @@ namespace TRUDUtilsD365.RunBaseBuilder
             CodeGenerate.IndentDecrease();
             CodeGenerate.AppendLine("#endmacro");
             CodeGenerate.EndBlock();
-
-            return CodeGenerate.GetResult();
         }
 
-        string SrcConstruct()
+        void SrcConstruct()
         {
+            CodeGenerate.SetMethodName("construct", ClassMethodType.Static);
+
             CodeGenerate.AppendLine($"public static {ClassName} construct()");
             CodeGenerate.BeginBlock();
             CodeGenerate.AppendLine($"return new {ClassName}();");
-            CodeGenerate.EndBlock();
-
-            return CodeGenerate.GetResult();
+            CodeGenerate.EndBlock();           
         }
-        string SrcDescription()
+        void SrcDescription()
         {
+            CodeGenerate.SetMethodName("description", ClassMethodType.Static);
             CodeGenerate.AppendLine("static ClassDescription description()");
             CodeGenerate.BeginBlock();
             CodeGenerate.AppendLine("return " + "\"" + ClassDescription + "\";");
             CodeGenerate.EndBlock();
-
-            return CodeGenerate.GetResult();
         }
-
-        string SrcDialog()
+        void SrcMain()
         {
-            CodeGenerate.AppendLine("public Object dialog()");
-            CodeGenerate.BeginBlock();
-            CodeGenerate.AppendLine("DialogRunbase       dialog = super();");
-            CodeGenerate.AppendLine(";");
-
-            foreach (RunBaseBuilderVars df in FieldsList)
-            {
-                CodeGenerate.Append(df.DlgName, "DlgName");
-
-                CodeGenerate.Append($" = dialog.addFieldValue(extendedtypestr({df.Type}), {df.Name}");
-                if (df.Label == "" && df.LabelHelp == "")
-                {
-                    CodeGenerate.AppendLine(");");
-                }
-                else
-                {
-                    CodeGenerate.Append($", \"{df.Label}\"");
-                    if (df.LabelHelp == "")
-                    {
-                        CodeGenerate.AppendLine(");");
-                    }
-                    else
-                    {
-                        CodeGenerate.AppendLine($", \"{df.LabelHelp}\"");
-                    }
-                }
-            }
-            CodeGenerate.AppendLine("");
-            CodeGenerate.AppendLine("return dialog;");
-            CodeGenerate.EndBlock();
-
-            return CodeGenerate.GetResult();
-        }
-        string SrcGetFromDialog()
-        {
-            CodeGenerate.AppendLine("public boolean getFromDialog()");
-            CodeGenerate.BeginBlock();
-            CodeGenerate.AppendLine(";");
-            foreach (RunBaseBuilderVars df in FieldsList)
-            {
-                CodeGenerate.Append(df.Name, "FieldName");
-                CodeGenerate.AppendLine($" = {df.DlgName}.value();");
-            }
-            CodeGenerate.AppendLine("");
-            CodeGenerate.AppendLine("return super();");
-            CodeGenerate.EndBlock();
-
-            return CodeGenerate.GetResult();
-        }
-        string SrcInitParmDefault()
-        {
-            if (!String.IsNullOrEmpty(QueryTable))
-            {
-                CodeGenerate.AppendLine("public void initParmDefault()");
-                CodeGenerate.BeginBlock();
-                CodeGenerate.AppendLine("this.initQuery();");
-                CodeGenerate.EndBlock();
-            }
-
-            return CodeGenerate.GetResult();
-        }
-        string SrcInitQuery()
-        {
-            if (!String.IsNullOrEmpty(QueryTable))
-            {
-                CodeGenerate.AppendLine("public void initQuery()");
-                CodeGenerate.BeginBlock();
-                CodeGenerate.AppendLine("Query                   query = new Query();");
-                CodeGenerate.AppendLine($"QueryBuildDataSource    qbds = query.addDataSource(tablenum({QueryTable}));");
-                CodeGenerate.AppendLine("QueryBuildRange         qBR;");
-                CodeGenerate.AppendLine(";");
-                CodeGenerate.AppendLine($"qBR = SysQuery::findOrCreateRange(qbds, fieldnum({QueryTable}, RecId));");
-                CodeGenerate.AppendLine($"qBR.status(RangeStatus::HIDDEN);");
-                CodeGenerate.AppendLine("");
-                CodeGenerate.AppendLine("queryRun = new QueryRun(query);");
-                CodeGenerate.EndBlock();
-            }
-
-            return CodeGenerate.GetResult();
-        }
-        string SrcMain()
-        {
+            CodeGenerate.SetMethodName("main", ClassMethodType.Static);
             CodeGenerate.AppendLine("public static void main(Args _args)");
             CodeGenerate.BeginBlock();
-            CodeGenerate.AppendLine($"%1    runObject = {ClassName}::construct();");
+            CodeGenerate.AppendLine($"{ClassName}    runObject = {ClassName}::construct();");
 
             if (ExternalTable != "")//&& showQueryValues)
             {
@@ -327,10 +250,89 @@ namespace TRUDUtilsD365.RunBaseBuilder
             CodeGenerate.EndBlock();
 
             CodeGenerate.EndBlock();
-            return CodeGenerate.GetResult();
         }
-        string SrcPack()
+
+        void SrcDialog()
         {
+            CodeGenerate.SetMethodName("dialog");
+            CodeGenerate.AppendLine("public Object dialog()");
+            CodeGenerate.BeginBlock();
+            CodeGenerate.AppendLine("DialogRunbase       dialog = super();");
+            CodeGenerate.AppendLine(";");
+
+            foreach (RunBaseBuilderVars df in FieldsList)
+            {
+                CodeGenerate.Append(df.DlgName, "DlgName");
+
+                CodeGenerate.Append($" = dialog.addFieldValue(extendedtypestr({df.Type}), {df.Name}");
+                if (df.Label == "" && df.LabelHelp == "")
+                {
+                    CodeGenerate.AppendLine(");");
+                }
+                else
+                {
+                    CodeGenerate.Append($", \"{df.Label}\"");
+                    if (df.LabelHelp == "")
+                    {
+                        CodeGenerate.AppendLine(");");
+                    }
+                    else
+                    {
+                        CodeGenerate.AppendLine($", \"{df.LabelHelp}\"");
+                    }
+                }
+            }
+            CodeGenerate.AppendLine("");
+            CodeGenerate.AppendLine("return dialog;");
+            CodeGenerate.EndBlock();
+        }
+        void SrcGetFromDialog()
+        {
+            CodeGenerate.SetMethodName("getFromDialog");
+            CodeGenerate.AppendLine("public boolean getFromDialog()");
+            CodeGenerate.BeginBlock();
+            CodeGenerate.AppendLine(";");
+            foreach (RunBaseBuilderVars df in FieldsList)
+            {
+                CodeGenerate.Append(df.Name, "FieldName");
+                CodeGenerate.AppendLine($" = {df.DlgName}.value();");
+            }
+            CodeGenerate.AppendLine("");
+            CodeGenerate.AppendLine("return super();");
+            CodeGenerate.EndBlock();
+        }
+        void SrcInitParmDefault()
+        {
+            CodeGenerate.SetMethodName("initParmDefault");
+            if (!String.IsNullOrEmpty(QueryTable))
+            {
+                CodeGenerate.AppendLine("public void initParmDefault()");
+                CodeGenerate.BeginBlock();
+                CodeGenerate.AppendLine("this.initQuery();");
+                CodeGenerate.EndBlock();
+            }
+        }
+        void SrcInitQuery()
+        {
+            CodeGenerate.SetMethodName("initQuery");
+            if (!String.IsNullOrEmpty(QueryTable))
+            {
+                CodeGenerate.AppendLine("public void initQuery()");
+                CodeGenerate.BeginBlock();
+                CodeGenerate.AppendLine("Query                   query = new Query();");
+                CodeGenerate.AppendLine($"QueryBuildDataSource    qbds = query.addDataSource(tablenum({QueryTable}));");
+                CodeGenerate.AppendLine("QueryBuildRange         qBR;");
+                CodeGenerate.AppendLine(";");
+                CodeGenerate.AppendLine($"qBR = SysQuery::findOrCreateRange(qbds, fieldnum({QueryTable}, RecId));");
+                CodeGenerate.AppendLine($"qBR.status(RangeStatus::HIDDEN);");
+                CodeGenerate.AppendLine("");
+                CodeGenerate.AppendLine("queryRun = new QueryRun(query);");
+                CodeGenerate.EndBlock();
+            }
+        }
+        void SrcPack()
+        {
+            CodeGenerate.SetMethodName("pack");
             CodeGenerate.AppendLine("public container pack()");
             CodeGenerate.BeginBlock();
             if (QueryTable != "")
@@ -342,11 +344,10 @@ namespace TRUDUtilsD365.RunBaseBuilder
                 CodeGenerate.AppendLine("return [#CurrentVersion, #CurrentList];");
             }
             CodeGenerate.EndBlock();
-
-            return CodeGenerate.GetResult();            
         }
-        string SrcUnpack()
+        void SrcUnpack()
         {
+            CodeGenerate.SetMethodName("unpack");
             CodeGenerate.AppendLine("public boolean unpack(container _packedClass)");
             CodeGenerate.BeginBlock();
             CodeGenerate.AppendLine("Version    version = RunBase::getVersion(_packedClass);");
@@ -382,37 +383,162 @@ namespace TRUDUtilsD365.RunBaseBuilder
             CodeGenerate.AppendLine("return true;");
 
             CodeGenerate.EndBlock();
+        }
+        void SrcQueryRun()
+        {
+            CodeGenerate.SetMethodName("queryRun");
+            if (!String.IsNullOrEmpty(QueryTable))
+            {
+                CodeGenerate.AppendLine("public QueryRun queryRun()");
+                CodeGenerate.BeginBlock();
+                CodeGenerate.AppendLine("return queryRun;");
+                CodeGenerate.EndBlock();
+            }
+        }
+        void SrcRun()
+        {
+            CodeGenerate.SetMethodName("run");
+            CodeGenerate.AppendLine("public void run()");
+            CodeGenerate.BeginBlock();
 
-            return CodeGenerate.GetResult();
+            if (!String.IsNullOrEmpty(QueryTable))
+            {
+                string queryCursor = AxHelper.GetVarNameFromType(QueryTable);
+                CodeGenerate.AppendLine("int                     processedCounter;");
+                CodeGenerate.AppendLine("QueryBuildDataSource    qBDS;");
+                CodeGenerate.AppendLine($"{QueryTable}    {queryCursor};");
+                CodeGenerate.AppendLine(";");
+                CodeGenerate.AppendLine($"qBDS = queryRun.query().dataSourceTable(tableNum({QueryTable}));");
+                CodeGenerate.AppendLine($"SysQuery::findOrCreateRange(qBDS, fieldnum({QueryTable}, RecId)).value(queryValue(\"\"));");
+                CodeGenerate.AppendLine("");
+                CodeGenerate.AppendLine("this.progressInit(RunBase::getDescription(classIdGet(this)),");
+                CodeGenerate.AppendLine("SysQuery::countTotal(queryRun),");
+                CodeGenerate.AppendLine("#AviSearch);");
+                CodeGenerate.AppendLine("");
+                CodeGenerate.AppendLine("while (queryRun.next())");
+                CodeGenerate.BeginBlock();
+                CodeGenerate.AppendLine($"{queryCursor} = queryRun.get(tablenum({QueryTable}));");
+                CodeGenerate.AppendLine("");
+                CodeGenerate.AppendLine("processedCounter++;");
+                CodeGenerate.AppendLine("progress.incCount();");             
+                CodeGenerate.EndBlock();
+                CodeGenerate.AppendLine("info(strfmt(\" %1 record(s) processed\", processedCounter));");
+            }
+            else
+            {
+                CodeGenerate.AppendLine("if (! this.validate())");
+                CodeGenerate.AppendLine("{");
+                CodeGenerate.AppendLine("    throw error(\"Validation error\");");
+                CodeGenerate.AppendLine("}");
+                CodeGenerate.AppendLine("");
+                CodeGenerate.AppendLine("ttsbegin;");
+                CodeGenerate.AppendLine("");
+                CodeGenerate.AppendLine("ttscommit;");                
+            }
+            CodeGenerate.EndBlock();
+        }
+        void SrcShowQueryValues()
+        {
+            CodeGenerate.SetMethodName("showQueryValues");
+            if (!String.IsNullOrEmpty(QueryTable))
+            {
+                CodeGenerate.AppendLine("public boolean showQueryValues()");
+                CodeGenerate.BeginBlock();
+                CodeGenerate.AppendLine("return true;");
+                CodeGenerate.EndBlock();
+            }
+        }
+        void SrcParmMethod(RunBaseBuilderVars  parmVar)
+        {
+            string mName = $"parm{AxHelper.UppercaseWords(parmVar.Name)}";
+            CodeGenerate.SetMethodName(mName);
+            CodeGenerate.AppendLine($"public {parmVar.Type} {mName}({parmVar.Type} _{parmVar.Name} = {parmVar.Name})");
+            CodeGenerate.BeginBlock();
+            CodeGenerate.AppendLine($"{parmVar.Name} = _{parmVar.Name};");
+            CodeGenerate.AppendLine($"return {parmVar.Name};");
+            CodeGenerate.EndBlock();
         }
 
+        //void AddMethodCode(String methodName, String methodSourceText, ClassMethodType methodType)
+        void AddMethodCode()
+        {
+            if (String.IsNullOrEmpty(CodeGenerate.GetResult()))
+            {
+                return;
+            }
+            if (IsPreviewMode)
+            {
+                CodeGenerate.AppendLine("");
+            }
+            else
+            {
+                if (CodeGenerate.MethodType == ClassMethodType.ClassDeclaration)
+                {
+                    newAxClass.SourceCode.Declaration = CodeGenerate.GetResult();
+                }
+                else
+                {
+                    AxMethod  axMethod = new AxMethod();
+                    axMethod.Name = CodeGenerate.MethodName;
+                    axMethod.IsStatic = (CodeGenerate.MethodType == ClassMethodType.Static ? true : false);
+                    axMethod.Source = CodeGenerate.GetResult();
+
+                    newAxClass.AddMethod(axMethod);
+
+                    CodeGenerate.ClearResult();
+
+                }
+            }
+        }
+
+        void CreateClassMethods()
+        {
+            InitCodeGenerate();
+            SrcClassDeclaration(); AddMethodCode();
+            SrcConstruct(); AddMethodCode();
+            SrcDescription(); AddMethodCode();
+            SrcMain(); AddMethodCode();
+            SrcDialog(); AddMethodCode();
+            SrcGetFromDialog(); AddMethodCode();
+            SrcInitParmDefault(); AddMethodCode();
+            SrcInitQuery(); AddMethodCode();
+            SrcPack(); AddMethodCode();
+            SrcUnpack(); AddMethodCode();
+            SrcQueryRun(); AddMethodCode();
+            SrcRun(); AddMethodCode();
+            SrcShowQueryValues(); AddMethodCode();
+            foreach (RunBaseBuilderVars df in FieldsList)
+            {
+                SrcParmMethod(df); AddMethodCode();               
+            }
+        }
 
         void CreateClass()
         {
-
             AxHelper axHelper = new AxHelper();
 
-            AxClass newClass = axHelper.MetadataProvider.Classes.Read(ClassName);
+            newAxClass = axHelper.MetadataProvider.Classes.Read(ClassName);
 
-            if (newClass != null)
+            if (newAxClass != null)
             {
                 throw new Exception($"Class {ClassName} already exists");
             }
 
-            newClass = new AxClass { Name = ClassName };
+            newAxClass = new AxClass { Name = ClassName };
 
             StringBuilder declarationText = new StringBuilder();
             
 
-            declarationText.AppendLine($"public class {newClass.Name} extends RunBaseBatch");
+            declarationText.AppendLine($"public class {newAxClass.Name} extends RunBaseBatch");
             declarationText.AppendLine("{");
             declarationText.AppendLine("}");
 
-            newClass.SourceCode.Declaration = declarationText.ToString();
-            axHelper.MetaModelService.CreateClass(newClass, axHelper.ModelSaveInfo);
-            axHelper.AppendToActiveProject(newClass);
+            newAxClass.SourceCode.Declaration = declarationText.ToString();
 
-            AddLog($"Class: {newClass.Name}; ");
+            axHelper.MetaModelService.CreateClass(newAxClass, axHelper.ModelSaveInfo);
+            axHelper.AppendToActiveProject(newAxClass);
+
+            AddLog($"Class: {newAxClass.Name}; ");
 
         }
 
@@ -435,7 +561,7 @@ namespace TRUDUtilsD365.RunBaseBuilder
 
         public override string RunPreview()
         {
-          
+            /*
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"class {ClassName}");
             sb.AppendLine(this.ToString());
@@ -445,6 +571,10 @@ namespace TRUDUtilsD365.RunBaseBuilder
             }
 
             return sb.ToString();
+            */
+            IsPreviewMode = true;
+            CreateClassMethods();
+            return CodeGenerate.GetResult();
         }
     }
 }

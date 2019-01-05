@@ -4,6 +4,12 @@ using System.Text;
 
 namespace TRUDUtilsD365.Kernel
 {
+    public enum ClassMethodType
+    {
+        Method,
+        ClassDeclaration,
+        Static
+    }
     public class CodeGenerateHelper
     {
         private readonly Dictionary<string, int> _columnAlignMap =
@@ -14,6 +20,15 @@ namespace TRUDUtilsD365.Kernel
         private int _currentLinePos;
         private bool _isIndentAppended;
         private int _savedIndent;
+
+        public string MethodName = "";
+        public ClassMethodType MethodType = ClassMethodType.Method;
+
+        public void SetMethodName(string methodName, ClassMethodType methodType = ClassMethodType.Method)
+        {
+            MethodName = methodName;
+            MethodType = methodType;
+        }
 
         public int IndentGlobalValue { get; set; } = 0;
 
@@ -76,6 +91,12 @@ namespace TRUDUtilsD365.Kernel
         {
             return ResultString.ToString();
         }
+
+        public void ClearResult()
+        {
+            ResultString.Clear();
+        }
+
         public void BeginBlock()
         {
             this.AppendLine("{").IndentIncrease();
