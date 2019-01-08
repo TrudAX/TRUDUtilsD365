@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Dynamics.AX.Metadata.MetaModel;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Core;
 
 namespace TRUDUtilsD365.Kernel
@@ -24,6 +23,9 @@ namespace TRUDUtilsD365.Kernel
     {
         private string _logString;
 
+        public bool IsPreviewMode;
+        protected CodeGenerateHelper CodeGenerate;
+
         public abstract string RunPreview();
         public abstract void RunCreate();
 
@@ -31,6 +33,7 @@ namespace TRUDUtilsD365.Kernel
 
         public virtual void RunCreateLog()
         {
+            IsPreviewMode = false;
             _logString = "";
             RunCreate();
         }
@@ -45,6 +48,34 @@ namespace TRUDUtilsD365.Kernel
             if (!String.IsNullOrWhiteSpace(_logString))
             {
                 CoreUtility.DisplayInfo($"The following element(s)({_logString}) created and added to the project");
+            }
+        }
+        protected void AddClassMethodCode(AxClass newAxClass)
+        {
+            if (String.IsNullOrEmpty(CodeGenerate.GetResult()))
+            {
+                return;
+            }
+            if (IsPreviewMode)
+            {
+                CodeGenerate.AppendLine("");
+            }
+            else
+            {
+                if (CodeGenerate.MethodType == ClassMethodType.ClassDeclaration)
+                {
+                    newAxClass.SourceCode.Declaration = CodeGenerate.GetResult();
+                }
+                else
+                {
+                    AxMethod axMethod = new AxMethod();
+                    axMethod.Name     = CodeGenerate.MethodName;
+                    axMethod.IsStatic = (CodeGenerate.MethodType == ClassMethodType.Static);
+                    axMethod.Source   = CodeGenerate.GetResult();
+
+                    newAxClass.AddMethod(axMethod);
+                }
+                CodeGenerate.ClearResult();
             }
         }
     }

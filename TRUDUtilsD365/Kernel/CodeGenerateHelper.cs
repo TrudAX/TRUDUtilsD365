@@ -99,12 +99,12 @@ namespace TRUDUtilsD365.Kernel
 
         public void BeginBlock()
         {
-            this.AppendLine("{").IndentIncrease();
+            AppendLine("{").IndentIncrease();
         }
         public void EndBlock()
         {
-            this.IndentDecrease();
-            this.AppendLine("}");
+            IndentDecrease();
+            AppendLine("}");
         }
 
         public void AddColumnAlignInt(string name, int value)

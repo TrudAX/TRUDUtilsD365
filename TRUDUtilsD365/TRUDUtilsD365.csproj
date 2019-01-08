@@ -117,6 +117,7 @@
       <DependentUpon>SnippetsDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="RunBaseBuilder\RunBaseBuilderParms.cs" />
+    <Compile Include="RunBaseBuilder\RunBaseBuilderMenu.cs" />
     <Compile Include="SecurityPrivilegeBuilder\SecurityPrivilegeBuilderMenu.cs" />
     <Compile Include="SecurityPrivilegeBuilder\SecurityPrivilegeBuilderDialog.cs">
       <SubType>Form</SubType>

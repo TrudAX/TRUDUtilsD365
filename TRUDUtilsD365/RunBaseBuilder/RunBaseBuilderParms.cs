@@ -1,23 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text;
 using Microsoft.Dynamics.AX.Metadata.Core.MetaModel;
 using TRUDUtilsD365.Kernel;
 using Microsoft.Dynamics.AX.Metadata.MetaModel;
-using Microsoft.Dynamics.Framework.Tools.MetaModel.Core;
 
 namespace TRUDUtilsD365.RunBaseBuilder
 {
-    public class RunBaseBuilderVars
+    public class RunBaseBuilderVar
     {
         public string Name { get; set; } = "";
         public string DlgName { get; set; } = "";
         public string Type { get; set; } = "";
         public string Label { get; set; } = "";
         public string LabelHelp { get; set; } = "";
-        public Boolean IsMandatory { get; set; } = false;
+        public Boolean IsMandatory { get; set; } 
 
         public override string ToString()
         {
@@ -26,17 +23,20 @@ namespace TRUDUtilsD365.RunBaseBuilder
     }
 
 
-
     public class RunBaseBuilder : SnippedCreateAction
     {        
         public string ClassName { get; set; } = "";
         public string ClassDescription { get; set; } = "";
         public string QueryTable { get; set; } = "";
         public string ExternalTable { get; set; } = "";
-        public Boolean IsAddFileUpload { get; set; } = false;
-        public Boolean IsCreateMenuItem { get; set; } = false;
+        public Boolean IsAddFileUpload { get; set; } 
+        public Boolean IsCreateMenuItem { get; set; } 
 
-        public List<RunBaseBuilderVars> FieldsList;
+        public List<RunBaseBuilderVar> FieldsList;
+        protected RunBaseBuilderVar ExternalTableVar;
+
+        protected AxClass NewAxClass;
+
 
         protected const char   MandatoryPropertySym      = '*';
         protected const string ClassNameParm             = "Class name";
@@ -46,18 +46,6 @@ namespace TRUDUtilsD365.RunBaseBuilder
         protected const string AddFileUploadParmName     = "Add file upload(y)";
         protected const string CreateMenuItemParmName    = "Create menu item(y)";
         protected const string ParametersParmName        = "Parameters..";
-
-        protected CodeGenerateHelper CodeGenerate;
-
-        private AxClass newAxClass;
-        protected bool IsPreviewMode;
-
-        public string GetPreviewString()
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-           
-            return stringBuilder.ToString();
-        }
 
         public void InitDialogParms(SnippetsParms snippetsParms)
         {
@@ -71,7 +59,7 @@ namespace TRUDUtilsD365.RunBaseBuilder
             snippetsParms.AddParametersValue(CreateMenuItemParmName, "");
 
             snippetsParms.AddParametersValue(ParametersParmName,       $"CustAccount" + MandatoryPropertySym + Environment.NewLine +
-                                                                   $"NoYesId {snippetsParms.ValuesSeparator} useCurrentDate {snippetsParms.ValuesSeparator} Use current date");
+                                                                   $"NoYesId {snippetsParms.ValuesSeparator} useCurrentDate {snippetsParms.ValuesSeparator} Use current date {snippetsParms.ValuesSeparator} Help text");
 
             snippetsParms.Description = "Util creates a RunBase type class. You can specify multiple parameters - each as a separate line in the following format EDTType | Variable name | " +
                                         "Label | Help text. You can specify only EDTType. For the Mandatory property add * to the EDTType";
@@ -90,13 +78,18 @@ namespace TRUDUtilsD365.RunBaseBuilder
             ExternalTable    = snippetsParms.GetParmStr(ExternalTableNameParmName);
             IsAddFileUpload  = snippetsParms.GetParmBool(AddFileUploadParmName);
             IsCreateMenuItem = snippetsParms.GetParmBool(CreateMenuItemParmName);
-
+            if (ExternalTable != "")
+            {
+                ExternalTableVar = new RunBaseBuilderVar();
+                ExternalTableVar.Type = ExternalTable;
+                ExternalTableVar.Name = $"caller{ExternalTable}";
+            }
             List<List<string>> parmList = snippetsParms.GetParmListSeparated(ParametersParmName);
-            FieldsList = new List<RunBaseBuilderVars>();
+            FieldsList = new List<RunBaseBuilderVar>();
 
             foreach (List<string> subList in parmList)
             {
-                RunBaseBuilderVars runBaseBuilderVars = new RunBaseBuilderVars();
+                RunBaseBuilderVar runBaseBuilderVars = new RunBaseBuilderVar();
 
                 string item = subList[0];                
                 if (item[item.Length - 1] == MandatoryPropertySym)//check mandatory
@@ -146,8 +139,7 @@ namespace TRUDUtilsD365.RunBaseBuilder
             longestTypeLength++;
             longestNameLength+=2;
 
-            CodeGenerate = new CodeGenerateHelper {IndentGlobalValue = 4};
-
+            CodeGenerate = new CodeGenerateHelper {IndentGlobalValue = 0};
 
             CodeGenerate.AddColumnAlignInt("Type", longestTypeLength);
             CodeGenerate.AddColumnAlignInt("FieldName", longestNameLength);
@@ -159,7 +151,7 @@ namespace TRUDUtilsD365.RunBaseBuilder
             CodeGenerate.SetMethodName("ClassDeclaration", ClassMethodType.ClassDeclaration);
             CodeGenerate.AppendLine($"class {ClassName} extends RunBaseBatch");
             CodeGenerate.BeginBlock();
-            foreach (RunBaseBuilderVars df in FieldsList)
+            foreach (RunBaseBuilderVar df in FieldsList)
             {
                 CodeGenerate.Append(df.Type, "Type").AppendLine($" {df.Name};");
             }
@@ -170,7 +162,7 @@ namespace TRUDUtilsD365.RunBaseBuilder
             }
             CodeGenerate.AppendLine("");
 
-            foreach (RunBaseBuilderVars df in FieldsList)
+            foreach (RunBaseBuilderVar df in FieldsList)
             {
                 CodeGenerate.Append("DialogField", "Type").AppendLine($" {df.DlgName};");
             }
@@ -179,7 +171,23 @@ namespace TRUDUtilsD365.RunBaseBuilder
             {
                 CodeGenerate.AppendLine("QueryRun       queryRun;");
             }
-            // source += strFmt('    %1            %2;', #SysQueryRun, #queryRun)                                      + #newLine;
+
+            if (ExternalTableVar != null)
+            {
+                CodeGenerate.AppendLine("");
+                CodeGenerate.Append(ExternalTableVar.Type, "Type").AppendLine($" {ExternalTableVar.Name};");
+            }
+
+            if (IsAddFileUpload)
+            {
+                CodeGenerate.AppendLine("");
+                CodeGenerate.AppendLine("DialogRunbase     dialog;");
+                CodeGenerate.AppendLine("private const str FileUploadName = 'FileUpload';");
+                CodeGenerate.AppendLine("private const str OkButtonName   = 'OkButton';");
+                CodeGenerate.AppendLine("FileUploadTemporaryStorageResult    fileUploadResult;");
+
+            }
+            CodeGenerate.AppendLine("");
             CodeGenerate.AppendLine("#define.CurrentVersion(1)");
             CodeGenerate.AppendLine("#localmacro.CurrentList").IndentIncrease();
 
@@ -193,7 +201,12 @@ namespace TRUDUtilsD365.RunBaseBuilder
             }
             CodeGenerate.IndentDecrease();
             CodeGenerate.AppendLine("#endmacro");
-            CodeGenerate.EndBlock();
+            CodeGenerate.AppendLine("");
+            if (!IsPreviewMode)
+            {
+                CodeGenerate.EndBlock();
+                CodeGenerate.IndentIncrease();
+            }
         }
 
         void SrcConstruct()
@@ -257,10 +270,30 @@ namespace TRUDUtilsD365.RunBaseBuilder
             CodeGenerate.SetMethodName("dialog");
             CodeGenerate.AppendLine("public Object dialog()");
             CodeGenerate.BeginBlock();
-            CodeGenerate.AppendLine("DialogRunbase       dialog = super();");
-            CodeGenerate.AppendLine(";");
+            if (IsAddFileUpload)
+            {
+                CodeGenerate.AppendLine("dialog = super();");
+                CodeGenerate.AppendLine("DialogGroup       dialogGroup;");
+                CodeGenerate.AppendLine("FormBuildControl  formBuildControl;");
+                CodeGenerate.AppendLine("FileUploadBuild   dialogFileUpload;");
+                CodeGenerate.AppendLine(";");
+                CodeGenerate.AppendLine("dialogGroup      = dialog.addGroup(\"File\");");
+                CodeGenerate.AppendLine("formBuildControl = dialog.formBuildDesign().control(dialogGroup.name());");
+                CodeGenerate.AppendLine("dialogFileUpload = formBuildControl.addControlEx(classstr(FileUpload), FileUploadName);");
+                CodeGenerate.AppendLine("dialogFileUpload.style(FileUploadStyle::MinimalWithFilename);");
+                CodeGenerate.AppendLine("dialogFileUpload.baseFileUploadStrategyClassName(classstr(FileUploadTemporaryStorageStrategy));");
+                CodeGenerate.AppendLine("dialogFileUpload.fileTypesAccepted('.txt');");
+                CodeGenerate.AppendLine("dialogFileUpload.fileNameLabel(\"@SYS308842\");");
+                CodeGenerate.AppendLine("");
+            }
+            else
+            {
+                CodeGenerate.AppendLine("DialogRunbase       dialog = super();");
+                CodeGenerate.AppendLine(";");
+            }
+            
 
-            foreach (RunBaseBuilderVars df in FieldsList)
+            foreach (RunBaseBuilderVar df in FieldsList)
             {
                 CodeGenerate.Append(df.DlgName, "DlgName");
 
@@ -278,8 +311,12 @@ namespace TRUDUtilsD365.RunBaseBuilder
                     }
                     else
                     {
-                        CodeGenerate.AppendLine($", \"{df.LabelHelp}\"");
+                        CodeGenerate.AppendLine($", \"{df.LabelHelp}\");");
                     }
+                }
+                if (df.IsMandatory)
+                {
+                    CodeGenerate.AppendLine($"{df.DlgName}.mandatory_RU(true);");
                 }
             }
             CodeGenerate.AppendLine("");
@@ -291,8 +328,18 @@ namespace TRUDUtilsD365.RunBaseBuilder
             CodeGenerate.SetMethodName("getFromDialog");
             CodeGenerate.AppendLine("public boolean getFromDialog()");
             CodeGenerate.BeginBlock();
-            CodeGenerate.AppendLine(";");
-            foreach (RunBaseBuilderVars df in FieldsList)
+            if (IsAddFileUpload)
+            {
+                CodeGenerate.AppendLine("FileUpload  fileUploadControl = this.getFormControl(dialog, FileUploadName);");
+                CodeGenerate.AppendLine("fileUploadResult = fileUploadControl.getFileUploadResult();");
+                CodeGenerate.AppendLine("");
+            }
+            else
+            {
+                CodeGenerate.AppendLine(";");
+            }
+
+            foreach (RunBaseBuilderVar df in FieldsList)
             {
                 CodeGenerate.Append(df.Name, "FieldName");
                 CodeGenerate.AppendLine($" = {df.DlgName}.value();");
@@ -401,19 +448,64 @@ namespace TRUDUtilsD365.RunBaseBuilder
             CodeGenerate.AppendLine("public void run()");
             CodeGenerate.BeginBlock();
 
+            foreach (RunBaseBuilderVar df in FieldsList)
+            {
+                CodeGenerate.AppendLine($"info(strFmt(\"{df.Name}=%1\", {df.Name}));");
+            }
+            if (IsAddFileUpload)
+            {
+                CodeGenerate.AppendLine("System.IO.MemoryStream memoryStreamFile;");
+                CodeGenerate.AppendLine("try");
+                CodeGenerate.AppendLine("{");
+                CodeGenerate.AppendLine("    if (!fileUploadResult)");
+                CodeGenerate.AppendLine("    {");
+                CodeGenerate.AppendLine("        throw error(\"File is empty\");");
+                CodeGenerate.AppendLine("    }");
+                CodeGenerate.AppendLine("    //get file names");
+                CodeGenerate.AppendLine("    container fileNameCon = Docu::splitFilename(fileUploadResult.getFileName());");
+                CodeGenerate.AppendLine("    if (!fileNameCon)");
+                CodeGenerate.AppendLine("    {");
+                CodeGenerate.AppendLine("        throw error(\"File is empty\");");
+                CodeGenerate.AppendLine("    }");
+                CodeGenerate.AppendLine("    str fileName   = strFmt('%1.%2', conPeek(fileNameCon, 1), conPeek(fileNameCon, 2));");
+                CodeGenerate.AppendLine("    str folderName = strFmt('%1', conPeek(fileNameCon, 3));");
+                CodeGenerate.AppendLine("    //get file data");
+                CodeGenerate.AppendLine("    memoryStreamFile = fileUploadResult.openResult();");
+                CodeGenerate.AppendLine("    AsciiStreamIo asciiIo = AsciiStreamIo::constructForRead(memoryStreamFile);");
+                CodeGenerate.AppendLine("    asciiIo.inRecordDelimiter('\\n');");
+                CodeGenerate.AppendLine("    while (asciiIo.status() == IO_Status::Ok)");
+                CodeGenerate.AppendLine("    {");
+                CodeGenerate.AppendLine("        container c = asciiIo.read();");
+                CodeGenerate.AppendLine("        if (conLen(c) > 0)");
+                CodeGenerate.AppendLine("        {");
+                CodeGenerate.AppendLine("            info(strFmt(\"File data:%1\", conPeek(c, 1)));");
+                CodeGenerate.AppendLine("        }");
+                CodeGenerate.AppendLine("    }");
+                CodeGenerate.AppendLine("}");
+                CodeGenerate.AppendLine("catch (Exception::Error)");
+                CodeGenerate.AppendLine("{");
+                CodeGenerate.AppendLine("    exceptionTextFallThrough();");
+                CodeGenerate.AppendLine("}");
+                CodeGenerate.AppendLine("finally");
+                CodeGenerate.AppendLine("{");
+                CodeGenerate.AppendLine("    fileUploadResult.deleteResult();");
+                CodeGenerate.AppendLine("    memoryStreamFile = null;");
+                CodeGenerate.AppendLine("}");
+            }
+
             if (!String.IsNullOrEmpty(QueryTable))
             {
                 string queryCursor = AxHelper.GetVarNameFromType(QueryTable);
                 CodeGenerate.AppendLine("int                     processedCounter;");
                 CodeGenerate.AppendLine("QueryBuildDataSource    qBDS;");
                 CodeGenerate.AppendLine($"{QueryTable}    {queryCursor};");
-                CodeGenerate.AppendLine(";");
+                CodeGenerate.AppendLine("");
                 CodeGenerate.AppendLine($"qBDS = queryRun.query().dataSourceTable(tableNum({QueryTable}));");
                 CodeGenerate.AppendLine($"SysQuery::findOrCreateRange(qBDS, fieldnum({QueryTable}, RecId)).value(queryValue(\"\"));");
                 CodeGenerate.AppendLine("");
                 CodeGenerate.AppendLine("this.progressInit(RunBase::getDescription(classIdGet(this)),");
-                CodeGenerate.AppendLine("SysQuery::countTotal(queryRun),");
-                CodeGenerate.AppendLine("#AviSearch);");
+                CodeGenerate.AppendLine("                  SysQuery::countTotal(queryRun),");
+                CodeGenerate.AppendLine("                  #AviSearch);");
                 CodeGenerate.AppendLine("");
                 CodeGenerate.AppendLine("while (queryRun.next())");
                 CodeGenerate.BeginBlock();
@@ -426,14 +518,17 @@ namespace TRUDUtilsD365.RunBaseBuilder
             }
             else
             {
-                CodeGenerate.AppendLine("if (! this.validate())");
-                CodeGenerate.AppendLine("{");
-                CodeGenerate.AppendLine("    throw error(\"Validation error\");");
-                CodeGenerate.AppendLine("}");
-                CodeGenerate.AppendLine("");
-                CodeGenerate.AppendLine("ttsbegin;");
-                CodeGenerate.AppendLine("");
-                CodeGenerate.AppendLine("ttscommit;");                
+                if (!IsAddFileUpload)
+                {
+                    CodeGenerate.AppendLine("if (! this.validate())");
+                    CodeGenerate.AppendLine("{");
+                    CodeGenerate.AppendLine("    throw error(\"Validation error\");");
+                    CodeGenerate.AppendLine("}");
+                    CodeGenerate.AppendLine("");
+                    CodeGenerate.AppendLine("ttsbegin;");
+                    CodeGenerate.AppendLine("");
+                    CodeGenerate.AppendLine("ttscommit;");
+                }
             }
             CodeGenerate.EndBlock();
         }
@@ -448,7 +543,68 @@ namespace TRUDUtilsD365.RunBaseBuilder
                 CodeGenerate.EndBlock();
             }
         }
-        void SrcParmMethod(RunBaseBuilderVars  parmVar)
+        void SrcCanRunInNewSession()
+        {
+            CodeGenerate.SetMethodName("canRunInNewSession");
+     
+            CodeGenerate.AppendLine("public boolean canRunInNewSession()");
+            CodeGenerate.BeginBlock();
+            CodeGenerate.AppendLine("return false;");
+            CodeGenerate.EndBlock();          
+        }
+        void SrcDialogPostRun()
+        {
+            CodeGenerate.SetMethodName("dialogPostRun");
+            if (IsAddFileUpload)
+            {
+                CodeGenerate.AppendLine("public void dialogPostRun(DialogRunbase _dialog)");
+                CodeGenerate.BeginBlock();
+                CodeGenerate.AppendLine("FileUpload fileUpload = this.getFormControl(_dialog, FileUploadName);");
+                CodeGenerate.AppendLine("fileUpload.notifyUploadCompleted += eventhandler(this.uploadCompleted);");
+                CodeGenerate.AppendLine("this.setDialogOkButtonEnabled(_dialog, false);");
+                CodeGenerate.EndBlock();
+            }
+        }
+        void SrcUploadCompleted()
+        {
+            CodeGenerate.SetMethodName("uploadCompleted");
+            if (IsAddFileUpload)
+            {
+                CodeGenerate.AppendLine("protected void uploadCompleted()");
+                CodeGenerate.BeginBlock();
+                CodeGenerate.AppendLine("FileUpload fileUpload = this.getFormControl(dialog, FileUploadName);");
+                CodeGenerate.AppendLine("fileUpload.notifyUploadCompleted -= eventhandler(this.uploadCompleted);");
+                CodeGenerate.AppendLine("this.setDialogOkButtonEnabled(dialog, true);");
+                CodeGenerate.EndBlock();
+            }
+        }
+        void SrcSetDialogOkButtonEnabled()
+        {
+            CodeGenerate.SetMethodName("setDialogOkButtonEnabled");
+            if (IsAddFileUpload)
+            {
+                CodeGenerate.AppendLine("protected void setDialogOkButtonEnabled(DialogRunbase _dialog, boolean _isEnabled)");
+                CodeGenerate.BeginBlock();
+                CodeGenerate.AppendLine("FormControl okButtonControl = this.getFormControl(_dialog, OkButtonName);");
+                CodeGenerate.AppendLine("if (okButtonControl)");
+                CodeGenerate.AppendLine("{");
+                CodeGenerate.AppendLine("    okButtonControl.enabled(_isEnabled);");
+                CodeGenerate.AppendLine("}");
+                CodeGenerate.EndBlock();
+            }
+        }
+        void SrcGetFormControl()
+        {
+            CodeGenerate.SetMethodName("getFormControl");
+            if (IsAddFileUpload)
+            {
+                CodeGenerate.AppendLine("protected FormControl getFormControl(DialogRunbase _dialog, str _controlName)");
+                CodeGenerate.BeginBlock();
+                CodeGenerate.AppendLine("return _dialog.formRun().control(_dialog.formRun().controlId( _controlName));");                
+                CodeGenerate.EndBlock();
+            }
+        }
+        void SrcParmMethod(RunBaseBuilderVar  parmVar)
         {
             string mName = $"parm{AxHelper.UppercaseWords(parmVar.Name)}";
             CodeGenerate.SetMethodName(mName);
@@ -462,44 +618,23 @@ namespace TRUDUtilsD365.RunBaseBuilder
         //void AddMethodCode(String methodName, String methodSourceText, ClassMethodType methodType)
         void AddMethodCode()
         {
-            if (String.IsNullOrEmpty(CodeGenerate.GetResult()))
-            {
-                return;
-            }
-            if (IsPreviewMode)
-            {
-                CodeGenerate.AppendLine("");
-            }
-            else
-            {
-                if (CodeGenerate.MethodType == ClassMethodType.ClassDeclaration)
-                {
-                    newAxClass.SourceCode.Declaration = CodeGenerate.GetResult();
-                }
-                else
-                {
-                    AxMethod  axMethod = new AxMethod();
-                    axMethod.Name = CodeGenerate.MethodName;
-                    axMethod.IsStatic = (CodeGenerate.MethodType == ClassMethodType.Static ? true : false);
-                    axMethod.Source = CodeGenerate.GetResult();
-
-                    newAxClass.AddMethod(axMethod);
-
-                    CodeGenerate.ClearResult();
-
-                }
-            }
+            AddClassMethodCode(NewAxClass);            
         }
 
         void CreateClassMethods()
         {
             InitCodeGenerate();
             SrcClassDeclaration(); AddMethodCode();
-            SrcConstruct(); AddMethodCode();
-            SrcDescription(); AddMethodCode();
-            SrcMain(); AddMethodCode();
             SrcDialog(); AddMethodCode();
             SrcGetFromDialog(); AddMethodCode();
+            foreach (RunBaseBuilderVar df in FieldsList)
+            {
+                SrcParmMethod(df); AddMethodCode();
+            }
+            if (ExternalTableVar != null)
+            {
+                SrcParmMethod(ExternalTableVar); AddMethodCode();
+            }
             SrcInitParmDefault(); AddMethodCode();
             SrcInitQuery(); AddMethodCode();
             SrcPack(); AddMethodCode();
@@ -507,9 +642,18 @@ namespace TRUDUtilsD365.RunBaseBuilder
             SrcQueryRun(); AddMethodCode();
             SrcRun(); AddMethodCode();
             SrcShowQueryValues(); AddMethodCode();
-            foreach (RunBaseBuilderVars df in FieldsList)
+            SrcCanRunInNewSession(); AddMethodCode();
+            SrcDialogPostRun(); AddMethodCode();
+            SrcUploadCompleted(); AddMethodCode();
+            SrcSetDialogOkButtonEnabled(); AddMethodCode();
+            SrcGetFormControl(); AddMethodCode();
+            SrcConstruct(); AddMethodCode();
+            SrcDescription(); AddMethodCode();
+            SrcMain(); AddMethodCode();
+
+            if (IsPreviewMode)
             {
-                SrcParmMethod(df); AddMethodCode();               
+                CodeGenerate.EndBlock();
             }
         }
 
@@ -517,62 +661,51 @@ namespace TRUDUtilsD365.RunBaseBuilder
         {
             AxHelper axHelper = new AxHelper();
 
-            newAxClass = axHelper.MetadataProvider.Classes.Read(ClassName);
-
-            if (newAxClass != null)
+            NewAxClass = axHelper.MetadataProvider.Classes.Read(ClassName);
+            //newAxClass = axHelper.MetadataProvider.Classes.Read("Tutorial_RunbaseBatch");
+            if (NewAxClass != null)
             {
                 throw new Exception($"Class {ClassName} already exists");
             }
 
-            newAxClass = new AxClass { Name = ClassName };
+            if (IsCreateMenuItem)
+            {
+                if (axHelper.MetadataProvider.MenuItemActions.Read(ClassName) != null)
+                {
+                    throw new Exception($"Menu item action {ClassName} already exists");
+                }
+            }
 
-            StringBuilder declarationText = new StringBuilder();
-            
+            NewAxClass = new AxClass { Name = ClassName };
+            CreateClassMethods();
 
-            declarationText.AppendLine($"public class {newAxClass.Name} extends RunBaseBatch");
-            declarationText.AppendLine("{");
-            declarationText.AppendLine("}");
+            axHelper.MetaModelService.CreateClass(NewAxClass, axHelper.ModelSaveInfo);
+            axHelper.AppendToActiveProject(NewAxClass);
 
-            newAxClass.SourceCode.Declaration = declarationText.ToString();
+            AddLog($"Class: {NewAxClass.Name}; ");
 
-            axHelper.MetaModelService.CreateClass(newAxClass, axHelper.ModelSaveInfo);
-            axHelper.AppendToActiveProject(newAxClass);
+            if (IsCreateMenuItem)
+            {
+                AxMenuItemAction axMenuItem = new AxMenuItemAction
+                    {Name = ClassName, Object = ClassName, ObjectType = MenuItemObjectType.Class};
+                axMenuItem.Label    = ClassDescription;
+                axMenuItem.HelpText = $"{axMenuItem.Label} operation";
+                axHelper.MetaModelService.CreateMenuItemAction(axMenuItem, axHelper.ModelSaveInfo);
+                axHelper.AppendToActiveProject(axMenuItem);
 
-            AddLog($"Class: {newAxClass.Name}; ");
+                AddLog($"MenuItem: {axMenuItem.Name}; ");
+            }
 
         }
 
 
         public override void RunCreate()
         {
-            AxHelper axHelper = new AxHelper();
-
-            /*
-            AxEnum newEnum = axHelper.MetadataProvider.Enums.Read(EnumName);
-
-            if (newEnum == null)
-            {
-                
-            }
-            */
+            CreateClass();            
         }
 
-
-
         public override string RunPreview()
-        {
-            /*
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"class {ClassName}");
-            sb.AppendLine(this.ToString());
-            foreach (var field in FieldsList)
-            {
-                sb.AppendLine(field.ToString());
-            }
-
-            return sb.ToString();
-            */
-            IsPreviewMode = true;
+        {           
             CreateClassMethods();
             return CodeGenerate.GetResult();
         }

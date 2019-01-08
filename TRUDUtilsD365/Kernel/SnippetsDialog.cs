@@ -36,6 +36,11 @@ namespace TRUDUtilsD365.Kernel
             try
             {
                 _parms.ParseValues();
+                SnippedCreateAction sa = _parms.PreviewAction as SnippedCreateAction;
+                if (sa != null)
+                {
+                    sa.IsPreviewMode = true;
+                }
                 _parms.PreviewAction.InitFromSnippetsParms(_parms);
                 ResultTextBox.Text = _parms.PreviewAction.RunPreview();               
             }
