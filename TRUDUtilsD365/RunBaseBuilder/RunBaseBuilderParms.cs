@@ -149,7 +149,7 @@ namespace TRUDUtilsD365.RunBaseBuilder
         private void SrcClassDeclaration()
         {
             CodeGenerate.SetMethodName("ClassDeclaration", ClassMethodType.ClassDeclaration);
-            CodeGenerate.AppendLine($"class {ClassName} extends RunBaseBatch");
+            CodeGenerate.AppendLine($"public class {ClassName} extends RunBaseBatch");
             CodeGenerate.BeginBlock();
             foreach (RunBaseBuilderVar df in FieldsList)
             {
@@ -552,6 +552,15 @@ namespace TRUDUtilsD365.RunBaseBuilder
             CodeGenerate.AppendLine("return false;");
             CodeGenerate.EndBlock();          
         }
+        void SrcCanGoBatch()
+        {
+            CodeGenerate.SetMethodName("canGoBatch");
+
+            CodeGenerate.AppendLine("public boolean canGoBatch()");
+            CodeGenerate.BeginBlock();
+            CodeGenerate.AppendLine("return false;");
+            CodeGenerate.EndBlock();
+        }
         void SrcDialogPostRun()
         {
             CodeGenerate.SetMethodName("dialogPostRun");
@@ -643,6 +652,7 @@ namespace TRUDUtilsD365.RunBaseBuilder
             SrcRun(); AddMethodCode();
             SrcShowQueryValues(); AddMethodCode();
             SrcCanRunInNewSession(); AddMethodCode();
+            SrcCanGoBatch(); AddMethodCode();
             SrcDialogPostRun(); AddMethodCode();
             SrcUploadCompleted(); AddMethodCode();
             SrcSetDialogOkButtonEnabled(); AddMethodCode();

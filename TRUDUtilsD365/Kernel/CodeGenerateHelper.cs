@@ -21,8 +21,19 @@ namespace TRUDUtilsD365.Kernel
         private bool _isIndentAppended;
         private int _savedIndent;
 
+        public string LastSymbol = "";
+
         public string MethodName = "";
         public ClassMethodType MethodType = ClassMethodType.Method;
+
+        public  void ProcessLastSym(string lastSymbol)
+        {
+            if (!String.IsNullOrEmpty(LastSymbol))
+            {
+                AppendLine(LastSymbol);
+            }
+            LastSymbol = lastSymbol;
+        }
 
         public void SetMethodName(string methodName, ClassMethodType methodType = ClassMethodType.Method)
         {
@@ -70,6 +81,7 @@ namespace TRUDUtilsD365.Kernel
             _currentLinePos = _currentIndent;
 
             _isIndentAppended = false;
+            LastSymbol = "";
             return this;
         }
 

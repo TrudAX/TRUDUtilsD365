@@ -16,17 +16,7 @@ namespace TRUDUtilsD365.Kernel
         {
             _parms = parms;
             snippetsParmsBindingSource.Add(_parms);
-
-
-            /*
-            MethodTypeCheckedListBox.Items.Clear();
-            MethodTypeCheckedListBox.Items.Add("find", _parms.IsCreateFind);
-            MethodTypeCheckedListBox.Items.Add("exists", _parms.IsCreateExists);
-            MethodTypeCheckedListBox.Items.Add("findRecId", _parms.IsCreateFindRecId);
-
-            UpdateFromForm();
-            ResultTextBox.Text = _parms.GenerateResult();
-            */
+            this.Text = _parms.SnippetName;
         }
 
 
