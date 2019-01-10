@@ -107,7 +107,7 @@ The tool does the following:
 
 ## RunBase class builder
 
-Add-in generates template code for the RunBaseBatch class
+Add-in generates code template for the RunBaseBatch class
 
 Supports the following options:
 
