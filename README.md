@@ -8,7 +8,8 @@ A set of Visual Studio Add-ins for Microsoft Dynamics 365 for Operation that wil
 * [Fields builder](#fields-builder)
 * [Table builder](#table-builder)
 * [Form builder](#form-builder)
-* [RunBase builder](#runbase-builder)
+* [RunBase class builder](#runbase-class-builder)
+* [DataContract class builder](#datacontract-class-builder)
 * [Create find method](#create-find-method)
 * [Create menu item](#create-menu-item)
 * [Create security privilege](#create-security-privilege)
@@ -104,11 +105,11 @@ The tool does the following:
 
 ![](assets/FormBuilder.png)
 
-## RunBase Builder
+## RunBase class builder
 
 Add-in generates template code for the RunBaseBatch class
 
-Support the following options:
+Supports the following options:
 
 * Multiple dialog parameters
 * Caller record handling
@@ -118,6 +119,18 @@ Support the following options:
 See detailed description at [RunBase template class builder](https://denistrunin.com/runbasebuilder-util/)
 
 ![](assets/RunBaseBuilder.png)
+
+## DataContract class builder
+
+Add-in generates template code for the DataContract class(used in SysOperation framework)
+
+Supports the following properties:
+
+* Mandatory
+* Groups
+* Label and Help text override
+
+![1547085113848](assets/DataContractBuilder.png)
 
 ## Create find method
 

@@ -7,6 +7,7 @@ using System.Windows.Forms;
 
 using TRUDUtilsD365.AddTableFindMethod;
 using TRUDUtilsD365.CreateExtensionClass;
+using TRUDUtilsD365.DataContractBuilder;
 using TRUDUtilsD365.EnumCreator;
 using TRUDUtilsD365.Kernel;
 using TRUDUtilsD365.RunBaseBuilder;
@@ -29,9 +30,20 @@ namespace AddTableFindMethodTest
             //TestCreateExtensionClass();
             //TestEnumCreator();
             //TestTableFieldsBuilder();
-            TestRunBaseBuilder();
+            //TestRunBaseBuilder();
+            TestDataContractBuilder();
         }
+        private static void TestDataContractBuilder()
+        {
+            SnippetsParms snippetsParms = new SnippetsParms();
+            DataContractBuilderParms runBaseBuilder = new DataContractBuilderParms();
 
+            runBaseBuilder.InitDialogParms(snippetsParms);
+
+            SnippetsDialog dialog = new SnippetsDialog();
+            dialog.SetParameters(snippetsParms);
+            Application.Run(dialog);
+        }
         private static void TestRunBaseBuilder()
         {
             SnippetsParms  snippetsParms = new SnippetsParms();

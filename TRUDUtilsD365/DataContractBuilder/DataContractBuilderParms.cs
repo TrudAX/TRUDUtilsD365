@@ -27,7 +27,7 @@ namespace TRUDUtilsD365.DataContractBuilder
     }
 
 
-    public class DataContractBuilder : SnippedCreateAction
+    public class DataContractBuilderParms : SnippedCreateAction
     {        
         public string ClassName { get; set; } = "";        
 
@@ -35,6 +35,7 @@ namespace TRUDUtilsD365.DataContractBuilder
 
         //calculated 
         public List<DataContractBuilderVar> GroupsList;
+        protected bool IsAnyMandatory;
 
         protected AxClass NewAxClass;
 
@@ -48,11 +49,13 @@ namespace TRUDUtilsD365.DataContractBuilder
 
             snippetsParms.AddParametersValue(ClassNameParm, "AATestDataContract");
 
-            snippetsParms.AddParametersValue(ParametersParmName,       $"CustAccount" + MandatoryPropertySym + Environment.NewLine +
-                                                                   $"FromDate {snippetsParms.ValuesSeparator} fromDate {snippetsParms.ValuesSeparator} From date label {snippetsParms.ValuesSeparator} Help text { snippetsParms.ValuesSeparator} GroupId { snippetsParms.ValuesSeparator} Group label");
+            snippetsParms.AddParametersValue(ParametersParmName,   
+                $"CustAccount" + MandatoryPropertySym + Environment.NewLine +
+                $"NoYesId {snippetsParms.ValuesSeparator} useCurrentDate {snippetsParms.ValuesSeparator} Use current date {snippetsParms.ValuesSeparator} Help text" + Environment.NewLine +
+                $"FromDate {snippetsParms.ValuesSeparator} fromDate {snippetsParms.ValuesSeparator} From date label {snippetsParms.ValuesSeparator} Help text { snippetsParms.ValuesSeparator} GroupId { snippetsParms.ValuesSeparator} Group label");
 
-            snippetsParms.Description = "Util creates a DataContract type class. You can specify multiple parameters - each as a separate line in the following format EDTType | Variable name | " +
-                                        "Label | Help text | GroupId | Group label. You can specify only EDTType. For the Mandatory property add * to the EDTType";
+            snippetsParms.Description = "Util creates a DataContract type class. You can specify multiple parameters - each as a separate line in the following format:"+ Environment.NewLine + "EDTType | Variable name | " +
+                                        "Label | Help text | GroupId | Group label" + Environment.NewLine + "You can specify only EDTType. For the Mandatory property add * to the EDTType";
 
             snippetsParms.IsFieldsSeparatorVisible = true;
             snippetsParms.IsCreateButtonVisible = true;
@@ -68,6 +71,7 @@ namespace TRUDUtilsD365.DataContractBuilder
             FieldsList = new List<DataContractBuilderVar>();
             GroupsList = new List<DataContractBuilderVar>();
             int groupNum = 0;
+            IsAnyMandatory = false;
 
             Dictionary<string, int> groutPosDict = new Dictionary<string, int>();
 
@@ -134,6 +138,10 @@ namespace TRUDUtilsD365.DataContractBuilder
                     }
                 }
                 groutPosDict[builderVar.GroupName]++;
+                if (builderVar.IsMandatory)
+                {
+                    IsAnyMandatory = true;
+                }
 
                 builderVar.PositionInGroup = groutPosDict[builderVar.GroupName];
 
@@ -171,7 +179,15 @@ namespace TRUDUtilsD365.DataContractBuilder
             CodeGenerate.AppendLine("").IndentDecrease();
             CodeGenerate.AppendLine("]");
 
-            CodeGenerate.AppendLine($"public class {ClassName}");
+            CodeGenerate.Append($"public class {ClassName}");
+            if (IsAnyMandatory)
+            {
+                CodeGenerate.AppendLine(" implements SysOperationValidatable");
+            }
+            else
+            {
+                CodeGenerate.AppendLine("");
+            }
             CodeGenerate.BeginBlock();
             foreach (DataContractBuilderVar df in FieldsList)
             {
@@ -227,7 +243,29 @@ namespace TRUDUtilsD365.DataContractBuilder
             CodeGenerate.EndBlock();
         }
 
-        //void AddMethodCode(String methodName, String methodSourceText, ClassMethodType methodType)
+
+        private void SrcValidate()
+        {
+            if (IsAnyMandatory)
+            {
+                CodeGenerate.SetMethodName("validate");
+                CodeGenerate.AppendLine("public boolean validate()");
+                CodeGenerate.BeginBlock();
+                CodeGenerate.AppendLine("boolean ret = true;");
+                CodeGenerate.AppendLine("");
+                foreach (DataContractBuilderVar df in FieldsList.Where(li => li.IsMandatory))
+                {
+                    CodeGenerate.AppendLine($"if (!{df.Name})");
+                    CodeGenerate.AppendLine("{");
+                    CodeGenerate.AppendLine($"    ret = checkFailed(\"{(df.Label == "" ? df.Name : df.Label)} should be specified\");");
+                    CodeGenerate.AppendLine("}");
+                }
+
+                CodeGenerate.AppendLine("return ret;");
+                CodeGenerate.EndBlock();
+            }
+        }
+
         void AddMethodCode()
         {
             AddClassMethodCode(NewAxClass);            
@@ -240,7 +278,8 @@ namespace TRUDUtilsD365.DataContractBuilder
             foreach (DataContractBuilderVar df in FieldsList)
             {
                 SrcParmMethod(df); AddMethodCode();
-            }            
+            }
+            SrcValidate(); AddMethodCode();
 
             if (IsPreviewMode)
             {
@@ -253,7 +292,7 @@ namespace TRUDUtilsD365.DataContractBuilder
             AxHelper axHelper = new AxHelper();
 
             NewAxClass = axHelper.MetadataProvider.Classes.Read(ClassName);
-            //newAxClass = axHelper.MetadataProvider.Classes.Read("Tutorial_RunbaseBatch");
+
             if (NewAxClass != null)
             {
                 throw new Exception($"Class {ClassName} already exists");

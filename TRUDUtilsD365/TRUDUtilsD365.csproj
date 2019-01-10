@@ -77,7 +77,8 @@
     </Compile>
     <Compile Include="CreateExtensionClass\CreateExtensionClassParms.cs" />
     <Compile Include="CreateExtensionClass\DesignerCreateExtensionClass.cs" />
-    <Compile Include="DataContractBuilder\DataContractBuilder.cs" />
+    <Compile Include="DataContractBuilder\DataContractBuilderParms.cs" />
+    <Compile Include="DataContractBuilder\DataContractBuilderMenu.cs" />
     <Compile Include="Kernel\CodeGenerateHelper.cs" />
     <Compile Include="Kernel\SnippetsParms.cs" />
     <Compile Include="MenuItemBuilder\MenuItemBuilderDialog.cs">
