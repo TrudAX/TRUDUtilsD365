@@ -119,7 +119,8 @@ namespace TRUDUtilsD365.Kernel
             {
                 if (_metadataProvider == null)
                 {
-                    _metadataProvider = DesignMetaModelService.Instance.CurrentMetadataProvider;
+                    var designMetaModelService = CoreUtility.GetService<IDesignMetaModelService>() as IDesignMetaModelService;
+                    _metadataProvider = designMetaModelService.CurrentMetadataProvider;
                 }
 
                 return _metadataProvider;
@@ -147,7 +148,8 @@ namespace TRUDUtilsD365.Kernel
             {
                 if (_metaModelService == null)
                 {
-                    _metaModelService = DesignMetaModelService.Instance.CurrentMetaModelService;
+                    var designMetaModelService = CoreUtility.GetService<IDesignMetaModelService>() as IDesignMetaModelService;
+                    _metaModelService = designMetaModelService.CurrentMetaModelService;
                 }
 
                 return _metaModelService;
