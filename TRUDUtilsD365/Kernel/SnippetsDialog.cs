@@ -17,10 +17,15 @@ namespace TRUDUtilsD365.Kernel
             _parms = parms;
             snippetsParmsBindingSource.Add(_parms);
             this.Text = _parms.SnippetName;
+
+            CreateButton.Visible = _parms.IsCreateButtonVisible;
+
+            SeparatorTextBox.Visible = _parms.IsFieldsSeparatorVisible;
+            SepLabel.Visible = _parms.IsFieldsSeparatorVisible;
         }
 
 
-        private void ShowResultButton_Click(object sender, EventArgs e)
+        public void ShowResultButton_Click(object sender, EventArgs e)
         {
             //UpdateFromForm();
             try

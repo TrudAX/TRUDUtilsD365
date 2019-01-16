@@ -144,6 +144,8 @@
     </Compile>
     <Compile Include="TableFieldsBuilder\TableFieldsBuilderMenu.cs" />
     <Compile Include="TableFieldsBuilder\TableFieldsBuilderParms.cs" />
+    <Compile Include="TableRelationToXpp\TableRelationToXppParms.cs" />
+    <Compile Include="TableRelationToXpp\TableRelationToXppMenu.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AddTableFindMethod\AddTableFindMethodDialog.resx">

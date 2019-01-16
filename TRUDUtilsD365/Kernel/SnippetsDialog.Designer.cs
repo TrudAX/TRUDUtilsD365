@@ -44,7 +44,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.SeparatorTextBox = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
+            this.SepLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.snippetsParmsBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -204,16 +204,16 @@
             this.SeparatorTextBox.TabIndex = 21;
             this.SeparatorTextBox.WordWrap = false;
             // 
-            // label6
+            // SepLabel
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(326, 117);
-            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(56, 13);
-            this.label6.TabIndex = 20;
-            this.label6.Text = "Separator:";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.SepLabel.AutoSize = true;
+            this.SepLabel.Location = new System.Drawing.Point(326, 117);
+            this.SepLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.SepLabel.Name = "SepLabel";
+            this.SepLabel.Size = new System.Drawing.Size(56, 13);
+            this.SepLabel.TabIndex = 20;
+            this.SepLabel.Text = "Separator:";
+            this.SepLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // SnippetsDialog
             // 
@@ -221,7 +221,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(868, 414);
             this.Controls.Add(this.SeparatorTextBox);
-            this.Controls.Add(this.label6);
+            this.Controls.Add(this.SepLabel);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.DescriptionBox);
@@ -258,7 +258,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox SeparatorTextBox;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label SepLabel;
         private System.Windows.Forms.BindingSource snippetsParmsBindingSource;
     }
 }
