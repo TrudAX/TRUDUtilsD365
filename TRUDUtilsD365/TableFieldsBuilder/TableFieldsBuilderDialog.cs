@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Dynamics.AX.Metadata.Core.MetaModel;
 
 namespace TRUDUtilsD365.TableFieldsBuilder
 {
@@ -18,6 +19,8 @@ namespace TRUDUtilsD365.TableFieldsBuilder
         {
             _parms = parms;
             tableFieldsBuilderParmsBindingSource.Add(parms);
+
+            FieldTypeBox.DataSource = Enum.GetValues(typeof(FieldType));
         }
         public TableFieldsBuilderDialog()
         {
@@ -69,6 +72,31 @@ namespace TRUDUtilsD365.TableFieldsBuilder
 
                 System.Diagnostics.Process.Start(fileName);
             }
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void EDTNameBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void FieldNameBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void EDTExtendsBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void FieldTypeBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

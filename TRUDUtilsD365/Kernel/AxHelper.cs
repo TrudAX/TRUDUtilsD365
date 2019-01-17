@@ -9,6 +9,7 @@ using Microsoft.Dynamics.AX.Metadata.Core.MetaModel;
 using Microsoft.Dynamics.AX.Metadata.MetaModel;
 using Microsoft.Dynamics.AX.Metadata.Providers;
 using Microsoft.Dynamics.AX.Metadata.Service;
+using Microsoft.Dynamics.Framework.Tools.Core;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Core;
 using Microsoft.Dynamics.Framework.Tools.ProjectSystem;
 
@@ -119,7 +120,7 @@ namespace TRUDUtilsD365.Kernel
             {
                 if (_metadataProvider == null)
                 {
-                    var designMetaModelService = CoreUtility.GetService<IDesignMetaModelService>() as IDesignMetaModelService;
+                    var designMetaModelService = AxServiceProvider.GetService<IDesignMetaModelService>() as IDesignMetaModelService;//CoreUtility.GetService<IDesignMetaModelService>() as IDesignMetaModelService;
                     _metadataProvider = designMetaModelService.CurrentMetadataProvider;
                 }
 
@@ -148,7 +149,7 @@ namespace TRUDUtilsD365.Kernel
             {
                 if (_metaModelService == null)
                 {
-                    var designMetaModelService = CoreUtility.GetService<IDesignMetaModelService>() as IDesignMetaModelService;
+                    var designMetaModelService = AxServiceProvider.GetService<IDesignMetaModelService>() as IDesignMetaModelService;//CoreUtility.GetService<IDesignMetaModelService>() as IDesignMetaModelService;
                     _metaModelService = designMetaModelService.CurrentMetaModelService;
                 }
 
