@@ -1,10 +1,22 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Microsoft.Win32;
 
 namespace InstallToVS
 {
+    public class FileUnblocker
+    {
+        [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool DeleteFile(string name);
+
+        public bool Unblock(string fileName)
+        {
+            return DeleteFile(fileName + ":Zone.Identifier");
+        }
+    }
     class Program
     {
         private const string DllName1     = "TRUDUtilsD365.dll";
@@ -15,13 +27,16 @@ namespace InstallToVS
         {
             try
             {
+                FileUnblocker unblocker = new FileUnblocker();
                 string extensionFolderName = FindExtensionFolder();
                 Console.WriteLine($"VS extension folder: {extensionFolderName}");
                 string sourcePath = Path.Combine(Environment.CurrentDirectory, DllName1);
+                unblocker.Unblock(sourcePath);
                 string targetPath = Path.Combine(extensionFolderName, DllName1);
                 File.Copy(sourcePath, targetPath, true);
 
                 sourcePath = Path.Combine(Environment.CurrentDirectory, DllName2);
+                unblocker.Unblock(sourcePath);
                 targetPath = Path.Combine(extensionFolderName, DllName2);
                 File.Copy(sourcePath, targetPath, true);
 

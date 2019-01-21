@@ -377,8 +377,9 @@ namespace TRUDUtilsD365.TableFieldsBuilder
                 {
                     AxMethod  axMethod = new AxMethod();
                     axMethod.Name = field.Name;
-                    axMethod.Source = $"public display {field.ExtendedDataType} {field.Name}() " +
-                                      Environment.NewLine + "{" + Environment.NewLine + "    return '';" + Environment.NewLine + "}";
+                    axMethod.Source =  "    [SysClientCacheDataMethodAttribute(true)]" + Environment.NewLine + 
+                                      $"    public display {field.ExtendedDataType} {field.Name}() " +
+                                      Environment.NewLine + "    {" + Environment.NewLine + "        return '';" + Environment.NewLine + "    }";
 
                     axTable.AddMethod(axMethod);
                 }
@@ -457,6 +458,9 @@ namespace TRUDUtilsD365.TableFieldsBuilder
         public bool IsContainsHeader { get; set; } = true;
 
         public string TableFieldsTxt { get; set; } = "";
+
+        public bool IsOneFieldMode { get; set; }
+        public NewFieldEngine OneFieldData { get; set; }
 
         public string GetPreviewString()
         {
@@ -538,60 +542,64 @@ namespace TRUDUtilsD365.TableFieldsBuilder
         {
             List<NewFieldEngine> resList = new List<NewFieldEngine>();
 
-            List<string> listImp = new List<string>(
-                TableFieldsTxt.Split(new[] { Environment.NewLine },
-                    StringSplitOptions.RemoveEmptyEntries));
-
-            bool isFirstElement = true;
-            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-
-            if (IsContainsHeader == false)
+            if (IsOneFieldMode)
             {
-                isFirstElement = false;
+                OneFieldData.TableName = TableName;
+                resList.Add(OneFieldData);
             }
+            else
+            {
+                List<string> listImp = new List<string>(
+                    TableFieldsTxt.Split(new[] {Environment.NewLine},
+                        StringSplitOptions.RemoveEmptyEntries));
 
-            foreach (string lineImp in listImp)
-            {             
-                List<string> listLineImp = new List<string>(
-                    lineImp.Split(new[] { '\t' },
-                        StringSplitOptions.None));
-                if (listLineImp.Count != 10)
-                {
-                    break;
-                }
+                bool isFirstElement = IsContainsHeader;
 
-                if (isFirstElement)
+                foreach (string lineImp in listImp)
                 {
-                    if (! string.Equals(listLineImp[0].Trim(), "Field type"))
+                    List<string> listLineImp = new List<string>(
+                        lineImp.Split(new[] {'\t'},
+                            StringSplitOptions.None));
+                    if (listLineImp.Count != 10)
                     {
-                        throw new Exception($"Wrong input format");
-                    }                    
-                    isFirstElement = false;
-                    continue;
-                }
+                        break;
+                    }
 
-                NewFieldEngine fieldEngine = new NewFieldEngine();
-                fieldEngine.FieldType    = (FieldType) Enum.Parse(typeof(FieldType), listLineImp[0].Trim(), true);
-                fieldEngine.FieldName    = listLineImp[1].Trim();
-                fieldEngine.EdtText      = listLineImp[2].Trim();
-                fieldEngine.ExtendsText  = listLineImp[3].Trim();
-                fieldEngine.LabelText    = listLineImp[4].Trim();
-                fieldEngine.HelpTextText = listLineImp[5].Trim();
-                int strLen;
-                int.TryParse(listLineImp[6].Trim(), out strLen);
-                fieldEngine.NewStrEdtLen = strLen;
-                fieldEngine.GroupName    = listLineImp[7].Trim();
-                if (string.Equals(listLineImp[8].Trim(), "yes", StringComparison.OrdinalIgnoreCase))
-                {
-                    fieldEngine.IsMandatory = true;
-                }
-                if (string.Equals(listLineImp[9].Trim(), "yes", StringComparison.OrdinalIgnoreCase))
-                {
-                    fieldEngine.IsDisplayMethod = true;
-                }
+                    if (isFirstElement)
+                    {
+                        if (!string.Equals(listLineImp[0].Trim(), "Field type"))
+                        {
+                            throw new Exception($"Wrong input format");
+                        }
 
-                fieldEngine.TableName = TableName;
-                resList.Add(fieldEngine);                
+                        isFirstElement = false;
+                        continue;
+                    }
+
+                    NewFieldEngine fieldEngine = new NewFieldEngine();
+                    fieldEngine.FieldType    = (FieldType) Enum.Parse(typeof(FieldType), listLineImp[0].Trim(), true);
+                    fieldEngine.FieldName    = listLineImp[1].Trim();
+                    fieldEngine.EdtText      = listLineImp[2].Trim();
+                    fieldEngine.ExtendsText  = listLineImp[3].Trim();
+                    fieldEngine.LabelText    = listLineImp[4].Trim();
+                    fieldEngine.HelpTextText = listLineImp[5].Trim();
+                    int strLen;
+                    int.TryParse(listLineImp[6].Trim(), out strLen);
+                    fieldEngine.NewStrEdtLen = strLen;
+                    fieldEngine.GroupName    = listLineImp[7].Trim();
+                    if (string.Equals(listLineImp[8].Trim(), "yes", StringComparison.OrdinalIgnoreCase))
+                    {
+                        fieldEngine.IsMandatory = true;
+                    }
+
+                    if (string.Equals(listLineImp[9].Trim(), "yes", StringComparison.OrdinalIgnoreCase))
+                    {
+                        fieldEngine.IsDisplayMethod = true;
+                    }
+
+                    fieldEngine.TableName = TableName;
+                    resList.Add(fieldEngine);
+                }
             }
 
             return resList;

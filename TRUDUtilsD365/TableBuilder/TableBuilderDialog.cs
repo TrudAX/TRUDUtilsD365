@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using TRUDUtilsD365.Kernel;
 
 namespace TRUDUtilsD365.TableBuilder
 {
@@ -39,6 +33,16 @@ namespace TRUDUtilsD365.TableBuilder
             {
                 MessageBox.Show(ex.Message, @"An exception occurred:", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
+            }
+        }
+
+
+        private void TableNameTextBox_Validated(object sender, EventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(TableVarNameTextBox.Text) && !String.IsNullOrWhiteSpace(TableNameTextBox.Text))
+            {
+                TableVarNameTextBox.Text = AxHelper.GetVarNameFromType(TableNameTextBox.Text.Trim());
+                _parms.TableVarName = TableVarNameTextBox.Text;
             }
         }
     }

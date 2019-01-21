@@ -47,7 +47,7 @@ namespace TRUDUtilsD365.FormBuilder
                     parms.InitFromTable();
 
                     dialog.SetParameters(parms);
-                    DialogResult formRes = dialog.ShowDialog();
+                    dialog.Show();
                 }
             }
             catch (Exception ex)

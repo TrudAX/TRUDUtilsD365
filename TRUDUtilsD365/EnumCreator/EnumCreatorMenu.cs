@@ -30,7 +30,7 @@ namespace TRUDUtilsD365.EnumCreator
                 EnumCreatorParms parms = new EnumCreatorParms();
 
                 dialog.SetParameters(parms);
-                DialogResult formRes = dialog.ShowDialog();
+                dialog.Show();
 
             }
             catch (Exception ex)

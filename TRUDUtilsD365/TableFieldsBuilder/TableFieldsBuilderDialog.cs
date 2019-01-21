@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Dynamics.AX.Metadata.Core.MetaModel;
+using TRUDUtilsD365.Kernel;
 
 namespace TRUDUtilsD365.TableFieldsBuilder
 {
@@ -27,10 +28,39 @@ namespace TRUDUtilsD365.TableFieldsBuilder
             InitializeComponent();
         }
 
+        void UpdateParms()
+        {
+            _parms.IsOneFieldMode = false;
+            _parms.OneFieldData = null;
+            if (tabControl1.SelectedTab == tabPage2)
+            {
+                NewFieldEngine oneFieldForm = new NewFieldEngine();
+                oneFieldForm.FieldType     = (FieldType) FieldTypeBox.SelectedItem;
+                oneFieldForm.FieldName     = FieldNameBox.Text.Trim();
+                oneFieldForm.EdtText       = EDTNameBox.Text.Trim();
+                oneFieldForm.ExtendsText   = EDTExtendsBox.Text.Trim();
+                oneFieldForm.LabelText     = LabelBox.Text.Trim();
+                oneFieldForm.HelpTextText  = HelpTextBox.Text.Trim();
+                int strLen;
+                int.TryParse(StrLenBox.Text.Trim(), out strLen);
+                oneFieldForm.NewStrEdtLen    = strLen;
+                oneFieldForm.GroupName       = FieldGroupBox.Text.Trim();
+                oneFieldForm.IsMandatory     = MandatoryCheckBox.Checked;
+                oneFieldForm.IsDisplayMethod = IsDisplayMethodCheckBox.Checked;
+
+                _parms.IsOneFieldMode = true;
+                _parms.OneFieldData   = oneFieldForm;
+
+            }
+
+            //if(Tabpage)
+        }
+
         private void UpdatePreviewButton_Click(object sender, EventArgs e)
         {
             try
             {
+                UpdateParms();
                 PreviewTextBox.Text = _parms.GetPreviewString();
             }
             catch (Exception ex)
@@ -45,6 +75,7 @@ namespace TRUDUtilsD365.TableFieldsBuilder
         {
             try
             {
+                UpdateParms();
                 _parms.AddFields();
 
                 _parms.DisplayLog();
@@ -74,29 +105,17 @@ namespace TRUDUtilsD365.TableFieldsBuilder
             }
         }
 
-        private void label7_Click(object sender, EventArgs e)
+        private void LabelBox_TextChanged(object sender, EventArgs e)
         {
-
+            
         }
 
-        private void EDTNameBox_TextChanged(object sender, EventArgs e)
+        private void LabelBox_Validated(object sender, EventArgs e)
         {
-
-        }
-
-        private void FieldNameBox_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void EDTExtendsBox_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void FieldTypeBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
+            if (String.IsNullOrWhiteSpace(FieldNameBox.Text) && !String.IsNullOrWhiteSpace(LabelBox.Text))
+            {
+                FieldNameBox.Text = AxHelper.GetTypeNameFromLabel(LabelBox.Text.Trim());
+            }
         }
     }
 }

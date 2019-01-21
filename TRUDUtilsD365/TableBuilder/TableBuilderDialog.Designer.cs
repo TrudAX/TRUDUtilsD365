@@ -39,6 +39,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.PrimaryKeyEDTTextBox = new System.Windows.Forms.TextBox();
+            this.tableBuilderParmsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.IsCreateTableCheckBox = new System.Windows.Forms.CheckBox();
             this.TableNameTextBox = new System.Windows.Forms.TextBox();
             this.TableLabelTextBox = new System.Windows.Forms.TextBox();
@@ -50,7 +51,6 @@
             this.button1 = new System.Windows.Forms.Button();
             this.FieldNameTextBox = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
-            this.tableBuilderParmsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.EDTLabeltextBox = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.EDTHelpTextBox = new System.Windows.Forms.TextBox();
@@ -169,6 +169,10 @@
             this.PrimaryKeyEDTTextBox.Size = new System.Drawing.Size(274, 24);
             this.PrimaryKeyEDTTextBox.TabIndex = 9;
             // 
+            // tableBuilderParmsBindingSource
+            // 
+            this.tableBuilderParmsBindingSource.DataSource = typeof(TRUDUtilsD365.TableBuilder.TableBuilderParms);
+            // 
             // IsCreateTableCheckBox
             // 
             this.IsCreateTableCheckBox.AutoSize = true;
@@ -186,6 +190,7 @@
             this.TableNameTextBox.Name = "TableNameTextBox";
             this.TableNameTextBox.Size = new System.Drawing.Size(274, 24);
             this.TableNameTextBox.TabIndex = 11;
+            this.TableNameTextBox.Validated += new System.EventHandler(this.TableNameTextBox_Validated);
             // 
             // TableLabelTextBox
             // 
@@ -266,10 +271,6 @@
             this.label10.Size = new System.Drawing.Size(108, 18);
             this.label10.TabIndex = 19;
             this.label10.Text = "Key field name:";
-            // 
-            // tableBuilderParmsBindingSource
-            // 
-            this.tableBuilderParmsBindingSource.DataSource = typeof(TRUDUtilsD365.TableBuilder.TableBuilderParms);
             // 
             // EDTLabeltextBox
             // 

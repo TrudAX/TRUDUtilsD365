@@ -31,7 +31,7 @@ namespace TRUDUtilsD365.AddTableFindMethod
                     parms.InitFromSelectedElement(e);
 
                     dialog.SetParameters(parms);
-                    dialog.ShowDialog();
+                    dialog.Show();
                 }
             }
             catch (Exception ex)

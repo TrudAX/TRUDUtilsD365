@@ -13,6 +13,7 @@ A set of Visual Studio Add-ins for Microsoft Dynamics 365 for Operation that wil
 * [Create find method](#create-find-method)
 * [Create menu item](#create-menu-item)
 * [Create security privilege](#create-security-privilege)
+* [Relation to Xpp](#relation-to-xpp)
 * [Troubleshooting](#troubleshooting)
 * [Installation](#installation)
 
@@ -151,6 +152,12 @@ This Add-in works for Forms, Reports and Classes and creates Menu item for the s
 This Add-in works for the selected Menu Item and creates new security privilege for this Menu Item. Label and Name are automatically updated when you change Access Level
 
 ![](assets/SecurityPrivilegeBuilder.png)
+
+## Relation to Xpp
+
+This Add-in works for the selected table relation and produces X++ code to implement this relation. Code can be generated as "select" or "query" statement
+
+![](assets/TableRelationToXpp.png)
 
 ## Troubleshooting
 
