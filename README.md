@@ -14,6 +14,7 @@ A set of Visual Studio Add-ins for Microsoft Dynamics 365 for Operation that wil
 * [Create menu item](#create-menu-item)
 * [Create security privilege](#create-security-privilege)
 * [Relation to Xpp](#relation-to-xpp)
+* [Create table relation](#create-table-relation)
 * [Troubleshooting](#troubleshooting)
 * [Installation](#installation)
 
@@ -158,6 +159,13 @@ This Add-in works for the selected Menu Item and creates new security privilege 
 This Add-in works for the selected table relation and produces X++ code to implement this relation. Code can be generated as "select" or "query" statement
 
 ![](assets/TableRelationToXpp.png)
+
+## Create table relation
+
+Add-in creates table relation for the selected table/table-extension field based on the field EDT relation
+
+![](assets/CreateTableRelation.png)
+
 
 ## Troubleshooting
 

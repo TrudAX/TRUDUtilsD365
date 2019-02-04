@@ -265,7 +265,25 @@ namespace TRUDUtilsD365.TableFieldsBuilder
             return edt;
         }
 
-        protected AxTableRelationForeignKey AddTableRelation(AxTableField field, KeyedObjectCollection<AxTableRelation> existingRelations)
+        protected string ConvertRelationFilterToString(AxEdtTableReferenceFilter referenceFilter)
+        {
+            string res = "";
+            AxTable  axTableRef = _axHelper.MetadataProvider.Tables.Read(referenceFilter.Table);
+            AxTableFieldEnum field = axTableRef?.Fields[referenceFilter.RelatedField] as AxTableFieldEnum;
+            if (field != null && ! String.IsNullOrEmpty(field.EnumType))
+            {
+                AxEnum axEnum = _axHelper.MetadataProvider.Enums.Read(field.EnumType);
+                AxEnumValue axEnumValue = axEnum?.EnumValues[referenceFilter.Value];
+                if (axEnumValue != null && axEnumValue.Value == referenceFilter.Value)
+                {
+                    res = $"{axEnum.Name}::{axEnumValue.Name}";
+                }
+            }
+
+            return res;
+        }
+
+        public AxTableRelationForeignKey AddTableRelation(AxTableField field, KeyedObjectCollection<AxTableRelation> existingRelations)
         {
             if (! string.IsNullOrEmpty(field.ExtendedDataType))
             {
@@ -311,6 +329,7 @@ namespace TRUDUtilsD365.TableFieldsBuilder
                             axTableRelationConstraint.Name         = localLineRef.RelatedField;
                             axTableRelationConstraint.RelatedField = localLineRef.RelatedField;
                             axTableRelationConstraint.Value        = localLineRef.Value;
+                            axTableRelationConstraint.ValueStr     = ConvertRelationFilterToString(localLineRef);
                             axTableRelation.AddConstraint(axTableRelationConstraint);
                         }
                         else

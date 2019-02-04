@@ -10,8 +10,6 @@ using TRUDUtilsD365.Kernel;
 
 namespace TRUDUtilsD365.AddTableFindMethod
 {
-
-
     public class AxTableFieldParm
     {
         public string FieldName { get; set; }
@@ -280,9 +278,9 @@ namespace TRUDUtilsD365.AddTableFindMethod
                 FieldsStr += fieldParm.FieldName + Environment.NewLine;
             }
             var field = (BaseField)e.SelectedElement;
-            AxTable axTable = (AxTable)field.Table.GetMetadataType();
+            //AxTable axTable = (AxTable)field.Table.GetMetadataType();
 
-            TableName = axTable.Name;
+            TableName = field.Table != null ? field.Table.GetMetadataType().Name : field.TableExtension?.GetMetadataType().Name;
             VarName = AxHelper.GetVarNameFromType(TableName);
         }
 

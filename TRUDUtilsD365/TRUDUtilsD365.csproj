@@ -121,6 +121,14 @@
     </Compile>
     <Compile Include="RunBaseBuilder\RunBaseBuilderParms.cs" />
     <Compile Include="RunBaseBuilder\RunBaseBuilderMenu.cs" />
+    <Compile Include="CreateTableRelation\CreateTableRelationDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CreateTableRelation\CreateTableRelationDialog.Designer.cs">
+      <DependentUpon>CreateTableRelationDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CreateTableRelation\CreateTableRelationMenu.cs" />
+    <Compile Include="CreateTableRelation\CreateTableRelationParms.cs" />
     <Compile Include="SecurityPrivilegeBuilder\SecurityPrivilegeBuilderMenu.cs" />
     <Compile Include="SecurityPrivilegeBuilder\SecurityPrivilegeBuilderDialog.cs">
       <SubType>Form</SubType>
@@ -171,6 +179,9 @@
     <EmbeddedResource Include="Kernel\SnippetsDialog.resx">
       <DependentUpon>SnippetsDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="CreateTableRelation\CreateTableRelationDialog.resx">
+      <DependentUpon>CreateTableRelationDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SecurityPrivilegeBuilder\SecurityPrivilegeBuilderDialog.resx">
       <DependentUpon>SecurityPrivilegeBuilderDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -184,6 +195,7 @@
   <ItemGroup>
     <None Include="Properties\DataSources\AddTableFindMethodParms.datasource" />
     <None Include="Properties\DataSources\TRUDUtilsD365.CreateExtensionClass.CreateExtensionClassParms.datasource" />
+    <None Include="Properties\DataSources\TRUDUtilsD365.CreateTableRelation.CreateTableRelationParms.datasource" />
     <None Include="Properties\DataSources\TRUDUtilsD365.EnumCreator.EnumCreatorParms.datasource" />
     <None Include="Properties\DataSources\TRUDUtilsD365.FormBuilder.FormBuilderParms.datasource" />
     <None Include="Properties\DataSources\TRUDUtilsD365.Kernel.SnippetsParms.datasource" />
