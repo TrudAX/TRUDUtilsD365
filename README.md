@@ -1,6 +1,8 @@
-﻿# TRUDUtilsD365
 
-A set of Visual Studio Add-ins for Microsoft Dynamics 365 for Operation that will allow you to perform quickly common development tasks.
+![](assets/TooBusy.png)
+# TRUDUtilsD365
+
+A set of Visual Studio Add-ins for Microsoft Dynamics 365 for Finance and Operations that will allow you to perform quickly common development tasks.
 
 * [Create extension class](#create-extension-class)
 * [Copy extension method](#copy-extension-method)
