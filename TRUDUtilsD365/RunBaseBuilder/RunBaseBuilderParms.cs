@@ -133,8 +133,8 @@ namespace TRUDUtilsD365.RunBaseBuilder
 
         void InitCodeGenerate()
         {
-            int longestNameLength = (from x in FieldsList select x.Name.Length).Max();
-            int longestTypeLength = (from x in FieldsList select x.Type.Length).Max();
+            int longestNameLength = FieldsList.Count > 0  ? (from x in FieldsList select x.Name.Length).Max() : 10;
+            int longestTypeLength = FieldsList.Count > 0  ? (from x in FieldsList select x.Type.Length).Max() : 10;
             longestTypeLength = Math.Max("DialogField".Length, longestTypeLength);
             longestTypeLength++;
             longestNameLength+=2;
