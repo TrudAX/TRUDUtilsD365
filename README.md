@@ -171,7 +171,7 @@ Add-in creates table relation for the selected table/table-extension field based
 
 ## Troubleshooting
 
-Current solution was tested on 8.0U15.
+Current solution was tested on v10 U24.
 
 All tools require that you have an active project with your current model. The first project in the solution is used.
 
