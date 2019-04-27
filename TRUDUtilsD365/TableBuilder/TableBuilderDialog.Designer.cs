@@ -39,7 +39,6 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.PrimaryKeyEDTTextBox = new System.Windows.Forms.TextBox();
-            this.tableBuilderParmsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.IsCreateTableCheckBox = new System.Windows.Forms.CheckBox();
             this.TableNameTextBox = new System.Windows.Forms.TextBox();
             this.TableLabelTextBox = new System.Windows.Forms.TextBox();
@@ -59,6 +58,13 @@
             this.label13 = new System.Windows.Forms.Label();
             this.EDTStringSizeTextBox = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
+            this.tableBuilderParmsBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.PrivilegeLabelMaintainTextBox = new System.Windows.Forms.TextBox();
+            this.PrivilegeLabelViewTextBox = new System.Windows.Forms.TextBox();
+            this.IsCreatePrivilegeCheckBox = new System.Windows.Forms.CheckBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.tableBuilderParmsBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -169,10 +175,6 @@
             this.PrimaryKeyEDTTextBox.Size = new System.Drawing.Size(274, 24);
             this.PrimaryKeyEDTTextBox.TabIndex = 9;
             // 
-            // tableBuilderParmsBindingSource
-            // 
-            this.tableBuilderParmsBindingSource.DataSource = typeof(TRUDUtilsD365.TableBuilder.TableBuilderParms);
-            // 
             // IsCreateTableCheckBox
             // 
             this.IsCreateTableCheckBox.AutoSize = true;
@@ -199,6 +201,7 @@
             this.TableLabelTextBox.Name = "TableLabelTextBox";
             this.TableLabelTextBox.Size = new System.Drawing.Size(274, 24);
             this.TableLabelTextBox.TabIndex = 12;
+            this.TableLabelTextBox.Validated += new System.EventHandler(this.TableLabelTextBox_Validated);
             // 
             // TableVarNameTextBox
             // 
@@ -245,7 +248,7 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(51, 278);
+            this.button1.Location = new System.Drawing.Point(58, 293);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(91, 32);
             this.button1.TabIndex = 18;
@@ -348,11 +351,80 @@
             this.label14.TabIndex = 27;
             this.label14.Text = "EDT Str Size:";
             // 
+            // tableBuilderParmsBindingSource
+            // 
+            this.tableBuilderParmsBindingSource.DataSource = typeof(TRUDUtilsD365.TableBuilder.TableBuilderParms);
+            // 
+            // PrivilegeLabelMaintainTextBox
+            // 
+            this.PrivilegeLabelMaintainTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.tableBuilderParmsBindingSource, "PrivilegeLabelMaintain", true));
+            this.PrivilegeLabelMaintainTextBox.Location = new System.Drawing.Point(570, 301);
+            this.PrivilegeLabelMaintainTextBox.Name = "PrivilegeLabelMaintainTextBox";
+            this.PrivilegeLabelMaintainTextBox.Size = new System.Drawing.Size(274, 24);
+            this.PrivilegeLabelMaintainTextBox.TabIndex = 34;
+            // 
+            // PrivilegeLabelViewTextBox
+            // 
+            this.PrivilegeLabelViewTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.tableBuilderParmsBindingSource, "PrivilegeLabelView", true));
+            this.PrivilegeLabelViewTextBox.Location = new System.Drawing.Point(570, 271);
+            this.PrivilegeLabelViewTextBox.Name = "PrivilegeLabelViewTextBox";
+            this.PrivilegeLabelViewTextBox.Size = new System.Drawing.Size(274, 24);
+            this.PrivilegeLabelViewTextBox.TabIndex = 33;
+            // 
+            // IsCreatePrivilegeCheckBox
+            // 
+            this.IsCreatePrivilegeCheckBox.AutoSize = true;
+            this.IsCreatePrivilegeCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.tableBuilderParmsBindingSource, "IsCreatePrivilege", true));
+            this.IsCreatePrivilegeCheckBox.Location = new System.Drawing.Point(570, 251);
+            this.IsCreatePrivilegeCheckBox.Name = "IsCreatePrivilegeCheckBox";
+            this.IsCreatePrivilegeCheckBox.Size = new System.Drawing.Size(15, 14);
+            this.IsCreatePrivilegeCheckBox.TabIndex = 32;
+            this.IsCreatePrivilegeCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.Location = new System.Drawing.Point(462, 304);
+            this.label15.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(101, 18);
+            this.label15.TabIndex = 31;
+            this.label15.Text = "Maintain label:";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.Location = new System.Drawing.Point(486, 274);
+            this.label16.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(77, 18);
+            this.label16.TabIndex = 30;
+            this.label16.Text = "View label:";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label17.Location = new System.Drawing.Point(435, 248);
+            this.label17.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(129, 18);
+            this.label17.TabIndex = 29;
+            this.label17.Text = "Create a privilege?";
+            // 
             // TableBuilderDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(856, 324);
+            this.ClientSize = new System.Drawing.Size(862, 354);
+            this.Controls.Add(this.PrivilegeLabelMaintainTextBox);
+            this.Controls.Add(this.PrivilegeLabelViewTextBox);
+            this.Controls.Add(this.IsCreatePrivilegeCheckBox);
+            this.Controls.Add(this.label15);
+            this.Controls.Add(this.label16);
+            this.Controls.Add(this.label17);
             this.Controls.Add(this.EDTStringSizeTextBox);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.EDTExtendsTextBox);
@@ -424,5 +496,11 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox EDTStringSizeTextBox;
         private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox PrivilegeLabelMaintainTextBox;
+        private System.Windows.Forms.TextBox PrivilegeLabelViewTextBox;
+        private System.Windows.Forms.CheckBox IsCreatePrivilegeCheckBox;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label17;
     }
 }

@@ -27,6 +27,10 @@ namespace TRUDUtilsD365.TableBuilder
         public string EdtLabel { get; set; } = "";
         public string EdtHelpText { get; set; } = "";
 
+        public Boolean IsCreatePrivilege { get; set; } = true;
+        public string PrivilegeLabelView { get; set; } = "";
+        public string PrivilegeLabelMaintain { get; set; } = "";
+
 
 
         public string KeyFieldName { get; set; } = "Id";
@@ -75,6 +79,10 @@ namespace TRUDUtilsD365.TableBuilder
             {
                 DoFormCreate();
                 DoMenuItemCreate();
+            }
+            if (IsCreatePrivilege)
+            {
+                DoPrivilegeCreate();
             }
         }
 
@@ -177,6 +185,58 @@ namespace TRUDUtilsD365.TableBuilder
             AddLog($"Form: {newForm.Name}; ");
         }
 
+        void DoPrivilegeCreateSingle(string privilegeName, string privilegeLabel, AccessGrant accessGrant)
+        {
+            if (String.IsNullOrWhiteSpace(privilegeLabel))
+            {
+                return;
+            }
+
+            AxSecurityPrivilege privilege;
+
+            privilege = _axHelper.MetadataProvider.SecurityPrivileges.Read(privilegeName);
+            if (privilege != null)
+            {
+                return;
+            }
+            privilege = new AxSecurityPrivilege();
+            AxSecurityEntryPointReference entryPoint = new AxSecurityEntryPointReference();
+
+            entryPoint.Name = FormName;
+            entryPoint.Grant = accessGrant;
+            entryPoint.ObjectName = FormName;
+            entryPoint.ObjectType = EntryPointType.MenuItemDisplay;
+
+            privilege.Name = privilegeName;
+            privilege.EntryPoints.Add(entryPoint);
+            privilege.Label = privilegeLabel;
+
+            _axHelper.MetaModelService.CreateSecurityPrivilege(privilege, _axHelper.ModelSaveInfo);
+            _axHelper.AppendToActiveProject(privilege);
+
+            AddLog($"Privilege: {privilege.Name}; ");
+        }
+
+        void DoPrivilegeCreate()
+        {
+            string privilegeName;
+            AccessGrant accessGrant;
+
+            if (!string.IsNullOrWhiteSpace(PrivilegeLabelView))
+            {
+                privilegeName = $"{FormName}View";
+                accessGrant = AccessGrant.ConstructGrantRead();
+                DoPrivilegeCreateSingle(privilegeName, PrivilegeLabelView, accessGrant);
+            }
+
+            if (!string.IsNullOrWhiteSpace(PrivilegeLabelMaintain))
+            {
+                privilegeName = $"{FormName}Maintain";
+                accessGrant = AccessGrant.ConstructGrantDelete();
+                DoPrivilegeCreateSingle(privilegeName, PrivilegeLabelMaintain, accessGrant);
+            }
+
+        }
 
         void DoTableCreate()
         {

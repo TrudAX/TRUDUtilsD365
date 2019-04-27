@@ -39,10 +39,32 @@ namespace TRUDUtilsD365.TableBuilder
 
         private void TableNameTextBox_Validated(object sender, EventArgs e)
         {
-            if (String.IsNullOrWhiteSpace(TableVarNameTextBox.Text) && !String.IsNullOrWhiteSpace(TableNameTextBox.Text))
+            if (String.IsNullOrWhiteSpace(TableVarNameTextBox.Text) &&
+                !String.IsNullOrWhiteSpace(TableNameTextBox.Text))
             {
                 TableVarNameTextBox.Text = AxHelper.GetVarNameFromType(TableNameTextBox.Text.Trim());
                 _parms.TableVarName = TableVarNameTextBox.Text;
+            }
+
+            if (!String.IsNullOrWhiteSpace(TableNameTextBox.Text))
+            {
+                FormNameTextBox.Text = TableNameTextBox.Text;
+                _parms.FormName = FormNameTextBox.Text;
+            }
+        }
+
+        private void TableLabelTextBox_Validated(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrWhiteSpace(TableLabelTextBox.Text))
+            {
+                FormLabelTextBox.Text = TableLabelTextBox.Text;
+                _parms.FormLabel      = FormLabelTextBox.Text;
+
+                PrivilegeLabelViewTextBox.Text = $"{_parms.FormLabel} view";
+                _parms.PrivilegeLabelView = PrivilegeLabelViewTextBox.Text;
+
+                PrivilegeLabelMaintainTextBox.Text = $"{_parms.FormLabel} maintain";
+                _parms.PrivilegeLabelMaintain = PrivilegeLabelMaintainTextBox.Text;
             }
         }
     }
