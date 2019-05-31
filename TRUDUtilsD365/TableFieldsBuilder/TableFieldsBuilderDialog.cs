@@ -45,6 +45,7 @@ namespace TRUDUtilsD365.TableFieldsBuilder
                 int.TryParse(StrLenBox.Text.Trim(), out strLen);
                 oneFieldForm.NewStrEdtLen    = strLen;
                 oneFieldForm.GroupName       = FieldGroupBox.Text.Trim();
+                oneFieldForm.GroupLabel      = FieldGroupLabelBox.Text.Trim();
                 oneFieldForm.IsMandatory     = MandatoryCheckBox.Checked;
                 oneFieldForm.IsDisplayMethod = IsDisplayMethodCheckBox.Checked;
 

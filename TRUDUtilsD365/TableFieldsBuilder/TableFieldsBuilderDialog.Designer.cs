@@ -31,7 +31,6 @@
             this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.TableNameTextBox = new System.Windows.Forms.TextBox();
-            this.tableFieldsBuilderParmsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.FieldsTextBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -64,7 +63,9 @@
             this.FieldTypeBox = new System.Windows.Forms.ComboBox();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.saveFileDialogTemplate = new System.Windows.Forms.SaveFileDialog();
-            ((System.ComponentModel.ISupportInitialize)(this.tableFieldsBuilderParmsBindingSource)).BeginInit();
+            this.label12 = new System.Windows.Forms.Label();
+            this.FieldGroupLabelBox = new System.Windows.Forms.TextBox();
+            this.tableFieldsBuilderParmsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -76,6 +77,7 @@
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tableFieldsBuilderParmsBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -97,10 +99,6 @@
             this.TableNameTextBox.Size = new System.Drawing.Size(320, 23);
             this.TableNameTextBox.TabIndex = 1;
             // 
-            // tableFieldsBuilderParmsBindingSource
-            // 
-            this.tableFieldsBuilderParmsBindingSource.DataSource = typeof(TRUDUtilsD365.TableFieldsBuilder.TableFieldsBuilderParms);
-            // 
             // FieldsTextBox
             // 
             this.FieldsTextBox.AcceptsReturn = true;
@@ -114,7 +112,7 @@
             this.FieldsTextBox.Multiline = true;
             this.FieldsTextBox.Name = "FieldsTextBox";
             this.FieldsTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.FieldsTextBox.Size = new System.Drawing.Size(480, 325);
+            this.FieldsTextBox.Size = new System.Drawing.Size(480, 323);
             this.FieldsTextBox.TabIndex = 2;
             this.FieldsTextBox.WordWrap = false;
             // 
@@ -241,6 +239,8 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.FieldGroupLabelBox);
+            this.tabPage2.Controls.Add(this.label12);
             this.tabPage2.Controls.Add(this.IsDisplayMethodCheckBox);
             this.tabPage2.Controls.Add(this.MandatoryCheckBox);
             this.tabPage2.Controls.Add(this.FieldGroupBox);
@@ -270,20 +270,20 @@
             // IsDisplayMethodCheckBox
             // 
             this.IsDisplayMethodCheckBox.AutoSize = true;
-            this.IsDisplayMethodCheckBox.Location = new System.Drawing.Point(119, 283);
+            this.IsDisplayMethodCheckBox.Location = new System.Drawing.Point(119, 312);
             this.IsDisplayMethodCheckBox.Name = "IsDisplayMethodCheckBox";
             this.IsDisplayMethodCheckBox.Size = new System.Drawing.Size(163, 21);
-            this.IsDisplayMethodCheckBox.TabIndex = 19;
+            this.IsDisplayMethodCheckBox.TabIndex = 20;
             this.IsDisplayMethodCheckBox.Text = "Is display method";
             this.IsDisplayMethodCheckBox.UseVisualStyleBackColor = true;
             // 
             // MandatoryCheckBox
             // 
             this.MandatoryCheckBox.AutoSize = true;
-            this.MandatoryCheckBox.Location = new System.Drawing.Point(119, 256);
+            this.MandatoryCheckBox.Location = new System.Drawing.Point(119, 285);
             this.MandatoryCheckBox.Name = "MandatoryCheckBox";
             this.MandatoryCheckBox.Size = new System.Drawing.Size(99, 21);
-            this.MandatoryCheckBox.TabIndex = 18;
+            this.MandatoryCheckBox.TabIndex = 19;
             this.MandatoryCheckBox.Text = "Mandatory";
             this.MandatoryCheckBox.UseVisualStyleBackColor = true;
             // 
@@ -445,6 +445,26 @@
             this.saveFileDialogTemplate.FileName = "TableFieldsBuilderTemplate.xlsm";
             this.saveFileDialogTemplate.Title = "Get excel template";
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(11, 259);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(96, 17);
+            this.label12.TabIndex = 20;
+            this.label12.Text = "Group label";
+            // 
+            // FieldGroupLabelBox
+            // 
+            this.FieldGroupLabelBox.Location = new System.Drawing.Point(119, 256);
+            this.FieldGroupLabelBox.Name = "FieldGroupLabelBox";
+            this.FieldGroupLabelBox.Size = new System.Drawing.Size(298, 23);
+            this.FieldGroupLabelBox.TabIndex = 18;
+            // 
+            // tableFieldsBuilderParmsBindingSource
+            // 
+            this.tableFieldsBuilderParmsBindingSource.DataSource = typeof(TRUDUtilsD365.TableFieldsBuilder.TableFieldsBuilderParms);
+            // 
             // TableFieldsBuilderDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -454,7 +474,6 @@
             this.Font = new System.Drawing.Font("Consolas", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "TableFieldsBuilderDialog";
             this.Text = "Add fields to table";
-            ((System.ComponentModel.ISupportInitialize)(this.tableFieldsBuilderParmsBindingSource)).EndInit();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.Panel2.PerformLayout();
@@ -470,6 +489,7 @@
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.tableFieldsBuilderParmsBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -511,5 +531,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox FieldTypeBox;
+        private System.Windows.Forms.TextBox FieldGroupLabelBox;
+        private System.Windows.Forms.Label label12;
     }
 }

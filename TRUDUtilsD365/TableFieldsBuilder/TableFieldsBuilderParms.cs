@@ -27,6 +27,9 @@ namespace TRUDUtilsD365.TableFieldsBuilder
         public string HelpTextText { get; set; } = "";
 
         public string GroupName { get; set; } = "";
+
+        public string GroupLabel { get; set; } = "";
+
         public bool IsMandatory { get; set; } = false;
 
         public bool IsDisplayMethod { get; set; } = false;
@@ -416,6 +419,10 @@ namespace TRUDUtilsD365.TableFieldsBuilder
                     else
                     {
                         axTableFieldGroup = new AxTableFieldGroup {Name = GroupName};
+                        if (!string.IsNullOrEmpty(GroupLabel))
+                        {
+                            axTableFieldGroup.Label = GroupLabel;
+                        }
                         axTableFieldGroup.AddField(axTableFieldGroupField);
                         axTable.AddFieldGroup(axTableFieldGroup);
                     }
@@ -450,6 +457,10 @@ namespace TRUDUtilsD365.TableFieldsBuilder
                     else
                     {
                         axTableFieldGroup = new AxTableFieldGroup { Name = GroupName };
+                        if (!string.IsNullOrEmpty(GroupLabel))
+                        {
+                            axTableFieldGroup.Label = GroupLabel;
+                        }
                         axTableFieldGroup.AddField(axTableFieldGroupField);
                         axTableExtension.FieldGroups.Add(axTableFieldGroup);
                     }
