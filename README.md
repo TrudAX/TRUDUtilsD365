@@ -118,7 +118,7 @@ Supports the following options:
 * Multiple dialog parameters
 * Caller record handling
 * Query usage
-* File upload control
+* File upload control(with CSV and Excel [support](https://denistrunin.com/xpptools-readexcelfile/))
 
 See detailed description at [RunBase template class builder](https://denistrunin.com/runbasebuilder-util/)
 

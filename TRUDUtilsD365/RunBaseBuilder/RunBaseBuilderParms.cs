@@ -7,6 +7,13 @@ using Microsoft.Dynamics.AX.Metadata.MetaModel;
 
 namespace TRUDUtilsD365.RunBaseBuilder
 {
+    public enum FileUploadType
+    {
+        None,
+        Normal,
+        Excel,
+        CSV
+    }
     public class RunBaseBuilderVar
     {
         public string Name { get; set; } = "";
@@ -29,7 +36,7 @@ namespace TRUDUtilsD365.RunBaseBuilder
         public string ClassDescription { get; set; } = "";
         public string QueryTable { get; set; } = "";
         public string ExternalTable { get; set; } = "";
-        public Boolean IsAddFileUpload { get; set; } 
+        public FileUploadType IsAddFileUpload { get; set; } = FileUploadType.None;
         public Boolean IsCreateMenuItem { get; set; } 
 
         public List<RunBaseBuilderVar> FieldsList;
@@ -43,7 +50,7 @@ namespace TRUDUtilsD365.RunBaseBuilder
         protected const string DescriptionParmName       = "Description";
         protected const string QueryTableParmName        = "Query table";
         protected const string ExternalTableNameParmName = "External table name";
-        protected const string AddFileUploadParmName     = "Add file upload(y)";
+        protected const string AddFileUploadParmName     = "Add file upload(y,excel,csv)";
         protected const string CreateMenuItemParmName    = "Create menu item(y)";
         protected const string ParametersParmName        = "Parameters..";
 
@@ -76,7 +83,18 @@ namespace TRUDUtilsD365.RunBaseBuilder
             ClassDescription = snippetsParms.GetParmStr(DescriptionParmName);
             QueryTable       = snippetsParms.GetParmStr(QueryTableParmName);
             ExternalTable    = snippetsParms.GetParmStr(ExternalTableNameParmName);
-            IsAddFileUpload  = snippetsParms.GetParmBool(AddFileUploadParmName);
+            switch (snippetsParms.GetParmStr(AddFileUploadParmName).ToLower())
+            {
+                case "y":
+                    IsAddFileUpload = FileUploadType.Normal;
+                    break;
+                case "excel":
+                    IsAddFileUpload = FileUploadType.Excel;
+                    break;
+                case "csv":
+                    IsAddFileUpload = FileUploadType.CSV;
+                    break;
+            }
             IsCreateMenuItem = snippetsParms.GetParmBool(CreateMenuItemParmName);
             if (ExternalTable != "")
             {
@@ -178,7 +196,7 @@ namespace TRUDUtilsD365.RunBaseBuilder
                 CodeGenerate.Append(ExternalTableVar.Type, "Type").AppendLine($" {ExternalTableVar.Name};");
             }
 
-            if (IsAddFileUpload)
+            if (IsAddFileUpload != FileUploadType.None )
             {
                 CodeGenerate.AppendLine("");
                 CodeGenerate.AppendLine("DialogRunbase     dialog;");
@@ -270,7 +288,7 @@ namespace TRUDUtilsD365.RunBaseBuilder
             CodeGenerate.SetMethodName("dialog");
             CodeGenerate.AppendLine("public Object dialog()");
             CodeGenerate.BeginBlock();
-            if (IsAddFileUpload)
+            if (IsAddFileUpload != FileUploadType.None)
             {
                 CodeGenerate.AppendLine("dialog = super();");
                 CodeGenerate.AppendLine("DialogGroup       dialogGroup;");
@@ -282,7 +300,18 @@ namespace TRUDUtilsD365.RunBaseBuilder
                 CodeGenerate.AppendLine("dialogFileUpload = formBuildControl.addControlEx(classstr(FileUpload), FileUploadName);");
                 CodeGenerate.AppendLine("dialogFileUpload.style(FileUploadStyle::MinimalWithFilename);");
                 CodeGenerate.AppendLine("dialogFileUpload.baseFileUploadStrategyClassName(classstr(FileUploadTemporaryStorageStrategy));");
-                CodeGenerate.AppendLine("dialogFileUpload.fileTypesAccepted('.txt');");
+                switch (IsAddFileUpload)
+                {                    
+                    case FileUploadType.CSV:
+                        CodeGenerate.AppendLine("dialogFileUpload.fileTypesAccepted('.csv');");
+                        break;
+                    case FileUploadType.Excel:
+                        CodeGenerate.AppendLine("dialogFileUpload.fileTypesAccepted('.xlsx');");
+                        break;
+                    default:
+                        CodeGenerate.AppendLine("dialogFileUpload.fileTypesAccepted('.txt');");
+                        break;
+                }
                 CodeGenerate.AppendLine("dialogFileUpload.fileNameLabel(\"@SYS308842\");");
                 CodeGenerate.AppendLine("");
             }
@@ -328,7 +357,7 @@ namespace TRUDUtilsD365.RunBaseBuilder
             CodeGenerate.SetMethodName("getFromDialog");
             CodeGenerate.AppendLine("public boolean getFromDialog()");
             CodeGenerate.BeginBlock();
-            if (IsAddFileUpload)
+            if (IsAddFileUpload != FileUploadType.None)
             {
                 CodeGenerate.AppendLine("FileUpload  fileUploadControl = this.getFormControl(dialog, FileUploadName);");
                 CodeGenerate.AppendLine("fileUploadResult = fileUploadControl.getFileUploadResult();");
@@ -452,7 +481,7 @@ namespace TRUDUtilsD365.RunBaseBuilder
             {
                 CodeGenerate.AppendLine($"info(strFmt(\"{df.Name}=%1\", {df.Name}));");
             }
-            if (IsAddFileUpload)
+            if (IsAddFileUpload != FileUploadType.None)
             {
                 CodeGenerate.AppendLine("System.IO.MemoryStream memoryStreamFile;");
                 CodeGenerate.AppendLine("try");
@@ -471,16 +500,53 @@ namespace TRUDUtilsD365.RunBaseBuilder
                 CodeGenerate.AppendLine("    str folderName = strFmt('%1', conPeek(fileNameCon, 3));");
                 CodeGenerate.AppendLine("    //get file data");
                 CodeGenerate.AppendLine("    memoryStreamFile = fileUploadResult.openResult();");
-                CodeGenerate.AppendLine("    AsciiStreamIo asciiIo = AsciiStreamIo::constructForRead(memoryStreamFile);");
-                CodeGenerate.AppendLine("    asciiIo.inRecordDelimiter('\\n');");
-                CodeGenerate.AppendLine("    while (asciiIo.status() == IO_Status::Ok)");
-                CodeGenerate.AppendLine("    {");
-                CodeGenerate.AppendLine("        container c = asciiIo.read();");
-                CodeGenerate.AppendLine("        if (conLen(c) > 0)");
-                CodeGenerate.AppendLine("        {");
-                CodeGenerate.AppendLine("            info(strFmt(\"File data:%1\", conPeek(c, 1)));");
-                CodeGenerate.AppendLine("        }");
-                CodeGenerate.AppendLine("    }");
+                switch (IsAddFileUpload)
+                {
+                    case FileUploadType.CSV:
+                        CodeGenerate.AppendLine("    //https://github.com/TrudAX/XppTools#devcommon-model");
+                        CodeGenerate.AppendLine("    DEVFileReaderCSV   fileReader   = new DEVFileReaderCSV();");
+                        CodeGenerate.AppendLine("    fileReader.readCSVFile(memoryStreamFile);");
+                        CodeGenerate.AppendLine("    fileReader.readHeaderRow();");
+                        CodeGenerate.AppendLine("    while (fileReader.readNextRow())");
+                        CodeGenerate.AppendLine("    {");
+                        CodeGenerate.AppendLine("        info(strFmt(\"row: % 1\", fileReader.getCurRow()));");
+                        CodeGenerate.AppendLine("        info(strFmt(\" % 1, % 2, % 3\",");
+                        CodeGenerate.AppendLine("            fileReader.getStringByName(\"Main account\"),");
+                        CodeGenerate.AppendLine("            fileReader.getStringByName(\"BusinessUnit\"),");
+                        CodeGenerate.AppendLine("            fileReader.getRealByName(\"Amount\")");
+                        CodeGenerate.AppendLine("            ));");
+                        CodeGenerate.AppendLine("    }");
+                        break;
+                    case FileUploadType.Excel:
+                        CodeGenerate.AppendLine("    //https://github.com/TrudAX/XppTools#devcommon-model");
+                        CodeGenerate.AppendLine("    DEVFileReaderExcel   fileReader   = new DEVFileReaderExcel();");
+                        CodeGenerate.AppendLine("    fileReader.openFile(memoryStreamFile);");
+                        CodeGenerate.AppendLine("    fileReader.readHeaderRow();");
+                        CodeGenerate.AppendLine("    while (fileReader.readNextRow())");
+                        CodeGenerate.AppendLine("    {");
+                        CodeGenerate.AppendLine("        info(strFmt(\"row: % 1\", fileReader.getCurRow()));");
+                        CodeGenerate.AppendLine("        info(strFmt(\" % 1, % 2, % 3\",");
+                        CodeGenerate.AppendLine("            fileReader.getStringByName(\"Main account\"),");
+                        CodeGenerate.AppendLine("            fileReader.getStringByName(\"BusinessUnit\"),");
+                        CodeGenerate.AppendLine("            fileReader.getRealByName(\"Amount\")");
+                        CodeGenerate.AppendLine("            ));");
+                        CodeGenerate.AppendLine("    }");
+                        break;
+                    default:
+                        CodeGenerate.AppendLine("    AsciiStreamIo asciiIo = AsciiStreamIo::constructForRead(memoryStreamFile);");
+                        CodeGenerate.AppendLine("    asciiIo.inRecordDelimiter('\\n');");
+                        CodeGenerate.AppendLine("    while (asciiIo.status() == IO_Status::Ok)");
+                        CodeGenerate.AppendLine("    {");
+                        CodeGenerate.AppendLine("        container c = asciiIo.read();");
+                        CodeGenerate.AppendLine("        if (conLen(c) > 0)");
+                        CodeGenerate.AppendLine("        {");
+                        CodeGenerate.AppendLine("            info(strFmt(\"File data:%1\", conPeek(c, 1)));");
+                        CodeGenerate.AppendLine("        }");
+                        CodeGenerate.AppendLine("    }");
+                        break;
+                }
+                
+
                 CodeGenerate.AppendLine("}");
                 CodeGenerate.AppendLine("catch (Exception::Error)");
                 CodeGenerate.AppendLine("{");
@@ -518,7 +584,7 @@ namespace TRUDUtilsD365.RunBaseBuilder
             }
             else
             {
-                if (!IsAddFileUpload)
+                if (IsAddFileUpload == FileUploadType.None)
                 {
                     CodeGenerate.AppendLine("if (! this.validate())");
                     CodeGenerate.AppendLine("{");
@@ -564,7 +630,7 @@ namespace TRUDUtilsD365.RunBaseBuilder
         void SrcDialogPostRun()
         {
             CodeGenerate.SetMethodName("dialogPostRun");
-            if (IsAddFileUpload)
+            if (IsAddFileUpload != FileUploadType.None)
             {
                 CodeGenerate.AppendLine("public void dialogPostRun(DialogRunbase _dialog)");
                 CodeGenerate.BeginBlock();
@@ -577,7 +643,7 @@ namespace TRUDUtilsD365.RunBaseBuilder
         void SrcUploadCompleted()
         {
             CodeGenerate.SetMethodName("uploadCompleted");
-            if (IsAddFileUpload)
+            if (IsAddFileUpload != FileUploadType.None)
             {
                 CodeGenerate.AppendLine("protected void uploadCompleted()");
                 CodeGenerate.BeginBlock();
@@ -590,7 +656,7 @@ namespace TRUDUtilsD365.RunBaseBuilder
         void SrcSetDialogOkButtonEnabled()
         {
             CodeGenerate.SetMethodName("setDialogOkButtonEnabled");
-            if (IsAddFileUpload)
+            if (IsAddFileUpload != FileUploadType.None)
             {
                 CodeGenerate.AppendLine("protected void setDialogOkButtonEnabled(DialogRunbase _dialog, boolean _isEnabled)");
                 CodeGenerate.BeginBlock();
@@ -605,7 +671,7 @@ namespace TRUDUtilsD365.RunBaseBuilder
         void SrcGetFormControl()
         {
             CodeGenerate.SetMethodName("getFormControl");
-            if (IsAddFileUpload)
+            if (IsAddFileUpload != FileUploadType.None)
             {
                 CodeGenerate.AppendLine("protected FormControl getFormControl(DialogRunbase _dialog, str _controlName)");
                 CodeGenerate.BeginBlock();
@@ -707,7 +773,6 @@ namespace TRUDUtilsD365.RunBaseBuilder
             }
 
         }
-
 
         public override void RunCreate()
         {
