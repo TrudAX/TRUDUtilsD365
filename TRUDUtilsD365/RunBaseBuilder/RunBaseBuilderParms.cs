@@ -511,9 +511,9 @@ namespace TRUDUtilsD365.RunBaseBuilder
                         CodeGenerate.AppendLine("    {");
                         CodeGenerate.AppendLine("        info(strFmt(\"row: % 1\", fileReader.getCurRow()));");
                         CodeGenerate.AppendLine("        info(strFmt(\" % 1, % 2, % 3\",");
-                        CodeGenerate.AppendLine("            fileReader.getStringByName(\"Main account\"),");
-                        CodeGenerate.AppendLine("            fileReader.getStringByName(\"BusinessUnit\"),");
-                        CodeGenerate.AppendLine("            fileReader.getRealByName(\"Amount\")");
+                        CodeGenerate.AppendLine("            fileReader.getStringByName('Main account'),");
+                        CodeGenerate.AppendLine("            fileReader.getStringByName('BusinessUnit'),");
+                        CodeGenerate.AppendLine("            fileReader.getRealByName('Amount')");
                         CodeGenerate.AppendLine("            ));");
                         CodeGenerate.AppendLine("    }");
                         break;
