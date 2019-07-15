@@ -141,7 +141,7 @@ namespace TRUDUtilsD365.AddTableFindMethod
                 generateHelper.IndentSetValue(0);
 
                 generateHelper.AppendLine("");
-                generateHelper.AppendLine($"public static {TableName} findRecId(RefRecId _recId,  _forUpdate = false)");
+                generateHelper.AppendLine($"public static {TableName} findRecId(RefRecId _recId,  boolean _forUpdate = false)");
 
                 //build method header
                 generateHelper.AppendLine("{");
