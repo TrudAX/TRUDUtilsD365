@@ -39,17 +39,22 @@ namespace TRUDUtilsD365.TableBuilder
 
         private void TableNameTextBox_Validated(object sender, EventArgs e)
         {
-            if (String.IsNullOrWhiteSpace(TableVarNameTextBox.Text) &&
-                !String.IsNullOrWhiteSpace(TableNameTextBox.Text))
-            {
-                TableVarNameTextBox.Text = AxHelper.GetVarNameFromType(TableNameTextBox.Text.Trim());
-                _parms.TableVarName = TableVarNameTextBox.Text;
-            }
 
             if (!String.IsNullOrWhiteSpace(TableNameTextBox.Text))
             {
                 FormNameTextBox.Text = TableNameTextBox.Text;
                 _parms.FormName = FormNameTextBox.Text;
+
+                TableVarNameTextBox.Text = AxHelper.GetVarNameFromType(TableNameTextBox.Text.Trim());
+                _parms.TableVarName = TableVarNameTextBox.Text;
+                if (!_parms.IsExternalEDT)
+                {
+                    PrimaryKeyEDTTextBox.Text = $"{TableNameTextBox.Text}Id";
+                    _parms.PrimaryKeyEdtName = PrimaryKeyEDTTextBox.Text;
+                }
+
+                FieldNameTextBox.Text = $"{AxHelper.UppercaseWords(TableVarNameTextBox.Text)}Id";
+                _parms.KeyFieldName = FieldNameTextBox.Text;
             }
         }
 
@@ -60,11 +65,23 @@ namespace TRUDUtilsD365.TableBuilder
                 FormLabelTextBox.Text = TableLabelTextBox.Text;
                 _parms.FormLabel      = FormLabelTextBox.Text;
 
+                FormHelpTextBox.Text = $"Set up {AxHelper.PrettyName(TableLabelTextBox.Text)}";
+                _parms.FormHelp      = FormHelpTextBox.Text;
+
                 PrivilegeLabelViewTextBox.Text = $"{_parms.FormLabel} view";
                 _parms.PrivilegeLabelView = PrivilegeLabelViewTextBox.Text;
 
                 PrivilegeLabelMaintainTextBox.Text = $"{_parms.FormLabel} maintain";
                 _parms.PrivilegeLabelMaintain = PrivilegeLabelMaintainTextBox.Text;
+            }
+        }
+
+        private void EDTLabeltextBox_Validated(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrWhiteSpace(EDTLabeltextBox.Text))
+            {
+                EDTHelpTextBox.Text = $"Identification of the {AxHelper.PrettyName(EDTLabeltextBox.Text)}";
+                _parms.EdtHelpText = EDTHelpTextBox.Text;
             }
         }
     }

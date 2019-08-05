@@ -78,6 +78,7 @@ namespace TRUDUtilsD365.TableBuilder
                     TableBuilderDialog dialog = new TableBuilderDialog();
                     TableBuilderParms parms = new TableBuilderParms();
                     parms.PrimaryKeyEdtName = form.Name;
+                    parms.IsExternalEDT = true;
 
                     dialog.SetParameters(parms);
                     DialogResult formRes = dialog.ShowDialog();

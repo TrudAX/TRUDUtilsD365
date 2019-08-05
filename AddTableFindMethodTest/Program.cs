@@ -11,6 +11,7 @@ using TRUDUtilsD365.DataContractBuilder;
 using TRUDUtilsD365.EnumCreator;
 using TRUDUtilsD365.Kernel;
 using TRUDUtilsD365.RunBaseBuilder;
+using TRUDUtilsD365.TableBuilder;
 using TRUDUtilsD365.TableFieldsBuilder;
 
 namespace AddTableFindMethodTest
@@ -31,7 +32,18 @@ namespace AddTableFindMethodTest
             //TestEnumCreator();
             //TestTableFieldsBuilder();
             //TestRunBaseBuilder();
-            TestDataContractBuilder();
+            //TestDataContractBuilder();
+            TestTableBuilder();
+        }
+        private static void TestTableBuilder()
+        {
+            TableBuilderDialog dialog = new TableBuilderDialog();
+            TableBuilderParms parms = new TableBuilderParms();
+
+            dialog.SetParameters(parms);
+            Application.Run(dialog);
+
+            
         }
         private static void TestDataContractBuilder()
         {

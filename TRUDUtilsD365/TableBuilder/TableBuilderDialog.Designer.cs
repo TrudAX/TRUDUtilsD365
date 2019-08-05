@@ -39,6 +39,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.PrimaryKeyEDTTextBox = new System.Windows.Forms.TextBox();
+            this.tableBuilderParmsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.IsCreateTableCheckBox = new System.Windows.Forms.CheckBox();
             this.TableNameTextBox = new System.Windows.Forms.TextBox();
             this.TableLabelTextBox = new System.Windows.Forms.TextBox();
@@ -58,7 +59,6 @@
             this.label13 = new System.Windows.Forms.Label();
             this.EDTStringSizeTextBox = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
-            this.tableBuilderParmsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.PrivilegeLabelMaintainTextBox = new System.Windows.Forms.TextBox();
             this.PrivilegeLabelViewTextBox = new System.Windows.Forms.TextBox();
             this.IsCreatePrivilegeCheckBox = new System.Windows.Forms.CheckBox();
@@ -82,22 +82,22 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(48, 150);
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(37, 150);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(89, 18);
+            this.label2.Size = new System.Drawing.Size(100, 18);
             this.label2.TabIndex = 1;
             this.label2.Text = "Table name:";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(55, 180);
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(43, 180);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(82, 18);
+            this.label3.Size = new System.Drawing.Size(94, 18);
             this.label3.TabIndex = 2;
             this.label3.Text = "Table label:";
             // 
@@ -174,6 +174,10 @@
             this.PrimaryKeyEDTTextBox.Name = "PrimaryKeyEDTTextBox";
             this.PrimaryKeyEDTTextBox.Size = new System.Drawing.Size(274, 24);
             this.PrimaryKeyEDTTextBox.TabIndex = 9;
+            // 
+            // tableBuilderParmsBindingSource
+            // 
+            this.tableBuilderParmsBindingSource.DataSource = typeof(TRUDUtilsD365.TableBuilder.TableBuilderParms);
             // 
             // IsCreateTableCheckBox
             // 
@@ -282,6 +286,7 @@
             this.EDTLabeltextBox.Name = "EDTLabeltextBox";
             this.EDTLabeltextBox.Size = new System.Drawing.Size(274, 24);
             this.EDTLabeltextBox.TabIndex = 22;
+            this.EDTLabeltextBox.Validated += new System.EventHandler(this.EDTLabeltextBox_Validated);
             // 
             // label11
             // 
@@ -350,10 +355,6 @@
             this.label14.Size = new System.Drawing.Size(98, 18);
             this.label14.TabIndex = 27;
             this.label14.Text = "EDT Str Size:";
-            // 
-            // tableBuilderParmsBindingSource
-            // 
-            this.tableBuilderParmsBindingSource.DataSource = typeof(TRUDUtilsD365.TableBuilder.TableBuilderParms);
             // 
             // PrivilegeLabelMaintainTextBox
             // 

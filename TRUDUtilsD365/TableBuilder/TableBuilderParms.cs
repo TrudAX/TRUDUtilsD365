@@ -12,6 +12,7 @@ namespace TRUDUtilsD365.TableBuilder
     public class TableBuilderParms
     {
         public Boolean IsCreateTable { get; set; } = true;
+        public Boolean IsExternalEDT { get; set; } = false;
         public string TableName { get; set; } = "";
         public string TableLabel { get; set; } = "";
         public string TableVarName { get; set; } = "";
