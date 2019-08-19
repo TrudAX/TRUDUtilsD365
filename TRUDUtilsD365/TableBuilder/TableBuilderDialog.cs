@@ -49,11 +49,11 @@ namespace TRUDUtilsD365.TableBuilder
                 _parms.TableVarName = TableVarNameTextBox.Text;
                 if (!_parms.IsExternalEDT)
                 {
-                    PrimaryKeyEDTTextBox.Text = $"{TableNameTextBox.Text}Id";
+                    PrimaryKeyEDTTextBox.Text = $@"{TableNameTextBox.Text}Id";
                     _parms.PrimaryKeyEdtName = PrimaryKeyEDTTextBox.Text;
                 }
 
-                FieldNameTextBox.Text = $"{AxHelper.UppercaseWords(TableVarNameTextBox.Text)}Id";
+                FieldNameTextBox.Text = $@"{AxHelper.UppercaseWords(TableVarNameTextBox.Text)}Id";
                 _parms.KeyFieldName = FieldNameTextBox.Text;
             }
         }
