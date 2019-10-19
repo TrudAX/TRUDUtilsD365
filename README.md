@@ -201,3 +201,13 @@ Download all 3 files from the [Releases](https://github.com/TrudAX/TRUDUtilsD365
 Restart VS
 
 You can also copy these files manually, but extension path will be different for different VMs. (for 8.0 local DEV VM it will be C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\agk3do44.e2i\AddinExtensions, for 8.1 local DEV VM: C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\ugjn0jrw.pfb\AddinExtensions )
+
+For VM without admin access(above PU25) use the following approach: In your documents folder there is a dynamics dev config XML file.
+
+```xml
+ <?xml version="1.0" encoding="utf-8"?> <DynamicsDevConfig xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/dynamics/2012/03/development/configuration"> 	    
+  <AddInPaths xmlns:d2p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays"> 		 
+      <d2p1:string>C:\D365CustomAddins</d2p1:string> 	
+  </AddInPaths>   
+</DynamicsDevConfig> 
+```
