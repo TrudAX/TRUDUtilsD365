@@ -102,6 +102,7 @@ namespace TRUDUtilsD365.CreateExtensionClass
                 var form = (FormDataSourceField)selectedElement;
                 ElementType    = ExtensionClassObject.FormDataField;
                 ElementName    = form.FormDataSource.RootElement.Name;
+                ElementName = ElementName.Split('.')[0];
                 SubElementName = $"{form.FormDataSource.Name}, {form.DataField}";
             }
             else if (selectedElement is FormDataSource)
@@ -109,6 +110,7 @@ namespace TRUDUtilsD365.CreateExtensionClass
                 var form = (FormDataSource)selectedElement;
                 ElementType    = ExtensionClassObject.FormDataSource;
                 ElementName    = form.RootElement.Name;
+                ElementName = ElementName.Split('.')[0];
                 SubElementName = $"{form.Name}";
             }
             else if (selectedElement is FormControl)
@@ -116,6 +118,7 @@ namespace TRUDUtilsD365.CreateExtensionClass
                 var form = (FormControl)selectedElement;
                 ElementType    = ExtensionClassObject.FormControl;
                 ElementName    = form.RootElement.Name;
+                ElementName = ElementName.Split('.')[0];
                 SubElementName = $"{form.Name}";
             }
             else if (selectedElement is DataEntityView)
@@ -123,6 +126,7 @@ namespace TRUDUtilsD365.CreateExtensionClass
                 var form = (DataEntityView)selectedElement;
                 ElementType = ExtensionClassObject.DataEntityView;
                 ElementName = form.Name;
+                ElementName = ElementName.Split('.')[0];
             }
         }
 
