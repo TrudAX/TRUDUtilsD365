@@ -30,13 +30,15 @@ What you need to do is to enter your project prefix
 
 It also allow you to follow naming conventions. The following standard is proposed
 
-| Standard element name | Extension Class Name                                         |
-| --------------------- | ------------------------------------------------------------ |
-| Table CustTable       | [ExtensionOf(tablestr(CustTable))]<br/>final class CustTableTST_Extension |
-| Form CustTable        | [ExtensionOf(formstr(CustTable))]<br/>final class CustTableFormTST_Extension |
-| Form data source      | [ExtensionOf(formdatasourcestr(CustTable, DataSource1))]<br/>final class CustTableFormTST_DataSource1_Extension |
-| Form data fields      | [ExtensionOf(formdatafieldstr(CustTable, DataSource1, Field1))]<br/>final class CustTableFormTST_DataSource1Field1_Extension |
-| Button1               | [ExtensionOf(formcontrolstr(CustTable, Button1))]<br/>final class CustTableFormTST_Button1_Extension |
+| Standard element name       | Extension Class Name                                         |
+| --------------------------- | ------------------------------------------------------------ |
+| Table CustTable             | [ExtensionOf(tablestr(CustTable))]<br/>final class CustTableTST_Extension |
+| View AssetBalances          | [ExtensionOf(viewstr(AssetBalances))]<br/>final class AssetBalancesTST_Extension |
+| DataEntity AccountantEntity | [ExtensionOf(dataentityviewstr(AccountantEntity))]<br/>final class AccountantEntityTST_Extension |
+| Form CustTable              | [ExtensionOf(formstr(CustTable))]<br/>final class CustTableFormTST_Extension |
+| Form data source            | [ExtensionOf(formdatasourcestr(CustTable, DataSource1))]<br/>final class CustTableFormTST_DataSource1_Extension |
+| Form data fields            | [ExtensionOf(formdatafieldstr(CustTable, DataSource1, Field1))]<br/>final class CustTableFormTST_DataSource1Field1_Extension |
+| Button1                     | [ExtensionOf(formcontrolstr(CustTable, Button1))]<br/>final class CustTableFormTST_Button1_Extension |
 
 ![](assets/CreateExtensionClass.png)
 
@@ -93,8 +95,9 @@ The tool does the following:
 * Adds "find" method for the table, adds Overview group and some default properties
 * Creates a form with this table as a data source and  adds all required controls for the "Simple list" template(you need manually specify template after creation)
 * Creates a new menu item for this form
+* Creates privileges
 
-![](assets/TableBuilder.jpg)
+![](assets/TableBuilder.png)
 
 ## Form Builder
 
@@ -200,7 +203,7 @@ Download all 3 files from the [Releases](https://github.com/TrudAX/TRUDUtilsD365
 
 Restart VS
 
-You can also copy these files manually, but extension path will be different for different VMs. (for 8.0 local DEV VM it will be C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\agk3do44.e2i\AddinExtensions, for 8.1 local DEV VM: C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\ugjn0jrw.pfb\AddinExtensions )
+You can also copy these files manually, but extension path will be different for different VMs. (for 8.0 local DEV VM it will be C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\agk3do44.e2i\AddinExtensions, for 8.1 local DEV VM: C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\ugjn0jrw.pfb\AddinExtensions, for 10.0.5 local DEV VM: C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\nmjrsprb.nva\AddinExtensions)
 
 For VM without admin access(above PU25) use the following approach: In your documents folder there is a dynamics dev config XML file.
 

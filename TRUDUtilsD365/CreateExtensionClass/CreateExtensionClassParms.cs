@@ -4,6 +4,7 @@ using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Classes;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Forms;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Tables;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.DataEntityViews;
+using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Views;
 using TRUDUtilsD365.Kernel;
 using Exception = System.Exception;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Core;
@@ -24,7 +25,8 @@ namespace TRUDUtilsD365.CreateExtensionClass
         FormDataField,
         FormDataSource,
         FormControl,
-        DataEntityView
+        DataEntityView,
+        View
     }
 
     public class CreateExtensionClassParms
@@ -85,18 +87,12 @@ namespace TRUDUtilsD365.CreateExtensionClass
                 ElementName = form.Name;
             }
             else
-            if (selectedElement is Table)
+            if ((selectedElement is Table) || (selectedElement is TableExtension))
             {
                 var form = (Table)selectedElement;
                 ElementType = ExtensionClassObject.Table;
-                ElementName = form.Name;
-            }
-            if (selectedElement is TableExtension)
-            {
-                var form = (TableExtension)selectedElement;
-                ElementType = ExtensionClassObject.Table;
                 ElementName = form.Name.Split('.')[0];
-            }
+            }            
             else if (selectedElement is FormDataSourceField)
             {
                 var form = (FormDataSourceField)selectedElement;
@@ -121,10 +117,17 @@ namespace TRUDUtilsD365.CreateExtensionClass
                 ElementName = ElementName.Split('.')[0];
                 SubElementName = $"{form.Name}";
             }
-            else if (selectedElement is DataEntityView)
+            else if ((selectedElement is DataEntityView) || (selectedElement is DataEntityViewExtension))
             {
                 var form = (DataEntityView)selectedElement;
                 ElementType = ExtensionClassObject.DataEntityView;
+                ElementName = form.Name;
+                ElementName = ElementName.Split('.')[0];
+            }
+            else if ((selectedElement is View) || (selectedElement is ViewExtension))
+            {
+                var form = (View)selectedElement;
+                ElementType = ExtensionClassObject.View;
                 ElementName = form.Name;
                 ElementName = ElementName.Split('.')[0];
             }
@@ -203,6 +206,9 @@ namespace TRUDUtilsD365.CreateExtensionClass
                     break;
                 case ExtensionClassObject.DataEntityView:
                     typeStr = "dataentityviewstr";
+                    break;
+                case ExtensionClassObject.View:
+                    typeStr = "viewstr";
                     break;
             }
 

@@ -21,6 +21,9 @@ namespace TRUDUtilsD365.CreateExtensionClass
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(FormDataSource))]
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(FormControl))]
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(DataEntityView))]
+    [DesignerMenuExportMetadata(AutomationNodeType = typeof(DataEntityViewExtension))]
+    [DesignerMenuExportMetadata(AutomationNodeType = typeof(Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Views.View))]
+    [DesignerMenuExportMetadata(AutomationNodeType = typeof(Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Views.ViewExtension))]
     internal class DesignerCreateExtensionClass : DesignerMenuBase
     {
         #region Properties
