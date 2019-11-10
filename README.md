@@ -97,7 +97,7 @@ The tool does the following:
 * Creates a new menu item for this form
 * Creates privileges
 
-![](assets/TableBuilder.png)
+![](assets/TableBuilder2.png)
 
 ## Form Builder
 
