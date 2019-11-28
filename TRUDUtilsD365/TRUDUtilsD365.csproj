@@ -80,6 +80,9 @@
     <Compile Include="CreateExtensionClass\DesignerCreateExtensionClass.cs" />
     <Compile Include="DataContractBuilder\DataContractBuilderParms.cs" />
     <Compile Include="DataContractBuilder\DataContractBuilderMenu.cs" />
+    <Compile Include="KernelSettings\KernelSettingsManager.cs" />
+    <Compile Include="KernelSettings\KernelSettingsStorage.cs" />
+    <Compile Include="Kernel\AxUtilParameters.cs" />
     <Compile Include="Kernel\CodeGenerateHelper.cs" />
     <Compile Include="Kernel\SnippetsParms.cs" />
     <Compile Include="MenuItemBuilder\MenuItemBuilderDialog.cs">

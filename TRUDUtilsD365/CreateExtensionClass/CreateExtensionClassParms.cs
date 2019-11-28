@@ -17,17 +17,7 @@ namespace TRUDUtilsD365.CreateExtensionClass
         EventHandler
     }
 
-    public enum ExtensionClassObject
-    {
-        Form,
-        Table,
-        Class,
-        FormDataField,
-        FormDataSource,
-        FormControl,
-        DataEntityView,
-        View
-    }
+
 
     public class CreateExtensionClassParms
     {
