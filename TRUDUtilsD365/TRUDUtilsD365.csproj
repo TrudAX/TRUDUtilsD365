@@ -54,6 +54,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -80,6 +81,12 @@
     <Compile Include="CreateExtensionClass\DesignerCreateExtensionClass.cs" />
     <Compile Include="DataContractBuilder\DataContractBuilderParms.cs" />
     <Compile Include="DataContractBuilder\DataContractBuilderMenu.cs" />
+    <Compile Include="KernelSettings\KernelSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="KernelSettings\KernelSettings.Designer.cs">
+      <DependentUpon>KernelSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="KernelSettings\KernelSettingsManager.cs" />
     <Compile Include="KernelSettings\KernelSettingsStorage.cs" />
     <Compile Include="Kernel\AxUtilParameters.cs" />
@@ -171,6 +178,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormBuilder\FormBuilderDialog.resx">
       <DependentUpon>FormBuilderDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="KernelSettings\KernelSettings.resx">
+      <DependentUpon>KernelSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MenuItemBuilder\MenuItemBuilderDialog.resx">
       <DependentUpon>MenuItemBuilderDialog.cs</DependentUpon>

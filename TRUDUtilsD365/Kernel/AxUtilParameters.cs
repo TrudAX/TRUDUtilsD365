@@ -3,32 +3,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Serialization;
+using System.Xml;
 
 namespace TRUDUtilsD365.Kernel
 {
-    public enum ExtensionClassObject
-    {
-        Form,
-        Table,
+    public enum ExtensionClassType
+    {        
         Class,
+        Table,
+        DataEntityView,
+        View,
+        Form,
         FormDataField,
         FormDataSource,
-        FormControl,
-        DataEntityView,
-        View
+        FormControl
     }
     public class ExtensionNameTemplate
     {
-        public ExtensionClassObject ExtensionObject { get; set; }
+        public ExtensionClassType ExtensionType { get; set; }
         public String ExtensionTemplate { get; set; }
         public string EventHandlerTemplate { get; set; }
     }
 
-    class AxModelSettings
+    [DataContract]
+    public class AxModelSettings 
     {
+        [DataMember]
         public String ModelPrefix { get; set; } = "";
 
-        public Dictionary<ExtensionClassObject, ExtensionNameTemplate> ExtensionNameTemplateList;
+        [DataMember]
+        public Dictionary<ExtensionClassType, ExtensionNameTemplate> ExtensionNameTemplateList { get; set; }
 
         //public List<ExtensionNameTemplate> ExtensionNameTemplateList = new List<ExtensionNameTemplate>();
     }

@@ -13,6 +13,8 @@ using TRUDUtilsD365.Kernel;
 using TRUDUtilsD365.RunBaseBuilder;
 using TRUDUtilsD365.TableBuilder;
 using TRUDUtilsD365.TableFieldsBuilder;
+using TRUDUtilsD365.KernelSettings;
+using ExtensionClassType = TRUDUtilsD365.Kernel.ExtensionClassType;
 
 namespace AddTableFindMethodTest
 {
@@ -33,8 +35,15 @@ namespace AddTableFindMethodTest
             //TestTableFieldsBuilder();
             //TestRunBaseBuilder();
             //TestDataContractBuilder();
-            TestTableBuilder();
+            //TestTableBuilder();
+            TestSettings();
         }
+
+        private static void TestSettings()
+        {
+            Application.Run(new KernelSettings());
+        }
+
         private static void TestTableBuilder()
         {
             TableBuilderDialog dialog = new TableBuilderDialog();
@@ -87,7 +96,7 @@ namespace AddTableFindMethodTest
             CreateExtensionClassParms parms = new CreateExtensionClassParms();
 
             parms.ElementName = "CustTable";
-            parms.ElementType = ExtensionClassObject.Form;
+            parms.ElementType = ExtensionClassType.Form;
             parms.Prefix = "MY";
             //parms.ClassType = ExtensionClassType.EventHandler;
 

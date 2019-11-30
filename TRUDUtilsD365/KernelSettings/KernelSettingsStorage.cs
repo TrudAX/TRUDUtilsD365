@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -37,7 +38,17 @@ namespace TRUDUtilsD365.KernelSettings
             try
             {
                 var xmlDocument = new XmlDocument();
-                var serializer = new XmlSerializer(axModelSettings.GetType());
+                var serializer = new DataContractSerializer(axModelSettings.GetType());
+                using (var sw = new StringWriter())
+                {
+                    using (var writer = new XmlTextWriter(sw))
+                    {
+                        writer.Formatting = Formatting.Indented; // indent the Xml so it's human readable
+                        serializer.WriteObject(writer, axModelSettings);
+                        writer.Flush();
+                    }
+                }
+                /*
                 using (var stream = new MemoryStream())
                 {
                     serializer.Serialize(stream, axModelSettings);
@@ -46,6 +57,7 @@ namespace TRUDUtilsD365.KernelSettings
                     xmlDocument.Save(filePath);
                     stream.Close();
                 }
+                */
             }
             catch (Exception ex)
             {
@@ -57,18 +69,29 @@ namespace TRUDUtilsD365.KernelSettings
         public AxModelSettings LoadSettings()
         {
             AxModelSettings axModelSettings = null;
-            XmlDocument doc = new XmlDocument();
-            var xsSubmit = new XmlSerializer(typeof(AxModelSettings));
+            //XmlDocument doc = new XmlDocument();
+            //var xsSubmit = new DataContractSerializer(typeof(AxModelSettings));
             var filePath = this.GetFilePath();
 
             if (File.Exists(filePath))
             {
+                FileStream fs = new FileStream(filePath, FileMode.Open);
+                XmlDictionaryReader reader =
+                    XmlDictionaryReader.CreateTextReader(fs, new XmlDictionaryReaderQuotas());
+                DataContractSerializer ser = new DataContractSerializer(typeof(AxModelSettings));
+
+                // Deserialize the data and read it from the instance.
+                axModelSettings = (AxModelSettings)ser.ReadObject(reader, true);
+                reader.Close();
+                fs.Close();
+                /*
                 doc.Load(filePath);
 
                 using (TextReader reader = new StringReader(doc.InnerXml))
                 {
                     axModelSettings = (AxModelSettings)xsSubmit.Deserialize(reader);
                 }
+                */
             }
 
             return axModelSettings ?? (axModelSettings = new AxModelSettings());

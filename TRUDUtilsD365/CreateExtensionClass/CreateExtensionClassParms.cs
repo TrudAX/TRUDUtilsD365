@@ -25,7 +25,7 @@ namespace TRUDUtilsD365.CreateExtensionClass
 
         public string ElementName { get; set; }
         public string SubElementName { get; set; } = "";
-        public ExtensionClassObject ElementType { get; set; }
+        public Kernel.ExtensionClassType ElementType { get; set; }
 
         public ExtensionClassType ClassType { get; set; } = ExtensionClassType.Extension;
 
@@ -59,34 +59,34 @@ namespace TRUDUtilsD365.CreateExtensionClass
             if (selectedElement is IForm)
             {
                 var form = (IForm)selectedElement;
-                ElementType = ExtensionClassObject.Form;
+                ElementType = Kernel.ExtensionClassType.Form;
                 ElementName = form.Name;
             }
             else
             if (selectedElement is FormExtension)
             {
                 var form = (FormExtension)selectedElement;
-                ElementType = ExtensionClassObject.Form;
+                ElementType = Kernel.ExtensionClassType.Form;
                 ElementName = form.Name.Split('.')[0];
             }
             else
             if (selectedElement is ClassItem)
             {
                 var form = (ClassItem)selectedElement;
-                ElementType = ExtensionClassObject.Class;
+                ElementType = Kernel.ExtensionClassType.Class;
                 ElementName = form.Name;
             }
             else
             if ((selectedElement is Table) || (selectedElement is TableExtension))
             {
                 var form = (Table)selectedElement;
-                ElementType = ExtensionClassObject.Table;
+                ElementType = Kernel.ExtensionClassType.Table;
                 ElementName = form.Name.Split('.')[0];
             }            
             else if (selectedElement is FormDataSourceField)
             {
                 var form = (FormDataSourceField)selectedElement;
-                ElementType    = ExtensionClassObject.FormDataField;
+                ElementType    = Kernel.ExtensionClassType.FormDataField;
                 ElementName    = form.FormDataSource.RootElement.Name;
                 ElementName = ElementName.Split('.')[0];
                 SubElementName = $"{form.FormDataSource.Name}, {form.DataField}";
@@ -94,7 +94,7 @@ namespace TRUDUtilsD365.CreateExtensionClass
             else if (selectedElement is FormDataSource)
             {
                 var form = (FormDataSource)selectedElement;
-                ElementType    = ExtensionClassObject.FormDataSource;
+                ElementType    = Kernel.ExtensionClassType.FormDataSource;
                 ElementName    = form.RootElement.Name;
                 ElementName = ElementName.Split('.')[0];
                 SubElementName = $"{form.Name}";
@@ -102,7 +102,7 @@ namespace TRUDUtilsD365.CreateExtensionClass
             else if (selectedElement is FormControl)
             {
                 var form = (FormControl)selectedElement;
-                ElementType    = ExtensionClassObject.FormControl;
+                ElementType    = Kernel.ExtensionClassType.FormControl;
                 ElementName    = form.RootElement.Name;
                 ElementName = ElementName.Split('.')[0];
                 SubElementName = $"{form.Name}";
@@ -110,14 +110,14 @@ namespace TRUDUtilsD365.CreateExtensionClass
             else if ((selectedElement is DataEntityView) || (selectedElement is DataEntityViewExtension))
             {
                 var form = (DataEntityView)selectedElement;
-                ElementType = ExtensionClassObject.DataEntityView;
+                ElementType = Kernel.ExtensionClassType.DataEntityView;
                 ElementName = form.Name;
                 ElementName = ElementName.Split('.')[0];
             }
             else if ((selectedElement is View) || (selectedElement is ViewExtension))
             {
                 var form = (View)selectedElement;
-                ElementType = ExtensionClassObject.View;
+                ElementType = Kernel.ExtensionClassType.View;
                 ElementName = form.Name;
                 ElementName = ElementName.Split('.')[0];
             }
@@ -127,10 +127,10 @@ namespace TRUDUtilsD365.CreateExtensionClass
         {
             string res = "";
             res += ElementName;
-            if (ElementType == ExtensionClassObject.Form ||
-                ElementType == ExtensionClassObject.FormDataSource ||
-                ElementType == ExtensionClassObject.FormDataField ||
-                ElementType == ExtensionClassObject.FormControl)
+            if (ElementType == Kernel.ExtensionClassType.Form ||
+                ElementType == Kernel.ExtensionClassType.FormDataSource ||
+                ElementType == Kernel.ExtensionClassType.FormDataField ||
+                ElementType == Kernel.ExtensionClassType.FormControl)
             {
                 res += "Form";
             }
@@ -176,28 +176,28 @@ namespace TRUDUtilsD365.CreateExtensionClass
             string typeStr = "";
             switch (ElementType)
             {
-                case ExtensionClassObject.Form:
+                case Kernel.ExtensionClassType.Form:
                     typeStr = "formstr";
                     break;
-                case ExtensionClassObject.Class:
+                case Kernel.ExtensionClassType.Class:
                     typeStr = "classstr";
                     break;
-                case ExtensionClassObject.Table:
+                case Kernel.ExtensionClassType.Table:
                     typeStr = "tablestr";
                     break;
-                case ExtensionClassObject.FormDataField:
+                case Kernel.ExtensionClassType.FormDataField:
                     typeStr = "formdatafieldstr";
                     break;
-                case ExtensionClassObject.FormDataSource:
+                case Kernel.ExtensionClassType.FormDataSource:
                     typeStr = "formdatasourcestr";
                     break;
-                case ExtensionClassObject.FormControl:
+                case Kernel.ExtensionClassType.FormControl:
                     typeStr = "formcontrolstr";
                     break;
-                case ExtensionClassObject.DataEntityView:
+                case Kernel.ExtensionClassType.DataEntityView:
                     typeStr = "dataentityviewstr";
                     break;
-                case ExtensionClassObject.View:
+                case Kernel.ExtensionClassType.View:
                     typeStr = "viewstr";
                     break;
             }
