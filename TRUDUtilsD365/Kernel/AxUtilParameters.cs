@@ -19,6 +19,11 @@ namespace TRUDUtilsD365.Kernel
         FormDataSource,
         FormControl
     }
+    public enum ExtensionClassModeType
+    {
+        Extension,
+        EventHandler
+    }
     public class ExtensionNameTemplate
     {
         public ExtensionClassType ExtensionType { get; set; }

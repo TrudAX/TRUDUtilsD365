@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 using Microsoft.Dynamics.Ax.Xpp;
@@ -18,7 +19,7 @@ namespace TRUDUtilsD365.KernelSettings
 {
     class KernelSettingsStorage
     {        
-        private string GetFilePath()
+        public string GetFilePath()
         {
             string fileName = "TRUDUtilsD365Settings.xml";// _" + Common.CommonUtil.GetCurrentModel().Name + ".json";
             string settingsFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
@@ -31,23 +32,23 @@ namespace TRUDUtilsD365.KernelSettings
         }
 
 
-        public void SaveSettings(AxModelSettings axModelSettings)
+        public bool SaveSettings(AxModelSettings axModelSettings)
         {
             var filePath = this.GetFilePath();
-
+            bool res = false;
             try
             {
                 var xmlDocument = new XmlDocument();
                 var serializer = new DataContractSerializer(axModelSettings.GetType());
-                using (var sw = new StringWriter())
+                using (var writer = new XmlTextWriter(filePath, null))
                 {
-                    using (var writer = new XmlTextWriter(sw))
-                    {
-                        writer.Formatting = Formatting.Indented; // indent the Xml so it's human readable
-                        serializer.WriteObject(writer, axModelSettings);
-                        writer.Flush();
-                    }
+                    writer.Formatting = Formatting.Indented; // indent the Xml so it's human readable
+                    serializer.WriteObject(writer, axModelSettings);
+                    writer.Flush();
+
+                    res = true;
                 }
+                
                 /*
                 using (var stream = new MemoryStream())
                 {
@@ -61,9 +62,12 @@ namespace TRUDUtilsD365.KernelSettings
             }
             catch (Exception ex)
             {
-                CoreUtility.HandleExceptionWithErrorMessage(ex);
+                MessageBox.Show(ex.Message, @"Unhandled Exception");
+                //CoreUtility.HandleExceptionWithErrorMessage(ex);
             }
-           
+
+            return res;
+
         }
 
         public AxModelSettings LoadSettings()

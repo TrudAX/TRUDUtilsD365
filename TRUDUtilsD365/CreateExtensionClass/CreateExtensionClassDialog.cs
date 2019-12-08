@@ -15,7 +15,7 @@ namespace TRUDUtilsD365.CreateExtensionClass
 
         public void SetParameters(CreateExtensionClassParms parms)
         {
-            comboBox1.DataSource = Enum.GetValues(parms.ClassType.GetType());
+            comboBox1.DataSource = Enum.GetValues(parms.ClassModeType.GetType());
             ElementTypeComboBox.DataSource = Enum.GetValues(parms.ElementType.GetType());
 
             _parms = parms;

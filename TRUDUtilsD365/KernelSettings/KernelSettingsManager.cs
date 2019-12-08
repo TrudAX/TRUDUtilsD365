@@ -8,6 +8,11 @@ using TRUDUtilsD365.Kernel;
 
 namespace TRUDUtilsD365.KernelSettings
 {
+    public enum ExtensionTemplateDefaultScheme
+    {
+        Default,
+        DefaultWithUnderscore
+    }
     class KernelSettingsManager
     {
         const string PrefixTemplateName = "$Prefix$";
@@ -18,10 +23,8 @@ namespace TRUDUtilsD365.KernelSettings
 
         private KernelSettingsStorage _kernelSettingsStorage = new KernelSettingsStorage();
 
-        public void LoadSettingsOrDefault()
+        protected void InitMissingSettings()
         {
-            AxModelSettings = _kernelSettingsStorage.LoadSettings();
-
             if (String.IsNullOrEmpty(AxModelSettings.ModelPrefix))
             {
                 AxModelSettings.ModelPrefix = "TST";
@@ -89,23 +92,57 @@ namespace TRUDUtilsD365.KernelSettings
 
                 AxModelSettings.ExtensionNameTemplateList[currentObject] = nameTemplate;
             }
-
         }
 
-        public string GetClassName(string templateString, string prefixValue, string mainElementValue,
-            string subElementValue)
+        public AxModelSettings GetAxModelSettings()
         {
-            string resultName = templateString;
-
-            //String
-            resultName = resultName.Replace(PrefixTemplateName, prefixValue);
-            resultName = resultName.Replace(MainElementTemplateName, mainElementValue);
-            resultName = resultName.Replace(SubElementTemplateName, subElementValue);
-
-            resultName = AxHelper.RemoveSpecialCharacters(resultName).Replace(" ", "");
-
-            return resultName;
+            return AxModelSettings;
         }
+
+        public void LoadSettings()
+        {
+            AxModelSettings = _kernelSettingsStorage.LoadSettings();
+
+            InitMissingSettings();
+        }
+        public void LoadDefaultSettings(ExtensionTemplateDefaultScheme extensionTemplateDefaultScheme)
+        {
+            AxModelSettings = new AxModelSettings();
+            InitMissingSettings();
+            switch (extensionTemplateDefaultScheme)
+            {
+                case ExtensionTemplateDefaultScheme.DefaultWithUnderscore:
+                    string templateStringControl;
+                    templateStringControl =
+                    @"TST
+                    $MainObject$ + _ + $Prefix$ + _Extension
+                    $MainObject$ + _ + $Prefix$ + _Extension
+                    $MainObject$ + _ + $Prefix$ + _Extension
+                    $MainObject$ + _ + $Prefix$ + _Extension
+                    $MainObject$ + Form + _ + $Prefix$ + _Extension
+                    $MainObject$ + Form + _ + $Prefix$+ _ + $SubObject$ + _Extension
+                    $MainObject$ + Form + _ + $Prefix$+ _ + $SubObject$ + _Extension
+                    $MainObject$ + Form + _ + $Prefix$+ _ + $SubObject$ + _Extension
+                    $MainObject$ + _ + $Prefix$ + _EventHandler
+                    $MainObject$ + _ + $Prefix$ + _EventHandler
+                    $MainObject$ + _ + $Prefix$ + _EventHandler
+                    $MainObject$ + _ + $Prefix$ + _EventHandler
+                    $MainObject$ + Form + _ + $Prefix$ + _EventHandler
+                    $MainObject$ + Form + _ + $Prefix$ + _EventHandler
+                    $MainObject$ + Form + _ + $Prefix$ + _EventHandler
+                    $MainObject$ + Form + _ + $Prefix$ + _EventHandler";
+
+                    LoadSettingsFromFormControlData(templateStringControl);
+                    break;
+            }            
+        }
+
+        public string GetSettingsFilename()
+        {
+            return _kernelSettingsStorage.GetFilePath();
+        }
+
+
 
         public void InitFormControlData(out string typeStringControl, out string templateStringControl)
         {
@@ -126,14 +163,14 @@ namespace TRUDUtilsD365.KernelSettings
                 templateEventBuilder.AppendLine(nameTemplate.EventHandlerTemplate);
             }
 
-            typeBuilder.Append(typeEventBuilder.ToString());
-            templateBuilder.Append(templateEventBuilder.ToString());
+            typeBuilder.Append(typeEventBuilder);
+            templateBuilder.Append(templateEventBuilder);
 
             typeStringControl = typeBuilder.ToString();
             templateStringControl = templateBuilder.ToString();
         }
 
-        public void SaveFormControlData(string templateStringControl)
+        public void LoadSettingsFromFormControlData(string templateStringControl)
         {
             List<string> listImp = new List<string>(
                 templateStringControl.Split(new[] {Environment.NewLine},
@@ -153,12 +190,18 @@ namespace TRUDUtilsD365.KernelSettings
 
                 if (!String.IsNullOrWhiteSpace(listImp[currentPosition + enumLength]))
                 {
-                    nameTemplate.ExtensionTemplate = listImp[currentPosition + enumLength].Trim();
+                    nameTemplate.EventHandlerTemplate = listImp[currentPosition + enumLength].Trim();
                 }
 
                 AxModelSettings.ExtensionNameTemplateList[currentObject] = nameTemplate;
                 currentPosition++;
             }
+        }
+
+        public bool SaveToFile()
+        {
+            return _kernelSettingsStorage.SaveSettings(AxModelSettings);
+
         }
 
         public string GetDescription()
@@ -170,5 +213,29 @@ namespace TRUDUtilsD365.KernelSettings
             res += $"{PrefixTemplateName} - Current prefix; {MainElementTemplateName} - Main AOT element name; {SubElementTemplateName} - Selected element" + Environment.NewLine;
             return res;
         }
+
+        public string GetClassName(Kernel.ExtensionClassType elementType, ExtensionClassModeType classType,
+                                            string prefixValue, string mainElementValue,
+                                            string subElementValue)
+        {
+            ExtensionNameTemplate nameTemplate = AxModelSettings.ExtensionNameTemplateList[elementType];
+
+            string templateString = classType == ExtensionClassModeType.EventHandler
+                ? nameTemplate.EventHandlerTemplate
+                : nameTemplate.ExtensionTemplate;
+
+            string resultName = templateString;
+
+            //String
+            resultName = resultName.Replace(PrefixTemplateName, prefixValue);
+            resultName = resultName.Replace(MainElementTemplateName, mainElementValue);
+            resultName = resultName.Replace(SubElementTemplateName, subElementValue);
+
+            resultName = AxHelper.RemoveSpecialCharacters(resultName).Replace(" ", "");
+
+            return resultName;
+
+        }
+
     }
 }

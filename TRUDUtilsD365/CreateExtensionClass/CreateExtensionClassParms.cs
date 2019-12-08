@@ -8,15 +8,10 @@ using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Views;
 using TRUDUtilsD365.Kernel;
 using Exception = System.Exception;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Core;
+using TRUDUtilsD365.KernelSettings;
 
 namespace TRUDUtilsD365.CreateExtensionClass
 {
-    public enum ExtensionClassType
-    {
-        Extension,
-        EventHandler
-    }
-
 
 
     public class CreateExtensionClassParms
@@ -27,11 +22,13 @@ namespace TRUDUtilsD365.CreateExtensionClass
         public string SubElementName { get; set; } = "";
         public Kernel.ExtensionClassType ElementType { get; set; }
 
-        public ExtensionClassType ClassType { get; set; } = ExtensionClassType.Extension;
+        public ExtensionClassModeType ClassModeType { get; set; } = ExtensionClassModeType.Extension;
 
         public string ResultClassName { get; set; } = "";
 
         private string _logString;
+
+        private KernelSettingsManager _kernelSettingsManager;
 
         public bool ClassTypeModified()
         {
@@ -52,6 +49,14 @@ namespace TRUDUtilsD365.CreateExtensionClass
         public void DisplayLog()
         {
             CoreUtility.DisplayInfo($"The following element({_logString}) was created and added to the project");
+        }
+
+        protected void InitFromSettings()
+        {
+            _kernelSettingsManager = new KernelSettingsManager();
+            _kernelSettingsManager.LoadSettings();
+
+            Prefix = _kernelSettingsManager.GetAxModelSettings().ModelPrefix;
         }
 
         public void InitFromSelectedElement(object selectedElement)
@@ -121,11 +126,13 @@ namespace TRUDUtilsD365.CreateExtensionClass
                 ElementName = form.Name;
                 ElementName = ElementName.Split('.')[0];
             }
+            InitFromSettings();
         }
 
         public void CalcResultName()
         {
-            string res = "";
+            string res = _kernelSettingsManager.GetClassName(ElementType, ClassModeType, Prefix, ElementName, SubElementName);
+            /*
             res += ElementName;
             if (ElementType == Kernel.ExtensionClassType.Form ||
                 ElementType == Kernel.ExtensionClassType.FormDataSource ||
@@ -137,7 +144,7 @@ namespace TRUDUtilsD365.CreateExtensionClass
 
             res += Prefix;
 
-            if (ClassType == ExtensionClassType.Extension)
+            if (ClassModeType == ExtensionClassModeType.Extension)
             {
                 if (!string.IsNullOrWhiteSpace(SubElementName))
                 {
@@ -145,16 +152,16 @@ namespace TRUDUtilsD365.CreateExtensionClass
                 }
             }
 
-            switch (ClassType)
+            switch (ClassModeType)
             {
-                case ExtensionClassType.Extension:
+                case ExtensionClassModeType.Extension:
                     res += "_Extension";
                     break;
-                case ExtensionClassType.EventHandler:
+                case ExtensionClassModeType.EventHandler:
                     res += "_EventHandler";
                     break;
             }
-
+            */
             ResultClassName = res;
         }
 
@@ -171,7 +178,7 @@ namespace TRUDUtilsD365.CreateExtensionClass
 
             newClass = new AxClass {IsFinal = true, Name = ResultClassName};
 
-            if (ClassType == ExtensionClassType.EventHandler) newClass.IsStatic = true;
+            if (ClassModeType == ExtensionClassModeType.EventHandler) newClass.IsStatic = true;
 
             string typeStr = "";
             switch (ElementType)
@@ -203,7 +210,7 @@ namespace TRUDUtilsD365.CreateExtensionClass
             }
 
             StringBuilder declarationText = new StringBuilder();
-            if (ClassType == ExtensionClassType.Extension)
+            if (ClassModeType == ExtensionClassModeType.Extension)
             {
                 if (string.IsNullOrWhiteSpace(SubElementName))
                 {

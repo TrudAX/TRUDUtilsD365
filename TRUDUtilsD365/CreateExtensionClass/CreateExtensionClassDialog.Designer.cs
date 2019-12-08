@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.ElementNameTextBox = new System.Windows.Forms.TextBox();
+            this.createExtensionClassParmsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -44,7 +45,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.MyToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.createExtensionClassParmsBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.SetupNameButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.createExtensionClassParmsBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -56,6 +57,10 @@
             this.ElementNameTextBox.Name = "ElementNameTextBox";
             this.ElementNameTextBox.Size = new System.Drawing.Size(404, 24);
             this.ElementNameTextBox.TabIndex = 101;
+            // 
+            // createExtensionClassParmsBindingSource
+            // 
+            this.createExtensionClassParmsBindingSource.DataSource = typeof(TRUDUtilsD365.CreateExtensionClass.CreateExtensionClassParms);
             // 
             // label1
             // 
@@ -95,7 +100,7 @@
             // 
             // comboBox1
             // 
-            this.comboBox1.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.createExtensionClassParmsBindingSource, "ClassType", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.comboBox1.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.createExtensionClassParmsBindingSource, "ClassModeType", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(343, 119);
             this.comboBox1.Name = "comboBox1";
@@ -181,13 +186,19 @@
             this.textBox1.Size = new System.Drawing.Size(404, 24);
             this.textBox1.TabIndex = 103;
             // 
-            // createExtensionClassParmsBindingSource
+            // SetupNameButton
             // 
-            this.createExtensionClassParmsBindingSource.DataSource = typeof(TRUDUtilsD365.CreateExtensionClass.CreateExtensionClassParms);
+            this.SetupNameButton.Location = new System.Drawing.Point(371, 10);
+            this.SetupNameButton.Name = "SetupNameButton";
+            this.SetupNameButton.Size = new System.Drawing.Size(168, 28);
+            this.SetupNameButton.TabIndex = 104;
+            this.SetupNameButton.Text = "Setup name template";
+            this.SetupNameButton.UseVisualStyleBackColor = true;
             // 
             // CreateExtensionClassDialog
             // 
             this.ClientSize = new System.Drawing.Size(622, 230);
+            this.Controls.Add(this.SetupNameButton);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.ElementTypeComboBox);
@@ -229,5 +240,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.ToolTip MyToolTip;
+        private System.Windows.Forms.Button SetupNameButton;
     }
 }
