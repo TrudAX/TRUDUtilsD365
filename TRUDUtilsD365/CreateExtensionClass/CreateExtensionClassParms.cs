@@ -51,7 +51,7 @@ namespace TRUDUtilsD365.CreateExtensionClass
             CoreUtility.DisplayInfo($"The following element({_logString}) was created and added to the project");
         }
 
-        protected void InitFromSettings()
+        public void InitFromSettings()
         {
             _kernelSettingsManager = new KernelSettingsManager();
             _kernelSettingsManager.LoadSettings();
@@ -165,72 +165,82 @@ namespace TRUDUtilsD365.CreateExtensionClass
             ResultClassName = res;
         }
 
-        public void Run()
+        public bool Run()
         {
             AxHelper axHelper = new AxHelper();
 
             AxClass newClass = axHelper.MetadataProvider.Classes.Read(ResultClassName);
+            bool res = false;
 
-            if (newClass != null)
+            if (newClass == null)
             {
-                throw new Exception($"Class {ResultClassName} already exists");
-            }
+                res = true;
+                //throw new Exception($"Class {ResultClassName} already exists");
 
-            newClass = new AxClass {IsFinal = true, Name = ResultClassName};
+                newClass = new AxClass {IsFinal = true, Name = ResultClassName};
 
-            if (ClassModeType == ExtensionClassModeType.EventHandler) newClass.IsStatic = true;
+                if (ClassModeType == ExtensionClassModeType.EventHandler) newClass.IsStatic = true;
 
-            string typeStr = "";
-            switch (ElementType)
-            {
-                case Kernel.ExtensionClassType.Form:
-                    typeStr = "formstr";
-                    break;
-                case Kernel.ExtensionClassType.Class:
-                    typeStr = "classstr";
-                    break;
-                case Kernel.ExtensionClassType.Table:
-                    typeStr = "tablestr";
-                    break;
-                case Kernel.ExtensionClassType.FormDataField:
-                    typeStr = "formdatafieldstr";
-                    break;
-                case Kernel.ExtensionClassType.FormDataSource:
-                    typeStr = "formdatasourcestr";
-                    break;
-                case Kernel.ExtensionClassType.FormControl:
-                    typeStr = "formcontrolstr";
-                    break;
-                case Kernel.ExtensionClassType.DataEntityView:
-                    typeStr = "dataentityviewstr";
-                    break;
-                case Kernel.ExtensionClassType.View:
-                    typeStr = "viewstr";
-                    break;
-            }
-
-            StringBuilder declarationText = new StringBuilder();
-            if (ClassModeType == ExtensionClassModeType.Extension)
-            {
-                if (string.IsNullOrWhiteSpace(SubElementName))
+                string typeStr = "";
+                switch (ElementType)
                 {
-                    declarationText.AppendLine($"[ExtensionOf({typeStr}({ElementName}))]");
+                    case Kernel.ExtensionClassType.Form:
+                        typeStr = "formstr";
+                        break;
+                    case Kernel.ExtensionClassType.Class:
+                        typeStr = "classstr";
+                        break;
+                    case Kernel.ExtensionClassType.Table:
+                        typeStr = "tablestr";
+                        break;
+                    case Kernel.ExtensionClassType.FormDataField:
+                        typeStr = "formdatafieldstr";
+                        break;
+                    case Kernel.ExtensionClassType.FormDataSource:
+                        typeStr = "formdatasourcestr";
+                        break;
+                    case Kernel.ExtensionClassType.FormControl:
+                        typeStr = "formcontrolstr";
+                        break;
+                    case Kernel.ExtensionClassType.DataEntityView:
+                        typeStr = "dataentityviewstr";
+                        break;
+                    case Kernel.ExtensionClassType.View:
+                        typeStr = "viewstr";
+                        break;
                 }
-                else
+
+                StringBuilder declarationText = new StringBuilder();
+                if (ClassModeType == ExtensionClassModeType.Extension)
                 {
-                    declarationText.AppendLine($"[ExtensionOf({typeStr}({ElementName}, {SubElementName}))]");
+                    if (string.IsNullOrWhiteSpace(SubElementName))
+                    {
+                        declarationText.AppendLine($"[ExtensionOf({typeStr}({ElementName}))]");
+                    }
+                    else
+                    {
+                        declarationText.AppendLine($"[ExtensionOf({typeStr}({ElementName}, {SubElementName}))]");
+                    }
                 }
+
+                declarationText.AppendLine($"final{(newClass.IsStatic ? " static " : " ")}class {newClass.Name}");
+                declarationText.AppendLine("{");
+                declarationText.AppendLine("}");
+
+                newClass.SourceCode.Declaration = declarationText.ToString();
+                axHelper.MetaModelService.CreateClass(newClass, axHelper.ModelSaveInfo);
+
+                axHelper.AppendToActiveProject(newClass);
+                AddLog($"Class: {newClass.Name}; ");
+            }
+            else
+            {
+                CoreUtility.DisplayInfo($"Class {newClass.Name} already exists");
+                axHelper.AppendToActiveProject(newClass);
             }
 
-            declarationText.AppendLine($"final{(newClass.IsStatic ? " static " : " ")}class {newClass.Name}");
-            declarationText.AppendLine("{");
-            declarationText.AppendLine("}");
+            return res;
 
-            newClass.SourceCode.Declaration = declarationText.ToString();
-            axHelper.MetaModelService.CreateClass(newClass, axHelper.ModelSaveInfo);
-            axHelper.AppendToActiveProject(newClass);
-
-            AddLog($"Class: {newClass.Name}; ");
         }
     }
 }

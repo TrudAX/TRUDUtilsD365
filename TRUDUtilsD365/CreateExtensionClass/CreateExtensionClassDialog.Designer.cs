@@ -30,7 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.ElementNameTextBox = new System.Windows.Forms.TextBox();
-            this.createExtensionClassParmsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -46,6 +45,7 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.MyToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.SetupNameButton = new System.Windows.Forms.Button();
+            this.createExtensionClassParmsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.createExtensionClassParmsBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -57,10 +57,6 @@
             this.ElementNameTextBox.Name = "ElementNameTextBox";
             this.ElementNameTextBox.Size = new System.Drawing.Size(404, 24);
             this.ElementNameTextBox.TabIndex = 101;
-            // 
-            // createExtensionClassParmsBindingSource
-            // 
-            this.createExtensionClassParmsBindingSource.DataSource = typeof(TRUDUtilsD365.CreateExtensionClass.CreateExtensionClassParms);
             // 
             // label1
             // 
@@ -194,6 +190,11 @@
             this.SetupNameButton.TabIndex = 104;
             this.SetupNameButton.Text = "Setup name template";
             this.SetupNameButton.UseVisualStyleBackColor = true;
+            this.SetupNameButton.Click += new System.EventHandler(this.SetupNameButton_Click);
+            // 
+            // createExtensionClassParmsBindingSource
+            // 
+            this.createExtensionClassParmsBindingSource.DataSource = typeof(TRUDUtilsD365.CreateExtensionClass.CreateExtensionClassParms);
             // 
             // CreateExtensionClassDialog
             // 

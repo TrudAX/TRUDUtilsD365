@@ -38,9 +38,10 @@ namespace TRUDUtilsD365.CreateExtensionClass
         {
             try
             {
-                _parms.Run();
-
-                _parms.DisplayLog();
+                if (_parms.Run())
+                {
+                    _parms.DisplayLog();
+                }
 
                 DialogResult = DialogResult.OK;
                 Close();
@@ -67,6 +68,19 @@ namespace TRUDUtilsD365.CreateExtensionClass
             {
                 createExtensionClassParmsBindingSource.ResetBindings(false);
             }
+        }
+
+        private void SetupNameButton_Click(object sender, EventArgs e)
+        {
+            KernelSettings.KernelSettings f = new KernelSettings.KernelSettings();
+            f.ShowDialog();
+
+            _parms.InitFromSettings();
+
+            _parms.CalcResultName();
+            createExtensionClassParmsBindingSource.ResetBindings(false);
+
+
         }
     }
 }
