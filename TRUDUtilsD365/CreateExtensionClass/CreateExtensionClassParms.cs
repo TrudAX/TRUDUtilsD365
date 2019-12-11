@@ -167,6 +167,11 @@ namespace TRUDUtilsD365.CreateExtensionClass
 
         public bool Run()
         {
+            if (ResultClassName.Length > 80)
+            {
+                throw new Exception($"Class name can't be more than 80 symbols({ResultClassName.Length})");
+            }
+
             AxHelper axHelper = new AxHelper();
 
             AxClass newClass = axHelper.MetadataProvider.Classes.Read(ResultClassName);
