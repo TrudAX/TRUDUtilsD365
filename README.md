@@ -42,7 +42,11 @@ It also allow you to follow naming conventions. The following standard is propos
 
 ![](assets/CreateExtensionClass.png)
 
-This tool can be run using Right-click AddIns on Table, Class or Form
+You can also setup your own naming convention rules. See [this](https://denistrunin.com/d365utils-classextensionname/) article for this details.
+
+![](assets/SetupForm.png)
+
+This tool can be run using Right-click AddIns on Table, Class or Form..
 
 ## Copy extension method
 
