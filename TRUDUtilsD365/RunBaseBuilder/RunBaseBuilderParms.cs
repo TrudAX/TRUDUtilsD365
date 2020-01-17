@@ -277,7 +277,7 @@ namespace TRUDUtilsD365.RunBaseBuilder
             }
             CodeGenerate.AppendLine("if (runObject.prompt())");
             CodeGenerate.BeginBlock();
-            CodeGenerate.AppendLine("runObject.run();");
+            CodeGenerate.AppendLine("runObject.runOperation();");
             CodeGenerate.EndBlock();
 
             CodeGenerate.EndBlock();
