@@ -315,7 +315,7 @@ namespace TRUDUtilsD365.TableFieldsBuilder
 
                     axTableRelation = new AxTableRelationForeignKey();
                     axTableRelation.Name         = newRelationName;
-                    axTableRelation.EDTRelation  = NoYes.Yes;
+                    //axTableRelation.EDTRelation  = NoYes.Yes;
                     axTableRelation.Cardinality  = Cardinality.ZeroMore;
                     axTableRelation.OnDelete     = DeleteAction.Restricted;
                     axTableRelation.RelatedTable = edt.ReferenceTable;
@@ -361,7 +361,7 @@ namespace TRUDUtilsD365.TableFieldsBuilder
 
                         axTableRelation              = new AxTableRelationForeignKey();
                         axTableRelation.Name         = newRelationName;
-                        axTableRelation.EDTRelation  = NoYes.Yes;
+                        //axTableRelation.EDTRelation  = NoYes.Yes;
                         axTableRelation.Cardinality  = Cardinality.ZeroMore;
                         axTableRelation.OnDelete     = DeleteAction.Restricted;
                         axTableRelation.RelatedTable = firstEdtRelation.Table;
