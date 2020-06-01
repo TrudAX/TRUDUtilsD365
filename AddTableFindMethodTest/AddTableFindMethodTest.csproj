@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="Microsoft.Dynamics.AX.Xpp.Support">
       <HintPath>..\..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\nmjrsprb.nva\Microsoft.Dynamics.AX.Xpp.Support.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
