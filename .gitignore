@@ -11,7 +11,6 @@
 *.userprefs
 
 # Build results
-[Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
@@ -19,8 +18,8 @@
 [Xx]86/
 [Bb]uild/
 bld/
-[Bb]in/
 [Oo]bj/
+AddTableFindMethodTest/bin/
 
 # Visual Studio 2015 cache/options directory
 .vs/
@@ -51,7 +50,6 @@ artifacts/
 *.meta
 *.obj
 *.pch
-*.pdb
 *.pgc
 *.pgd
 *.rsp
@@ -243,3 +241,5 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+InstallToVS/bin/Debug/InstallToVS.pdb
+InstallToVS/bin/Debug/InstallToVS.exe.config
