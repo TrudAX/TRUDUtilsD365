@@ -67,7 +67,7 @@ namespace TRUDUtilsD365.Kernel
 
             string res = UppercaseWords(noCharsStr).Replace(" ", "");
             //string res = textInfo.ToTitleCase(noCharsStr).Replace(" ", "");
-            if (char.IsDigit(res[0]))
+            if (res.Length > 0 && char.IsDigit(res[0]))
             {
                 res = "V" + res;
             }

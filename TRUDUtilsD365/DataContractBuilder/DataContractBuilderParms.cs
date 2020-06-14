@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TRUDUtilsD365.Kernel;
 using Microsoft.Dynamics.AX.Metadata.MetaModel;
+using Microsoft.Dynamics.Framework.Tools.MetaModel.Core;
 
 namespace TRUDUtilsD365.DataContractBuilder
 {
@@ -28,7 +29,15 @@ namespace TRUDUtilsD365.DataContractBuilder
 
     public class DataContractBuilderParms : SnippedCreateAction
     {        
-        public string ClassName { get; set; } = "";        
+        public string ClassName { get; set; } = "";
+
+        public Boolean GenerateReportDP { get; set; } = false;
+        public string ReportDPTableName { get; set; } = "";
+        public string ClassNameDP { get; set; } = "";
+        public string ReportDPTableVarName { get; set; } = "";
+
+        public Boolean GenerateReportController { get; set; } = false;
+        public string ClassNameController { get; set; } = "";
 
         public List<DataContractBuilderVar> FieldsList;
 
@@ -38,15 +47,22 @@ namespace TRUDUtilsD365.DataContractBuilder
 
         protected AxClass NewAxClass;
 
-        protected const char   MandatoryPropertySym      = '*';
-        protected const string ClassNameParm             = "Class name";
-        protected const string ParametersParmName        = "Parameters..";
+        protected const char   MandatoryPropertySym         = '*';
+        protected const string ClassNameParm                = "Class name";
+        protected const string GenerateReportDPParm         = "Generate report DP(y)";
+        protected const string ReportDPTableNameParm        = "Report DP table name";
+        protected const string GenerateReportControllerParm = "Generate report controller(y)";
+        protected const string ParametersParmName           = "Parameters..";
 
         public void InitDialogParms(SnippetsParms snippetsParms)
         {
             snippetsParms.SnippetName = "Create DataContract class";
 
             snippetsParms.AddParametersValue(ClassNameParm, "AATestDataContract");
+
+            snippetsParms.AddParametersValue(GenerateReportDPParm, "y");
+            snippetsParms.AddParametersValue(ReportDPTableNameParm, "TmpLedgerConsTrans");
+            snippetsParms.AddParametersValue(GenerateReportControllerParm, "y");
 
             snippetsParms.AddParametersValue(ParametersParmName,   
                 $"CustAccount" + MandatoryPropertySym + Environment.NewLine +
@@ -64,8 +80,23 @@ namespace TRUDUtilsD365.DataContractBuilder
         }
         public override void InitFromSnippetsParms(SnippetsParms snippetsParms)
         {
-            ClassName        = snippetsParms.GetParmStr(ClassNameParm);
-            
+            ClassName                = snippetsParms.GetParmStr(ClassNameParm);
+            GenerateReportController = snippetsParms.GetParmBool(GenerateReportControllerParm);
+            GenerateReportDP         = snippetsParms.GetParmBool(GenerateReportDPParm);
+            ReportDPTableName        = snippetsParms.GetParmStr(ReportDPTableNameParm);
+            if (String.IsNullOrWhiteSpace(ReportDPTableName))
+            {
+                ReportDPTableName = "TableTemDB";
+            }
+            ReportDPTableVarName = AxHelper.GetVarNameFromType(ReportDPTableName);
+            string baseStr = ClassName;
+            if (ClassName.ToLower().EndsWith("contract"))
+            {
+                baseStr = ClassName.Substring(0, ClassName.Length - "contract".Length);
+            }
+            ClassNameDP = $"{baseStr}DP";
+            ClassNameController = $"{baseStr}Controller";
+
             List<List<string>> parmList = snippetsParms.GetParmListSeparated(ParametersParmName);
             FieldsList = new List<DataContractBuilderVar>();
             GroupsList = new List<DataContractBuilderVar>();
@@ -270,7 +301,7 @@ namespace TRUDUtilsD365.DataContractBuilder
             AddClassMethodCode(NewAxClass);            
         }
 
-        void CreateClassMethods()
+        void CreateClassMethodsContract()
         {
             InitCodeGenerate();
             SrcClassDeclaration(); AddMethodCode();
@@ -285,6 +316,124 @@ namespace TRUDUtilsD365.DataContractBuilder
                 CodeGenerate.EndBlock();
             }
         }
+        #region DPClass
+        private void SrcDPClassDeclaration()
+        {
+            CodeGenerate.IndentSetValue(0);
+            CodeGenerate.SetMethodName("ClassDeclaration", ClassMethodType.ClassDeclaration);
+
+            CodeGenerate.AppendLine($"[SRSReportParameterAttribute(classStr({ClassName})),");
+            CodeGenerate.AppendLine("SRSReportQueryAttribute(queryStr(LedgerJournalTrans))]  //Change query");
+            CodeGenerate.AppendLine($"public class {ClassNameDP} extends SrsReportDataProviderPreProcessTempDB");
+            CodeGenerate.BeginBlock();
+
+            CodeGenerate.AppendLine($"{ReportDPTableName} {ReportDPTableVarName};");
+
+            CodeGenerate.AppendLine("");
+            if (!IsPreviewMode)
+            {
+                CodeGenerate.EndBlock();
+                CodeGenerate.IndentIncrease();
+            }
+        }
+        private void SrcDPgetReportDataTmp()
+        {
+            CodeGenerate.SetMethodName("getReportDataTmp");
+            CodeGenerate.AppendLine($"[SRSReportDataSetAttribute(tableStr({ReportDPTableName}))]");
+            CodeGenerate.AppendLine($"public {ReportDPTableName} getReportDataTmp()");
+            CodeGenerate.BeginBlock();
+            CodeGenerate.AppendLine($"select * from {ReportDPTableVarName};");
+            CodeGenerate.AppendLine($"return {ReportDPTableVarName};");
+            CodeGenerate.EndBlock();
+        }
+        private void SrcDPprocessReport()
+        {
+            CodeGenerate.SetMethodName("processReport");
+            CodeGenerate.AppendLine("[SysEntryPointAttribute(false)]");
+            CodeGenerate.AppendLine("public void processReport()");
+            CodeGenerate.BeginBlock();
+            CodeGenerate.AppendLine($"{ClassName}   reportContract;");
+            CodeGenerate.AppendLine("Query           query;");
+            CodeGenerate.AppendLine("");
+            CodeGenerate.AppendLine("reportContract  = this.parmDataContract();");
+            CodeGenerate.AppendLine("query           = this.parmQuery();;");
+            CodeGenerate.AppendLine("//populate tempdb table here..");
+            CodeGenerate.EndBlock();
+        }
+        void CreateDataProviderMethods()
+        {
+            SrcDPClassDeclaration(); AddMethodCode();
+            SrcDPgetReportDataTmp(); AddMethodCode();
+            SrcDPprocessReport(); AddMethodCode();
+
+            if (IsPreviewMode)
+            {
+                CodeGenerate.EndBlock();
+            }
+        }
+        #endregion
+
+        #region ControllerClass
+        private void SrcControllerClassDeclaration()
+        {
+            CodeGenerate.IndentSetValue(0);
+            CodeGenerate.SetMethodName("ClassDeclaration", ClassMethodType.ClassDeclaration);
+
+            CodeGenerate.AppendLine($"public class {ClassNameController} extends SrsReportRunController");
+            CodeGenerate.BeginBlock();
+
+            if (!IsPreviewMode)
+            {
+                CodeGenerate.EndBlock();
+                CodeGenerate.IndentIncrease();
+            }
+        }
+        private void SrcControllerprePromptModifyContract()
+        {
+            CodeGenerate.SetMethodName("prePromptModifyContract");
+            CodeGenerate.AppendLine("protected void prePromptModifyContract()");
+            CodeGenerate.BeginBlock();
+            CodeGenerate.AppendLine($"{ClassName}      contract;");
+            CodeGenerate.AppendLine("super();");
+            CodeGenerate.AppendLine($"contract = this.parmReportContract().parmRdpContract() as {ClassName};");
+            CodeGenerate.AppendLine("reportContract  = this.parmDataContract();");
+            CodeGenerate.AppendLine("//handle external record");
+            CodeGenerate.AppendLine("if (!args || ! args.record() || args.dataset() != tablenum(CustGroup))");
+            CodeGenerate.AppendLine("{");
+            CodeGenerate.AppendLine("    throw error(strfmt(\"@GLS110030\",tablestr(CustGroup)));");
+            CodeGenerate.AppendLine("}");
+            CodeGenerate.AppendLine("CustGroup custGroup = args.record();");
+            CodeGenerate.AppendLine("//contract.parmGroupId(custGroup.GroupId);");
+            CodeGenerate.AppendLine("//Query query = this.getFirstQuery();");
+            CodeGenerate.EndBlock();
+        }
+        private void SrcControllermain()
+        {
+            CodeGenerate.SetMethodName("main", ClassMethodType.Static);
+            CodeGenerate.AppendLine("public static void main (Args args)");
+            CodeGenerate.BeginBlock();
+            CodeGenerate.AppendLine($"{ClassNameController}         reportController;");
+            CodeGenerate.AppendLine("");
+            CodeGenerate.AppendLine($"reportController  = new {ClassNameController}();");
+            CodeGenerate.AppendLine("");
+            CodeGenerate.AppendLine("reportController.parmArgs(args);");
+            CodeGenerate.AppendLine("reportController.parmReportName(ssrsReportStr(SalesInvoice,Report));");
+            CodeGenerate.AppendLine("reportController.parmShowDialog(true);");
+            CodeGenerate.AppendLine("reportController.startOperation();");
+            CodeGenerate.EndBlock();
+        }
+        void CreateControllerMethods()
+        {
+            SrcControllerClassDeclaration(); AddMethodCode();
+            SrcControllerprePromptModifyContract(); AddMethodCode();
+            SrcControllermain(); AddMethodCode();
+
+            if (IsPreviewMode)
+            {
+                CodeGenerate.EndBlock();
+            }
+        }
+        #endregion
 
         void CreateClass()
         {
@@ -298,7 +447,7 @@ namespace TRUDUtilsD365.DataContractBuilder
             }            
 
             NewAxClass = new AxClass { Name = ClassName };
-            CreateClassMethods();
+            CreateClassMethodsContract();
 
             axHelper.MetaModelService.CreateClass(NewAxClass, axHelper.ModelSaveInfo);
             axHelper.AppendToActiveProject(NewAxClass);
@@ -306,15 +455,78 @@ namespace TRUDUtilsD365.DataContractBuilder
             AddLog($"Class: {NewAxClass.Name}; ");
         }
 
+        void CreateDPClass()
+        {
+            AxHelper axHelper = new AxHelper();
+
+            NewAxClass = axHelper.MetadataProvider.Classes.Read(ClassNameDP);
+
+            if (NewAxClass != null)
+            {
+                CoreUtility.DisplayInfo($"Class {NewAxClass.Name} already exists");
+                axHelper.AppendToActiveProject(NewAxClass);
+            }
+            else
+            {
+                NewAxClass = new AxClass { Name = ClassNameDP };
+                CreateDataProviderMethods();
+
+                axHelper.MetaModelService.CreateClass(NewAxClass, axHelper.ModelSaveInfo);
+                axHelper.AppendToActiveProject(NewAxClass);
+
+                AddLog($"Class: {NewAxClass.Name}; ");
+            }
+        }
+
+        void CreateControllerClass()
+        {
+            AxHelper axHelper = new AxHelper();
+
+            NewAxClass = axHelper.MetadataProvider.Classes.Read(ClassNameController);
+
+            if (NewAxClass != null)
+            {
+                CoreUtility.DisplayInfo($"Class {NewAxClass.Name} already exists");
+                axHelper.AppendToActiveProject(NewAxClass);
+            }
+            else
+            {
+                NewAxClass = new AxClass { Name = ClassNameController };
+                CreateControllerMethods();
+
+                axHelper.MetaModelService.CreateClass(NewAxClass, axHelper.ModelSaveInfo);
+                axHelper.AppendToActiveProject(NewAxClass);
+
+                AddLog($"Class: {NewAxClass.Name}; ");
+            }
+        }
+
 
         public override void RunCreate()
         {
-            CreateClass();            
+            CreateClass();
+            if (GenerateReportDP)
+            {
+                CreateDPClass();
+            }
+            if (GenerateReportController)
+            {
+                CreateControllerClass();
+            }
         }
 
         public override string RunPreview()
         {           
-            CreateClassMethods();
+            CreateClassMethodsContract();
+            if (GenerateReportDP)
+            {
+                CreateDataProviderMethods();
+            }
+            if (GenerateReportController)
+            {
+                CreateControllerMethods();
+            }
+
             return CodeGenerate.GetResult();
         }
     }

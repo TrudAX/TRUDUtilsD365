@@ -34,9 +34,9 @@ namespace AddTableFindMethodTest
             //TestEnumCreator();
             //TestTableFieldsBuilder();
             //TestRunBaseBuilder();
-            //TestDataContractBuilder();
+            TestDataContractBuilder();
             //TestTableBuilder();
-            TestSettings();
+            //TestSettings();
         }
 
         private static void TestSettings()
