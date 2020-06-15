@@ -298,7 +298,7 @@ namespace TRUDUtilsD365.TableFieldsBuilder
 
                 AxTableRelationForeignKey axTableRelation = null;
 
-                if (!string.IsNullOrEmpty(edt.ReferenceTable))
+                if (!string.IsNullOrEmpty(edt.ReferenceTable) && edt.TableReferences.Count > 0)
                 {
 
                     AxEdtTableReference firstRef = edt.TableReferences.First();
