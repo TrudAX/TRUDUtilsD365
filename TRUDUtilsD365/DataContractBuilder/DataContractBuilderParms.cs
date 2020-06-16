@@ -349,14 +349,13 @@ namespace TRUDUtilsD365.DataContractBuilder
         private void SrcDPprocessReport()
         {
             CodeGenerate.SetMethodName("processReport");
-            CodeGenerate.AppendLine("[SysEntryPointAttribute(false)]");
             CodeGenerate.AppendLine("public void processReport()");
             CodeGenerate.BeginBlock();
             CodeGenerate.AppendLine($"{ClassName}   reportContract;");
             CodeGenerate.AppendLine("Query           query;");
             CodeGenerate.AppendLine("");
             CodeGenerate.AppendLine("reportContract  = this.parmDataContract();");
-            CodeGenerate.AppendLine("query           = this.parmQuery();;");
+            CodeGenerate.AppendLine("query           = this.parmQuery();");
             CodeGenerate.AppendLine("//populate tempdb table here..");
             CodeGenerate.EndBlock();
         }
@@ -396,7 +395,6 @@ namespace TRUDUtilsD365.DataContractBuilder
             CodeGenerate.AppendLine($"{ClassName}      contract;");
             CodeGenerate.AppendLine("super();");
             CodeGenerate.AppendLine($"contract = this.parmReportContract().parmRdpContract() as {ClassName};");
-            CodeGenerate.AppendLine("reportContract  = this.parmDataContract();");
             CodeGenerate.AppendLine("//handle external record");
             CodeGenerate.AppendLine("if (!args || ! args.record() || args.dataset() != tablenum(CustGroup))");
             CodeGenerate.AppendLine("{");
