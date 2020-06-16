@@ -141,6 +141,8 @@ Supports the following properties:
 * Groups
 * Label and Help text override
 
+Also can generate a code template for Data provider and [Controller](https://denistrunin.com/d365utils-generatedp/) 
+
 ![1547085113848](assets/DataContractBuilder.png)
 
 ## Create find method
