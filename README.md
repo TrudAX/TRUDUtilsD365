@@ -35,6 +35,7 @@ It also allow you to follow naming conventions. The following standard is propos
 | Table CustTable             | [ExtensionOf(tablestr(CustTable))]<br/>final class CustTableTST_Extension |
 | View AssetBalances          | [ExtensionOf(viewstr(AssetBalances))]<br/>final class AssetBalancesTST_Extension |
 | DataEntity AccountantEntity | [ExtensionOf(dataentityviewstr(AccountantEntity))]<br/>final class AccountantEntityTST_Extension |
+| Map CustVendTable           | [ExtensionOf(mapstr(CustVendTable))]<br/>final class CustVendTableMapTST_Extension |
 | Form CustTable              | [ExtensionOf(formstr(CustTable))]<br/>final class CustTableFormTST_Extension |
 | Form data source            | [ExtensionOf(formdatasourcestr(CustTable, DataSource1))]<br/>final class CustTableFormTST_DataSource1_Extension |
 | Form data fields            | [ExtensionOf(formdatafieldstr(CustTable, DataSource1, Field1))]<br/>final class CustTableFormTST_DataSource1Field1_Extension |
