@@ -10,9 +10,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TRUDUtilsD365</RootNamespace>
     <AssemblyName>TRUDUtilsD365</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SkipAssemblyComVisible>true</SkipAssemblyComVisible>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,7 +38,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Dynamics.AX.Metadata">
-      <HintPath>..\..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\uhv05n1m.te4\Microsoft.Dynamics.AX.Metadata.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\Extensions\s2jvqaw1.144\Microsoft.Dynamics.AX.Metadata.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Dynamics.AX.Metadata.Core">
@@ -45,18 +46,22 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Dynamics.AX.Xpp.Support">
-      <HintPath>..\..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\uhv05n1m.te4\Microsoft.Dynamics.AX.Xpp.Support.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\Extensions\s2jvqaw1.144\Microsoft.Dynamics.AX.Xpp.Support.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.Framework.Tools.Extensibility, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\Extensions\s2jvqaw1.144\Microsoft.Dynamics.Framework.Tools.Extensibility.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dynamics.Framework.Tools.MetaModel.Core">
       <HintPath>..\..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\uhv05n1m.te4\Microsoft.Dynamics.Framework.Tools.MetaModel.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dynamics.Framework.Tools.ProjectSupport">
-      <HintPath>..\..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\uhv05n1m.te4\Microsoft.Dynamics.Framework.Tools.ProjectSupport.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\Extensions\s2jvqaw1.144\Microsoft.Dynamics.Framework.Tools.ProjectSupport.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Dynamics.Framework.Tools.ProjectSystem">
-      <HintPath>..\..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\uhv05n1m.te4\Microsoft.Dynamics.Framework.Tools.ProjectSystem.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\Extensions\s2jvqaw1.144\Microsoft.Dynamics.Framework.Tools.ProjectSystem.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -242,8 +247,7 @@
       <OutputFiles Include="$(MSBuildProjectDirectory)\$(OutputPath)\**\*.*" />
     </ItemGroup>
     <Message Text="Copying @(OutputFiles)" Importance="high" />
-	<Message Text="@(OutputFiles->'$(DynamicsVSToolsHintPath)\AddinExtensions\%(RecursiveDir)%(Filename)%(Extension)')" Importance="high" />
-	
+    <Message Text="@(OutputFiles->'$(DynamicsVSToolsHintPath)\AddinExtensions\%(RecursiveDir)%(Filename)%(Extension)')" Importance="high" />
     <Copy SourceFiles="@(OutputFiles)" DestinationFiles="@(OutputFiles->'$(DynamicsVSToolsHintPath)\AddinExtensions\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Message Text="Copying finished" Importance="high" />
   </Target>
