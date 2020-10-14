@@ -119,10 +119,12 @@ namespace TRUDUtilsD365.KernelSettings
                     $MainObject$ + _ + $Prefix$ + _Extension
                     $MainObject$ + _ + $Prefix$ + _Extension
                     $MainObject$ + _ + $Prefix$ + _Extension
+                    $MainObject$ + _ + $Prefix$ + _Extension
                     $MainObject$ + Form + _ + $Prefix$ + _Extension
                     $MainObject$ + Form + _ + $Prefix$+ _ + $SubObject$ + _Extension
                     $MainObject$ + Form + _ + $Prefix$+ _ + $SubObject$ + _Extension
                     $MainObject$ + Form + _ + $Prefix$+ _ + $SubObject$ + _Extension
+                    $MainObject$ + _ + $Prefix$ + _EventHandler
                     $MainObject$ + _ + $Prefix$ + _EventHandler
                     $MainObject$ + _ + $Prefix$ + _EventHandler
                     $MainObject$ + _ + $Prefix$ + _EventHandler

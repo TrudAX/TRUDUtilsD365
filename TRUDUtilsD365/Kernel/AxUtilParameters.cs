@@ -14,6 +14,7 @@ namespace TRUDUtilsD365.Kernel
         Table,
         DataEntityView,
         View,
+        Map,
         Form,
         FormDataField,
         FormDataSource,

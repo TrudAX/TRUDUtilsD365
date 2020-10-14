@@ -5,6 +5,7 @@ using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Forms;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Tables;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.DataEntityViews;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Views;
+using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Maps;
 using TRUDUtilsD365.Kernel;
 using Exception = System.Exception;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Core;
@@ -126,42 +127,20 @@ namespace TRUDUtilsD365.CreateExtensionClass
                 ElementName = form.Name;
                 ElementName = ElementName.Split('.')[0];
             }
+            else if ((selectedElement is Map) || (selectedElement is MapExtension))
+            {
+                var form = (Map)selectedElement;
+                ElementType = Kernel.ExtensionClassType.Map;
+                ElementName = form.Name;
+                ElementName = ElementName.Split('.')[0];
+            }
             InitFromSettings();
         }
 
         public void CalcResultName()
         {
             string res = _kernelSettingsManager.GetClassName(ElementType, ClassModeType, Prefix, ElementName, SubElementName);
-            /*
-            res += ElementName;
-            if (ElementType == Kernel.ExtensionClassType.Form ||
-                ElementType == Kernel.ExtensionClassType.FormDataSource ||
-                ElementType == Kernel.ExtensionClassType.FormDataField ||
-                ElementType == Kernel.ExtensionClassType.FormControl)
-            {
-                res += "Form";
-            }
 
-            res += Prefix;
-
-            if (ClassModeType == ExtensionClassModeType.Extension)
-            {
-                if (!string.IsNullOrWhiteSpace(SubElementName))
-                {
-                    res += "_" + AxHelper.GetTypeNameFromLabel(SubElementName);
-                }
-            }
-
-            switch (ClassModeType)
-            {
-                case ExtensionClassModeType.Extension:
-                    res += "_Extension";
-                    break;
-                case ExtensionClassModeType.EventHandler:
-                    res += "_EventHandler";
-                    break;
-            }
-            */
             ResultClassName = res;
         }
 
@@ -212,6 +191,9 @@ namespace TRUDUtilsD365.CreateExtensionClass
                         break;
                     case Kernel.ExtensionClassType.View:
                         typeStr = "viewstr";
+                        break;
+                    case Kernel.ExtensionClassType.Map:
+                        typeStr = "mapstr";
                         break;
                 }
 

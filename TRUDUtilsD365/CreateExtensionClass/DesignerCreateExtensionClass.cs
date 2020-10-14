@@ -24,6 +24,8 @@ namespace TRUDUtilsD365.CreateExtensionClass
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(DataEntityViewExtension))]
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Views.View))]
     [DesignerMenuExportMetadata(AutomationNodeType = typeof(Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Views.ViewExtension))]
+    [DesignerMenuExportMetadata(AutomationNodeType = typeof(Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Maps.Map))]
+    [DesignerMenuExportMetadata(AutomationNodeType = typeof(Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Maps.MapExtension))]
     internal class DesignerCreateExtensionClass : DesignerMenuBase
     {
         #region Properties
