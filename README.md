@@ -223,7 +223,7 @@ Write-Host Determining latest release
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 $tag = (Invoke-WebRequest -Uri $releases -UseBasicParsing | ConvertFrom-Json)[0].tag_name
 
-$files = @("InstallToVS.exe"  "TRUDUtilsD365.dll"  "TRUDUtilsD365.pdb")
+$files = @("InstallToVS.exe",  "TRUDUtilsD365.dll",  "TRUDUtilsD365.pdb")
 
 Write-Host Downloading files
 foreach ($file in $files) 

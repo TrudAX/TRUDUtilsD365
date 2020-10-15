@@ -53,34 +53,9 @@ namespace InstallToVS
         }
         private static string FindExtensionFolder()
         {
-            /*
-            using (var extensionsRegKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\VisualStudio\14.0\ExtensionManager\EnabledExtensions"))
-            {
-                string path = "";
-                if (extensionsRegKey != null)
-                {
-                    string axToolsKeyName = extensionsRegKey.GetValueNames()
-                        .FirstOrDefault(name => name.StartsWith("DynamicsRainierVSTools"));
-                    if (axToolsKeyName != null)
-                    {
-                        path = (string) extensionsRegKey.GetValue(axToolsKeyName);
-                    }
-                }
-                */
-            string path = "";
-            RegistryKey d365Key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\VisualStudio\14.0_Config\AutomationProperties\Dynamics 365");
-            if (d365Key != null)
-            {
-                string package = (string) d365Key.GetValue("Package");
+            String path;
 
-                RegistryKey pathKey =
-                    Registry.CurrentUser.OpenSubKey(
-                        $@"SOFTWARE\Microsoft\VisualStudio\14.0_Config\BindingPaths\{package}");
-                if (pathKey != null)
-                {
-                    path = pathKey.GetValueNames()[0];
-                }
-            }
+            path = Environment.GetEnvironmentVariable("DynamicsVSTools");
 
             if (string.IsNullOrEmpty(path))
             {
