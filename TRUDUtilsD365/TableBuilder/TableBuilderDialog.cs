@@ -76,9 +76,9 @@ namespace TRUDUtilsD365.TableBuilder
             }
         }
 
-        private void EDTLabeltextBox_Validated(object sender, EventArgs e)
+        private void EDTLabeltextBox_TextChanged(object sender, EventArgs e)
         {
-            if (!String.IsNullOrWhiteSpace(EDTLabeltextBox.Text))
+            if (!String.IsNullOrWhiteSpace(EDTLabeltextBox.Text) && (_parms.EdtLabel != EDTLabeltextBox.Text))
             {
                 EDTHelpTextBox.Text = $"Identification of the {AxHelper.PrettyName(EDTLabeltextBox.Text)}";
                 _parms.EdtHelpText = EDTHelpTextBox.Text;

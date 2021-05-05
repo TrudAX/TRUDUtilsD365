@@ -82,8 +82,11 @@ namespace TRUDUtilsD365.Kernel
         //AAACustTable  --> custTable
         //AAA_CustTable --> custTable
         //CustTable     --> custTable
+        //CustTable_AAA --> custTable
         public static string GetVarNameFromType(string typeName)
         {
+            string res;
+
             if (typeName.Length <= 6)
             {
                 return PrettyName(typeName);
@@ -99,12 +102,22 @@ namespace TRUDUtilsD365.Kernel
                 }
             }
 
+            int typeLen = typeName.Length;
+            if (typeName[typeLen - 4] == '_' &&
+                Char.IsUpper(typeName[typeLen - 3]) &&
+                Char.IsUpper(typeName[typeLen - 2]) &&
+                Char.IsUpper(typeName[typeLen - 1]))
+            {
+                res = PrettyName(typeName.Substring(0, typeLen - 4));
+                return res;
+            }
+
             if (prefixPos == 0)
             {
                 return PrettyName(typeName);
             }
 
-            string res = PrettyName(typeName.Substring(prefixPos));
+            res = PrettyName(typeName.Substring(prefixPos));
 
             return res;
 

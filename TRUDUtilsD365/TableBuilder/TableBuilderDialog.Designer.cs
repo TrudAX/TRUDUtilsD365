@@ -39,7 +39,6 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.PrimaryKeyEDTTextBox = new System.Windows.Forms.TextBox();
-            this.tableBuilderParmsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.IsCreateTableCheckBox = new System.Windows.Forms.CheckBox();
             this.TableNameTextBox = new System.Windows.Forms.TextBox();
             this.TableLabelTextBox = new System.Windows.Forms.TextBox();
@@ -65,6 +64,7 @@
             this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
+            this.tableBuilderParmsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.tableBuilderParmsBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -175,10 +175,6 @@
             this.PrimaryKeyEDTTextBox.Size = new System.Drawing.Size(274, 24);
             this.PrimaryKeyEDTTextBox.TabIndex = 9;
             // 
-            // tableBuilderParmsBindingSource
-            // 
-            this.tableBuilderParmsBindingSource.DataSource = typeof(TRUDUtilsD365.TableBuilder.TableBuilderParms);
-            // 
             // IsCreateTableCheckBox
             // 
             this.IsCreateTableCheckBox.AutoSize = true;
@@ -286,7 +282,7 @@
             this.EDTLabeltextBox.Name = "EDTLabeltextBox";
             this.EDTLabeltextBox.Size = new System.Drawing.Size(274, 24);
             this.EDTLabeltextBox.TabIndex = 22;
-            this.EDTLabeltextBox.Validated += new System.EventHandler(this.EDTLabeltextBox_Validated);
+            this.EDTLabeltextBox.TextChanged += new System.EventHandler(this.EDTLabeltextBox_TextChanged);
             // 
             // label11
             // 
@@ -414,6 +410,10 @@
             this.label17.Size = new System.Drawing.Size(129, 18);
             this.label17.TabIndex = 29;
             this.label17.Text = "Create a privilege?";
+            // 
+            // tableBuilderParmsBindingSource
+            // 
+            this.tableBuilderParmsBindingSource.DataSource = typeof(TRUDUtilsD365.TableBuilder.TableBuilderParms);
             // 
             // TableBuilderDialog
             // 

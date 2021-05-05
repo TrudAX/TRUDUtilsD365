@@ -34,8 +34,8 @@ namespace AddTableFindMethodTest
             //TestEnumCreator();
             //TestTableFieldsBuilder();
             //TestRunBaseBuilder();
-            TestDataContractBuilder();
-            //TestTableBuilder();
+            //TestDataContractBuilder();
+            TestTableBuilder();
             //TestSettings();
         }
 
