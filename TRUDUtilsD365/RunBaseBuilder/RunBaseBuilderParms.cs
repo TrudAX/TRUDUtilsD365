@@ -167,7 +167,7 @@ namespace TRUDUtilsD365.RunBaseBuilder
         private void SrcClassDeclaration()
         {
             CodeGenerate.SetMethodName("ClassDeclaration", ClassMethodType.ClassDeclaration);
-            CodeGenerate.AppendLine($"public class {ClassName} extends RunBaseBatch");
+            CodeGenerate.AppendLine($"public class {ClassName} extends RunBaseBatch implements BatchRetryable");
             CodeGenerate.BeginBlock();
             foreach (RunBaseBuilderVar df in FieldsList)
             {
@@ -627,6 +627,16 @@ namespace TRUDUtilsD365.RunBaseBuilder
             CodeGenerate.AppendLine("return false;");
             CodeGenerate.EndBlock();
         }
+        void SrcIsRetryable()
+        {
+            CodeGenerate.SetMethodName("isRetryable");
+
+            CodeGenerate.AppendLine("public boolean isRetryable()");
+            CodeGenerate.BeginBlock();
+            CodeGenerate.AppendLine("return true;");
+            CodeGenerate.EndBlock();
+        }
+
         void SrcDialogPostRun()
         {
             CodeGenerate.SetMethodName("dialogPostRun");
@@ -719,6 +729,7 @@ namespace TRUDUtilsD365.RunBaseBuilder
             SrcShowQueryValues(); AddMethodCode();
             SrcCanRunInNewSession(); AddMethodCode();
             SrcCanGoBatch(); AddMethodCode();
+            SrcIsRetryable(); AddMethodCode();
             SrcDialogPostRun(); AddMethodCode();
             SrcUploadCompleted(); AddMethodCode();
             SrcSetDialogOkButtonEnabled(); AddMethodCode();
