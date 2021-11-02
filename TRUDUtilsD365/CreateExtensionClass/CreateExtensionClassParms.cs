@@ -10,6 +10,7 @@ using TRUDUtilsD365.Kernel;
 using Exception = System.Exception;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Core;
 using TRUDUtilsD365.KernelSettings;
+using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation;
 
 namespace TRUDUtilsD365.CreateExtensionClass
 {
@@ -85,7 +86,7 @@ namespace TRUDUtilsD365.CreateExtensionClass
             else
             if ((selectedElement is Table) || (selectedElement is TableExtension))
             {
-                var form = (Table)selectedElement;
+                var form = (INamedElement)selectedElement;
                 ElementType = Kernel.ExtensionClassType.Table;
                 ElementName = form.Name.Split('.')[0];
             }            
@@ -115,21 +116,21 @@ namespace TRUDUtilsD365.CreateExtensionClass
             }
             else if ((selectedElement is DataEntityView) || (selectedElement is DataEntityViewExtension))
             {
-                var form = (DataEntityView)selectedElement;
+                var form = (INamedElement)selectedElement;
                 ElementType = Kernel.ExtensionClassType.DataEntityView;
                 ElementName = form.Name;
                 ElementName = ElementName.Split('.')[0];
             }
             else if ((selectedElement is View) || (selectedElement is ViewExtension))
             {
-                var form = (View)selectedElement;
+                var form = (INamedElement)selectedElement;
                 ElementType = Kernel.ExtensionClassType.View;
                 ElementName = form.Name;
                 ElementName = ElementName.Split('.')[0];
             }
             else if ((selectedElement is Map) || (selectedElement is MapExtension))
             {
-                var form = (Map)selectedElement;
+                var form = (INamedElement)selectedElement;
                 ElementType = Kernel.ExtensionClassType.Map;
                 ElementName = form.Name;
                 ElementName = ElementName.Split('.')[0];
