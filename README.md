@@ -6,6 +6,7 @@ A set of Visual Studio Add-ins for Microsoft Dynamics 365 for Finance and Operat
 
 * [Create extension class](#create-extension-class)
 * [Copy extension method](#copy-extension-method)
+* [Create extension](#create-extension)
 * [Enum builder](#enum-builder)
 * [Fields builder](#fields-builder)
 * [Table builder](#table-builder)
@@ -54,6 +55,14 @@ This tool can be run using Right-click AddIns on Table, Class or Form..
 This Addins copies to the clipboard template for the method extension(with next call)
 
 ![](assets/CopyExtensionMethod.png)
+
+Tool can be run by Right-click method in the designer view
+
+## Create extension
+
+This Addins creates an extension for the element from the designer view(standard tool allows to do it only from the Application Explorer)
+
+![](assets/CreateExtension.png)
 
 Tool can be run by Right-click method in the designer view
 

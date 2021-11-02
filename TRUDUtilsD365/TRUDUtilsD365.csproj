@@ -87,6 +87,8 @@
     </Compile>
     <Compile Include="CreateExtensionClass\CreateExtensionClassParms.cs" />
     <Compile Include="CreateExtensionClass\DesignerCreateExtensionClass.cs" />
+    <Compile Include="CreateExtension\CreateExtensionParms.cs" />
+    <Compile Include="CreateExtension\DesignerCreateExtension.cs" />
     <Compile Include="DataContractBuilder\DataContractBuilderParms.cs" />
     <Compile Include="DataContractBuilder\DataContractBuilderMenu.cs" />
     <Compile Include="KernelSettings\KernelSettings.cs">
