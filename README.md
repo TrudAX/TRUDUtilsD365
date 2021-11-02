@@ -64,7 +64,7 @@ This Addins creates an extension for the element from the designer view(standard
 
 ![](assets/CreateExtension.png)
 
-Tool can be run by Right-click method in the designer view
+Tool can be run by Right-click object in the designer view
 
 ## Enum builder
 
