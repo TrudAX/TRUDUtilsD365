@@ -20,8 +20,14 @@ namespace TRUDUtilsD365.CopyExtensionMethod
             {
                 throw new Exception("sourceMethod is null");
             }
+            var attributes = sourceMethod.DataContractAttributes.OfType<IAttributeItem>();
 
-            if (sourceMethod.IsFinal)
+            Boolean isWrappableAttrib = (attributes != null && attributes.Any(attribute =>
+                    attribute.Name == "Wrappable" &&
+                    string.Equals(attribute.Parameters[0].TypeValue, Boolean.TrueString)));
+
+
+            if (sourceMethod.IsFinal && !isWrappableAttrib)
             {
                 throw new Exception("Final method could not be extended");
             }
@@ -32,7 +38,7 @@ namespace TRUDUtilsD365.CopyExtensionMethod
                 throw new Exception("Only protected and public methods can be extended");
             }
 
-            var attributes = sourceMethod.DataContractAttributes.OfType<IAttributeItem>();
+            
             if (attributes != null && attributes.Any(attribute =>
                     attribute.Name == "Wrappable" &&
                     string.Equals(attribute.Parameters[0].TypeValue, Boolean.FalseString)))
