@@ -60,9 +60,13 @@ namespace TRUDUtilsD365.KernelSettings
                             break;
                         case ExtensionClassType.FormDataField:
                         case ExtensionClassType.FormDataSource:
+                            nameTemplate.ExtensionTemplate =
+                                MainElementTemplateName + " + Form + " + PrefixTemplateName + "+ _ds + " +
+                                SubElementTemplateName + " + _Extension";
+                            break;
                         case ExtensionClassType.FormControl:
                             nameTemplate.ExtensionTemplate =
-                                MainElementTemplateName + " + Form + " + PrefixTemplateName + "+ _ + " +
+                                MainElementTemplateName + " + Form + " + PrefixTemplateName + "+ _c + " +
                                 SubElementTemplateName + " + _Extension";
                             break;
                         default:
@@ -121,9 +125,9 @@ namespace TRUDUtilsD365.KernelSettings
                     $MainObject$ + _ + $Prefix$ + _Extension
                     $MainObject$ + _ + $Prefix$ + _Extension
                     $MainObject$ + Form + _ + $Prefix$ + _Extension
-                    $MainObject$ + Form + _ + $Prefix$+ _ + $SubObject$ + _Extension
-                    $MainObject$ + Form + _ + $Prefix$+ _ + $SubObject$ + _Extension
-                    $MainObject$ + Form + _ + $Prefix$+ _ + $SubObject$ + _Extension
+                    $MainObject$ + Form + _ds + $Prefix$+ _ + $SubObject$ + _Extension
+                    $MainObject$ + Form + _ds + $Prefix$+ _ + $SubObject$ + _Extension
+                    $MainObject$ + Form + _c + $Prefix$+ _ + $SubObject$ + _Extension
                     $MainObject$ + _ + $Prefix$ + _EventHandler
                     $MainObject$ + _ + $Prefix$ + _EventHandler
                     $MainObject$ + _ + $Prefix$ + _EventHandler
