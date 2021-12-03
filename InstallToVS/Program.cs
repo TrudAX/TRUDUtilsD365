@@ -21,6 +21,8 @@ namespace InstallToVS
     {
         private const string DllName1     = "TRUDUtilsD365.dll";
         private const string DllName2     = "TRUDUtilsD365.pdb";
+        private const string SettingsName = "TRUDUtilsD365Settings.xml";
+
         private const string AddinFolder = "AddinExtensions";
 
         static void Main(string[] args)
@@ -39,6 +41,14 @@ namespace InstallToVS
                 unblocker.Unblock(sourcePath);
                 targetPath = Path.Combine(extensionFolderName, DllName2);
                 File.Copy(sourcePath, targetPath, true);
+
+                sourcePath = Path.Combine(Environment.CurrentDirectory, SettingsName);
+                if (File.Exists(sourcePath))
+                {
+                    unblocker.Unblock(sourcePath);
+                    targetPath = Path.Combine(extensionFolderName, SettingsName);
+                    File.Copy(sourcePath, targetPath, true);
+                }
 
                 Console.WriteLine("Setup finished! Close and enjoy!");
 
