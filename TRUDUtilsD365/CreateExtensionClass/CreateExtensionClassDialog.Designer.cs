@@ -53,9 +53,9 @@
             // 
             this.ElementNameTextBox.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.ElementNameTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.createExtensionClassParmsBindingSource, "ElementName", true));
-            this.ElementNameTextBox.Location = new System.Drawing.Point(135, 43);
+            this.ElementNameTextBox.Location = new System.Drawing.Point(109, 42);
             this.ElementNameTextBox.Name = "ElementNameTextBox";
-            this.ElementNameTextBox.Size = new System.Drawing.Size(404, 20);
+            this.ElementNameTextBox.Size = new System.Drawing.Size(455, 20);
             this.ElementNameTextBox.TabIndex = 101;
             // 
             // createExtensionClassParmsBindingSource
@@ -65,7 +65,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 47);
+            this.label1.Location = new System.Drawing.Point(15, 45);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(84, 13);
             this.label1.TabIndex = 1;
@@ -74,7 +74,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(32, 15);
+            this.label2.Location = new System.Drawing.Point(25, 18);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(71, 13);
             this.label2.TabIndex = 3;
@@ -83,7 +83,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(67, 110);
+            this.label3.Location = new System.Drawing.Point(60, 110);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(36, 13);
             this.label3.TabIndex = 5;
@@ -92,7 +92,7 @@
             // PrefixTextBox
             // 
             this.PrefixTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.createExtensionClassParmsBindingSource, "Prefix", true));
-            this.PrefixTextBox.Location = new System.Drawing.Point(135, 107);
+            this.PrefixTextBox.Location = new System.Drawing.Point(109, 107);
             this.PrefixTextBox.Name = "PrefixTextBox";
             this.PrefixTextBox.Size = new System.Drawing.Size(104, 20);
             this.PrefixTextBox.TabIndex = 4;
@@ -102,7 +102,7 @@
             // 
             this.comboBox1.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.createExtensionClassParmsBindingSource, "ClassModeType", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(343, 107);
+            this.comboBox1.Location = new System.Drawing.Point(310, 107);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(196, 21);
             this.comboBox1.TabIndex = 6;
@@ -111,7 +111,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(256, 110);
+            this.label4.Location = new System.Drawing.Point(240, 110);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(58, 13);
             this.label4.TabIndex = 7;
@@ -129,16 +129,16 @@
             // ResultClassNameTextBox
             // 
             this.ResultClassNameTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.createExtensionClassParmsBindingSource, "ResultClassName", true));
-            this.ResultClassNameTextBox.Location = new System.Drawing.Point(135, 139);
+            this.ResultClassNameTextBox.Location = new System.Drawing.Point(109, 139);
             this.ResultClassNameTextBox.Name = "ResultClassNameTextBox";
-            this.ResultClassNameTextBox.Size = new System.Drawing.Size(437, 20);
+            this.ResultClassNameTextBox.Size = new System.Drawing.Size(455, 20);
             this.ResultClassNameTextBox.TabIndex = 8;
             // 
             // CreateClassButton
             // 
-            this.CreateClassButton.Location = new System.Drawing.Point(135, 169);
+            this.CreateClassButton.Location = new System.Drawing.Point(109, 176);
             this.CreateClassButton.Name = "CreateClassButton";
-            this.CreateClassButton.Size = new System.Drawing.Size(129, 31);
+            this.CreateClassButton.Size = new System.Drawing.Size(142, 31);
             this.CreateClassButton.TabIndex = 10;
             this.CreateClassButton.Text = "Create class";
             this.CreateClassButton.UseVisualStyleBackColor = true;
@@ -162,15 +162,15 @@
             this.ElementTypeComboBox.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.createExtensionClassParmsBindingSource, "ElementType", true));
             this.ElementTypeComboBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.createExtensionClassParmsBindingSource, "ElementType", true));
             this.ElementTypeComboBox.FormattingEnabled = true;
-            this.ElementTypeComboBox.Location = new System.Drawing.Point(135, 12);
+            this.ElementTypeComboBox.Location = new System.Drawing.Point(109, 15);
             this.ElementTypeComboBox.Name = "ElementTypeComboBox";
-            this.ElementTypeComboBox.Size = new System.Drawing.Size(202, 21);
+            this.ElementTypeComboBox.Size = new System.Drawing.Size(241, 21);
             this.ElementTypeComboBox.TabIndex = 100;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(26, 79);
+            this.label6.Location = new System.Drawing.Point(23, 73);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(73, 13);
             this.label6.TabIndex = 102;
@@ -180,14 +180,14 @@
             // 
             this.textBox1.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.textBox1.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.createExtensionClassParmsBindingSource, "SubElementName", true));
-            this.textBox1.Location = new System.Drawing.Point(135, 69);
+            this.textBox1.Location = new System.Drawing.Point(109, 70);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(404, 20);
+            this.textBox1.Size = new System.Drawing.Size(455, 20);
             this.textBox1.TabIndex = 103;
             // 
             // SetupNameButton
             // 
-            this.SetupNameButton.Location = new System.Drawing.Point(371, 10);
+            this.SetupNameButton.Location = new System.Drawing.Point(396, 8);
             this.SetupNameButton.Name = "SetupNameButton";
             this.SetupNameButton.Size = new System.Drawing.Size(168, 28);
             this.SetupNameButton.TabIndex = 104;
@@ -197,6 +197,8 @@
             // 
             // CreateExtensionClassDialog
             // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(622, 219);
             this.Controls.Add(this.SetupNameButton);
             this.Controls.Add(this.label6);
