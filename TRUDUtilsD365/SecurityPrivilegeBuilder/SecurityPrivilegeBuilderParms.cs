@@ -27,6 +27,8 @@ namespace TRUDUtilsD365.SecurityPrivilegeBuilder
         public string FormLabel { get; set; } = "";
         private string FormLabelOrig { get; set; } = "";
 
+        private string FormName { get; set; } = "";
+
         private AxHelper _axHelper;
 
         private string _logString;
@@ -67,6 +69,11 @@ namespace TRUDUtilsD365.SecurityPrivilegeBuilder
             if (selectedElement is IMenuItemDisplay)
             {
                 MenuItemType = EntryPointType.MenuItemDisplay;
+            }
+
+            if (selectedElement.ObjectType == MenuItemObjectType.Form)
+            {
+                FormName = selectedElement.Object;
             }
 
             GenerateNames();
@@ -159,8 +166,14 @@ namespace TRUDUtilsD365.SecurityPrivilegeBuilder
             entryPoint.Name       = MenuItemName;
             entryPoint.Grant      = GetGrant();
             entryPoint.ObjectName = MenuItemName;
-            entryPoint.ObjectType = MenuItemType;            
+            entryPoint.ObjectType = MenuItemType;
 
+            if (!string.IsNullOrEmpty(FormName))
+            {
+                AxSecurityEntryPointReferenceForm formRef = new AxSecurityEntryPointReferenceForm();
+                formRef.Name = FormName;
+                entryPoint.Forms.Add(formRef);
+            }
             privilege.Name = ObjectName;
             privilege.EntryPoints.Add(entryPoint);
             privilege.Label = FormLabel;

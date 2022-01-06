@@ -208,6 +208,10 @@ namespace TRUDUtilsD365.TableBuilder
             entryPoint.ObjectName = FormName;
             entryPoint.ObjectType = EntryPointType.MenuItemDisplay;
 
+            AxSecurityEntryPointReferenceForm formRef = new AxSecurityEntryPointReferenceForm();
+            formRef.Name = FormName;
+            entryPoint.Forms.Add(formRef);
+
             privilege.Name = privilegeName;
             privilege.EntryPoints.Add(entryPoint);
             privilege.Label = privilegeLabel;
