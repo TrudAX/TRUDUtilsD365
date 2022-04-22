@@ -4,6 +4,7 @@ using TRUDUtilsD365.Kernel;
 using Microsoft.Dynamics.AX.Metadata.MetaModel;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Menus;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Core;
+using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.DataEntityViews;
 
 namespace TRUDUtilsD365.SecurityPrivilegeBuilder
 {
@@ -28,6 +29,8 @@ namespace TRUDUtilsD365.SecurityPrivilegeBuilder
         private string FormLabelOrig { get; set; } = "";
 
         private string FormName { get; set; } = "";
+
+        public bool IsDataEntity { get; set; } = false;
 
         private AxHelper _axHelper;
 
@@ -79,6 +82,15 @@ namespace TRUDUtilsD365.SecurityPrivilegeBuilder
             GenerateNames();
         }
 
+        public void InitFromDataEntity(IDataEntityView selectedElement)
+        {
+            MenuItemName = selectedElement.Name;
+            FormLabelOrig = selectedElement.Label;
+            IsDataEntity = true;
+            MenuItemType = EntryPointType.None;
+
+            GenerateNames();
+        }
         public void Run()
         {
             _logString = "";
@@ -161,21 +173,34 @@ namespace TRUDUtilsD365.SecurityPrivilegeBuilder
                 throw new Exception($"Privilege {ObjectName} already exists");
             }
             privilege = new AxSecurityPrivilege();
-            AxSecurityEntryPointReference entryPoint = new AxSecurityEntryPointReference();
-
-            entryPoint.Name       = MenuItemName;
-            entryPoint.Grant      = GetGrant();
-            entryPoint.ObjectName = MenuItemName;
-            entryPoint.ObjectType = MenuItemType;
-
-            if (!string.IsNullOrEmpty(FormName))
-            {
-                AxSecurityEntryPointReferenceForm formRef = new AxSecurityEntryPointReferenceForm();
-                formRef.Name = FormName;
-                entryPoint.Forms.Add(formRef);
-            }
             privilege.Name = ObjectName;
-            privilege.EntryPoints.Add(entryPoint);
+            if (IsDataEntity)
+            {
+                AxSecurityDataEntityPermission dataEntityPermission = new AxSecurityDataEntityPermission();
+
+                dataEntityPermission.Grant = GetGrant();
+                dataEntityPermission.IntegrationMode = IntegrationMode.All;
+                dataEntityPermission.Name = MenuItemName;
+
+                privilege.DataEntityPermissions.Add(dataEntityPermission);
+            }
+            else
+            {
+                AxSecurityEntryPointReference entryPoint = new AxSecurityEntryPointReference();
+
+                entryPoint.Name = MenuItemName;
+                entryPoint.Grant = GetGrant();
+                entryPoint.ObjectName = MenuItemName;
+                entryPoint.ObjectType = MenuItemType;
+
+                if (!string.IsNullOrEmpty(FormName))
+                {
+                    AxSecurityEntryPointReferenceForm formRef = new AxSecurityEntryPointReferenceForm();
+                    formRef.Name = FormName;
+                    entryPoint.Forms.Add(formRef);
+                }
+                privilege.EntryPoints.Add(entryPoint);
+            }
             privilege.Label = FormLabel;
 
             _axHelper.MetaModelService.CreateSecurityPrivilege(privilege, _axHelper.ModelSaveInfo);
