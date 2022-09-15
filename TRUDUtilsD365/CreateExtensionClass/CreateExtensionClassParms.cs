@@ -96,7 +96,7 @@ namespace TRUDUtilsD365.CreateExtensionClass
                 ElementType    = Kernel.ExtensionClassType.FormDataField;
                 ElementName    = form.FormDataSource.RootElement.Name;
                 ElementName = ElementName.Split('.')[0];
-                SubElementName = $"{form.FormDataSource.Name},_ {form.DataField}";
+                SubElementName = $"{form.FormDataSource.Name},{form.DataField}";
             }
             else if (selectedElement is FormDataSource)
             {

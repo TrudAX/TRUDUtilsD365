@@ -210,7 +210,7 @@ Another option (this will run a new instance of VS)
 
 * Open the solution and set the required breakpoints
 * Got to the Project->Property->Debug (for TRUDUtilsD365 project)
-* Set start action to "start external program" and specify the parameter "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe"
+* Set start action to "start external program" and specify the parameter "C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\Common7\IDE\devenv.exe"
 * Run the project
 
 ## Installation
