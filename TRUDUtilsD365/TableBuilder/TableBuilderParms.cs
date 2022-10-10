@@ -6,6 +6,7 @@ using Microsoft.Dynamics.AX.Metadata.MetaModel;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Core;
 using TRUDUtilsD365.AddTableFindMethod;
 using AxTableField = Microsoft.Dynamics.AX.Metadata.MetaModel.AxTableField;
+using System.Text;
 
 namespace TRUDUtilsD365.TableBuilder
 {
@@ -324,6 +325,12 @@ namespace TRUDUtilsD365.TableBuilder
                     axTableFieldGroup.AddField(axTableFieldGroupField);
                 }
                 newTable.AddFieldGroup(axTableFieldGroup);
+
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.AppendLine($"public class {newTable.Name} extends common");
+                stringBuilder.AppendLine("{");
+                stringBuilder.AppendLine("}");
+                newTable.SourceCode.Declaration = stringBuilder.ToString();
 
                 AddTableFindMethodParms findMethodParms = new AddTableFindMethodParms();
                 findMethodParms.IsCreateFind = true;
