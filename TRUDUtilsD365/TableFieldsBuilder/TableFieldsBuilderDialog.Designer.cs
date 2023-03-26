@@ -148,7 +148,7 @@
             this.PreviewTextBox.Multiline = true;
             this.PreviewTextBox.Name = "PreviewTextBox";
             this.PreviewTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.PreviewTextBox.Size = new System.Drawing.Size(383, 281);
+            this.PreviewTextBox.Size = new System.Drawing.Size(384, 281);
             this.PreviewTextBox.TabIndex = 4;
             this.PreviewTextBox.WordWrap = false;
             // 
@@ -194,8 +194,8 @@
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";

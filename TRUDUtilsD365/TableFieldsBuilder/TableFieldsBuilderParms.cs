@@ -290,11 +290,31 @@ namespace TRUDUtilsD365.TableFieldsBuilder
         {
             if (! string.IsNullOrEmpty(field.ExtendedDataType))
             {
-                var edt = _axHelper.MetadataProvider.Edts.Read(field.ExtendedDataType);
-                if (edt == null)
+                Boolean checkMore;
+                AxEdt edt;
+                string  curEDTName = field.ExtendedDataType;
+                int iPos = 0;
+                do
                 {
-                    return null;
-                }
+                    iPos++;
+                    checkMore = false;
+                    edt = _axHelper.MetadataProvider.Edts.Read(curEDTName);
+                    if (edt == null)
+                    {
+                        return null;
+                    }
+                    if (!string.IsNullOrEmpty(edt.Extends))
+                    {
+                        //no valid relations for the current edt
+                        if (! (!string.IsNullOrEmpty(edt.ReferenceTable) && edt.TableReferences.Count > 0) &&
+                            !  (edt.Relations != null && edt.Relations.Count > 0))
+                        {
+                            curEDTName = edt.Extends;
+                            checkMore = true;
+                        }
+                    }
+
+                }while (checkMore && iPos < 10);
 
                 AxTableRelationForeignKey axTableRelation = null;
 
@@ -310,7 +330,7 @@ namespace TRUDUtilsD365.TableFieldsBuilder
                     string newRelationName = edt.ReferenceTable;
                     if (existingRelations.Contains(newRelationName))
                     {
-                        newRelationName = edt.ReferenceTable + "_" + field.Name;
+                        newRelationName = newRelationName + "_" + field.Name;
                     }
 
                     axTableRelation = new AxTableRelationForeignKey();
@@ -356,7 +376,7 @@ namespace TRUDUtilsD365.TableFieldsBuilder
                         string newRelationName = firstEdtRelation.Table;
                         if (existingRelations.Contains(newRelationName))
                         {
-                            newRelationName = edt.ReferenceTable + "_" + field.Name;
+                            newRelationName = newRelationName + "_" + field.Name;
                         }
 
                         axTableRelation              = new AxTableRelationForeignKey();
@@ -559,6 +579,45 @@ namespace TRUDUtilsD365.TableFieldsBuilder
                 }
 
                 newFieldsList.Add(newFieldEngine.FieldName);
+
+                //do default types
+                if (string.IsNullOrEmpty(newFieldEngine.EdtText))
+                {
+                    switch (newFieldEngine.FieldType)
+                    {
+                        case FieldType.String:
+                            break;
+                        case FieldType.Integer:
+                            newFieldEngine.EdtText = "Integer";
+                            break;
+                        case FieldType.Real:
+                            newFieldEngine.EdtText = "Amount";
+                            break;
+                        case FieldType.DateTime:
+                            newFieldEngine.EdtText = "TransDateTime";
+                            break;
+                        case FieldType.Guid:
+                            break;
+                        case FieldType.Int64:
+                            newFieldEngine.EdtText = "RefRecId";
+                            break;
+                        case FieldType.Enum:
+                            newFieldEngine.EdtText = "NoYesId";
+                            break;
+                        case FieldType.Time:
+                            newFieldEngine.EdtText = "TimeHour24";
+                            break;
+                        case FieldType.Container:
+                            newFieldEngine.EdtText = "InfologData";
+                            break;
+                        case FieldType.Memo:
+                            newFieldEngine.EdtText = "FreeTxt";
+                            break;
+                        case FieldType.Date:
+                            newFieldEngine.EdtText = "TransDate";
+                            break;
+                    }
+                }
             }
         }
 
