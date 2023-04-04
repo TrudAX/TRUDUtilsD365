@@ -109,40 +109,48 @@ namespace TRUDUtilsD365.RunBaseBuilder
             {
                 RunBaseBuilderVar runBaseBuilderVars = new RunBaseBuilderVar();
 
-                string item = subList[0];                
-                if (item[item.Length - 1] == MandatoryPropertySym)//check mandatory
+                string item = subList[0];   
+                if (item.Contains(';')) //these vars are copied from class declaration
                 {
-                    runBaseBuilderVars.IsMandatory = true;
-                    runBaseBuilderVars.Type        = item.Remove(item.Length - 1).Trim();
+                    item = item.Replace(";", "");
+                    runBaseBuilderVars.Type = item.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[0].Trim();
+                    runBaseBuilderVars.Name = item.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1].Trim();
                 }
                 else
-                {
-                    runBaseBuilderVars.IsMandatory = false;
-                    runBaseBuilderVars.Type        = item;
-                }
+                { 
+                    if (item[item.Length - 1] == MandatoryPropertySym)//check mandatory
+                    {
+                        runBaseBuilderVars.IsMandatory = true;
+                        runBaseBuilderVars.Type        = item.Remove(item.Length - 1).Trim();
+                    }
+                    else
+                    {
+                        runBaseBuilderVars.IsMandatory = false;
+                        runBaseBuilderVars.Type        = item;
+                    }
 
-                if (String.IsNullOrEmpty(runBaseBuilderVars.Type))
-                {
-                    throw new Exception("Type should be specified");
-                }
+                    if (String.IsNullOrEmpty(runBaseBuilderVars.Type))
+                    {
+                        throw new Exception("Type should be specified");
+                    }
 
-                if (subList.Count > 1 && ! String.IsNullOrWhiteSpace(subList[1])) //check var name
-                {
-                    runBaseBuilderVars.Name = subList[1];
+                    if (subList.Count > 1 && ! String.IsNullOrWhiteSpace(subList[1])) //check var name
+                    {
+                        runBaseBuilderVars.Name = subList[1];
+                    }
+                    else
+                    {
+                        runBaseBuilderVars.Name = AxHelper.GetVarNameFromType(runBaseBuilderVars.Type);
+                    }
+                    if (subList.Count > 2 && !String.IsNullOrWhiteSpace(subList[2])) 
+                    {
+                        runBaseBuilderVars.Label = subList[2];
+                    }
+                    if (subList.Count > 3 && !String.IsNullOrWhiteSpace(subList[3]))
+                    {
+                        runBaseBuilderVars.LabelHelp = subList[3];
+                    }
                 }
-                else
-                {
-                    runBaseBuilderVars.Name = AxHelper.GetVarNameFromType(runBaseBuilderVars.Type);
-                }
-                if (subList.Count > 2 && !String.IsNullOrWhiteSpace(subList[2])) 
-                {
-                    runBaseBuilderVars.Label = subList[2];
-                }
-                if (subList.Count > 3 && !String.IsNullOrWhiteSpace(subList[3]))
-                {
-                    runBaseBuilderVars.LabelHelp = subList[3];
-                }
-
                 runBaseBuilderVars.DlgName = $"dlg{AxHelper.UppercaseWords(runBaseBuilderVars.Name)}";
                 FieldsList.Add(runBaseBuilderVars);
             }
