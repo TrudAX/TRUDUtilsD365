@@ -1,16 +1,16 @@
-﻿using Microsoft.Dynamics.AX.Metadata.MetaModel;
-using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Forms;
-using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Tables;
-using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Views;
+﻿using System;
+using Microsoft.Dynamics.AX.Metadata.Core.MetaModel;
+using Microsoft.Dynamics.AX.Metadata.MetaModel;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.BaseTypes;
+using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Forms;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Menus;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Security;
-using TRUDUtilsD365.Kernel;
+using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Tables;
+using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Views;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Core;
+using TRUDUtilsD365.Kernel;
 using TRUDUtilsD365.KernelSettings;
-using Microsoft.Dynamics.AX.Metadata.Core.MetaModel;
-using System;
 
 namespace TRUDUtilsD365.CreateExtension
 {
@@ -18,8 +18,6 @@ namespace TRUDUtilsD365.CreateExtension
     public class CreateExtensionParms
     {
         public string ResultClassName { get; set; } = "";
-
-        private KernelSettingsManager _kernelSettingsManager;
 
         INamedElement SelectedElement;
 
@@ -38,7 +36,7 @@ namespace TRUDUtilsD365.CreateExtension
                 {
                     newExtension = new AxEnumExtension() { Name = ResultClassName };
                     axHelper.MetadataProvider.EnumExtensions.Create((AxEnumExtension)newExtension, axHelper.ModelSaveInfo);
-                    res = true;                    
+                    res = true;
                 }
             }
             else if (SelectedElement is ITable)
@@ -153,7 +151,7 @@ namespace TRUDUtilsD365.CreateExtension
             }
             else
             {
-                CoreUtility.DisplayInfo($"Element {newExtension.Name} already exists");                
+                CoreUtility.DisplayInfo($"Element {newExtension.Name} already exists");
             }
 
             return res;

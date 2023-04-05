@@ -29,13 +29,13 @@ namespace AddTableFindMethodTest
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            //TestAddTableFindMethod();
+            TestAddTableFindMethod();
             //TestCreateExtensionClass();
             //TestEnumCreator();
             //TestTableFieldsBuilder();
             //TestRunBaseBuilder();
             //TestDataContractBuilder();
-            TestTableBuilder();
+            //TestTableBuilder();
             //TestSettings();
         }
 
@@ -52,7 +52,7 @@ namespace AddTableFindMethodTest
             dialog.SetParameters(parms);
             Application.Run(dialog);
 
-            
+
         }
         private static void TestDataContractBuilder()
         {
@@ -82,7 +82,7 @@ namespace AddTableFindMethodTest
             TableFieldsBuilderDialog dialog = new TableFieldsBuilderDialog();
 
             TableFieldsBuilderParms parms = new TableFieldsBuilderParms();
-            parms.TableName = "CustTable";            
+            parms.TableName = "CustTable";
 
             dialog.SetParameters(parms);
 

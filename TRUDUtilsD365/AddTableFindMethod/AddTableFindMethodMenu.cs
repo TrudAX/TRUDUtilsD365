@@ -2,7 +2,7 @@
 using System.ComponentModel.Composition;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Dynamics.Framework.Tools.Extensibility;
-using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Tables; 
+using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Tables;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Core;
 
 namespace TRUDUtilsD365.AddTableFindMethod
@@ -40,6 +40,5 @@ namespace TRUDUtilsD365.AddTableFindMethod
             }
         }
 
-        
     }
 }

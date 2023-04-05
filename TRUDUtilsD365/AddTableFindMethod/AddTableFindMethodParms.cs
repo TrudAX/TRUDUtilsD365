@@ -7,6 +7,7 @@ using Microsoft.Dynamics.AX.Metadata.MetaModel;
 using Microsoft.Dynamics.Framework.Tools.Extensibility;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Tables;
 using TRUDUtilsD365.Kernel;
+using TRUDUtilsD365.KernelSettings;
 
 namespace TRUDUtilsD365.AddTableFindMethod
 {
@@ -30,10 +31,13 @@ namespace TRUDUtilsD365.AddTableFindMethod
         public bool IsCreateFind { get; set; } = true;
         public bool IsCreateFindRecId { get; set; }
         public bool IsCreateExists { get; set; }
+        public bool IsTxtNotExists { get; set; }
+        public bool IsCheckExists { get; set; }
+
 
         public bool IsTestMode { get; set; }
 
-       
+
 
         public string GenerateResult()
         {
@@ -44,13 +48,13 @@ namespace TRUDUtilsD365.AddTableFindMethod
             longestNameLength++;
 
             CodeGenerateHelper generateHelper = new CodeGenerateHelper {IndentGlobalValue = 4};
-            
+
 
             generateHelper.AddColumnAlignInt("Type", longestTypeLength);
             generateHelper.AddColumnAlignInt("FieldName", longestNameLength);
 
             if (VarName == "")
-            {            
+            {
                 VarName = AxHelper.PrettyName(TableName);
             }
 
@@ -244,6 +248,77 @@ namespace TRUDUtilsD365.AddTableFindMethod
                 generateHelper.IndentDecrease();
 
                 generateHelper.AppendLine("}");
+            }
+
+            if (IsCheckExists)
+            {
+                generateHelper.IndentSetValue(0);
+                generateHelper.AppendLine("");
+
+                generateHelper.Append("public static boolean checkExists(");
+                generateHelper.IndentSetAsCurrentPos();
+
+                // build args and mandatory fields list
+                mandatoryFields = "";
+                bool isFirst = true;
+                foreach (AxTableFieldParm df in Fields.OrderBy(x => x.Position))
+                {
+                    if (df.IsMandatory || df.FieldName == "RecId")
+                    {
+                        if (mandatoryFields.Length > 0) mandatoryFields += " && ";
+                        mandatoryFields += "_" + AxHelper.PrettyName(df.FieldName);
+                    }
+
+                    if (!isFirst) generateHelper.AppendLine(",");
+                    generateHelper.Append(df.FieldType, "Type");
+                    generateHelper.Append($" _{AxHelper.PrettyName(df.FieldName)}");
+                    isFirst = false;
+                }
+
+                generateHelper.AppendLine(")");
+
+                //build method header
+                generateHelper.IndentSetValue(0);
+                generateHelper.AppendLine("{");
+                generateHelper.IndentIncrease();
+
+                //check for mandatory fields
+                if (mandatoryFields != "")
+                {
+                    generateHelper.AppendLine($"if ({mandatoryFields})");
+                    generateHelper.IndentIncrease();
+                    generateHelper.Append("&& ");
+                    generateHelper.Append($"(!{TableName}::exists({mandatoryFields})");
+                    generateHelper.AppendLine(")");
+                    generateHelper.IndentDecrease();
+                    generateHelper.AppendLine("{");
+                    generateHelper.IndentIncrease();
+                    generateHelper.AppendLine($"return checkFailed(strFmt({TableName}::txtNotExists(), {mandatoryFields.Replace("&&", ",")}));");
+                    generateHelper.IndentDecrease();
+                    generateHelper.AppendLine("}");
+                }
+
+                generateHelper.AppendLine("");
+                generateHelper.AppendLine("return true;");
+                generateHelper.IndentDecrease();
+
+                generateHelper.AppendLine("}");
+                generateHelper.AppendLine("");
+            }
+
+            if (IsTxtNotExists)
+            {
+                KernelSettingsManager _kernelSettingsManager = new KernelSettingsManager();
+                _kernelSettingsManager.LoadSettings();
+                generateHelper.IndentSetValue(0);
+
+                generateHelper.AppendLine("public static str txtNotExists()");
+                generateHelper.AppendLine("{");
+                generateHelper.IndentIncrease();
+                generateHelper.AppendLine($@"return ""@{_kernelSettingsManager.GetAxModelSettings().ModelPrefix}:{TableName}TxtNotExists"";");
+                generateHelper.IndentDecrease();
+                generateHelper.AppendLine("}");
+                generateHelper.AppendLine("");
             }
 
             var methodText = generateHelper.ResultString.ToString();
