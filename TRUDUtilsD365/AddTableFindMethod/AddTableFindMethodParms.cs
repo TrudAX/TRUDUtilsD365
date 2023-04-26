@@ -288,7 +288,7 @@ namespace TRUDUtilsD365.AddTableFindMethod
                     generateHelper.AppendLine($"if ({mandatoryFields})");
                     generateHelper.IndentIncrease();
                     generateHelper.Append("&& ");
-                    generateHelper.Append($"(!{TableName}::exists({mandatoryFields})");
+                    generateHelper.Append($"(!{TableName}::exists({mandatoryFields.Replace("&&", ",")})");
                     generateHelper.AppendLine(")");
                     generateHelper.IndentDecrease();
                     generateHelper.AppendLine("{");

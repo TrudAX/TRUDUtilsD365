@@ -53,11 +53,11 @@
       <HintPath>..\..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\uhv05n1m.te4\Microsoft.Dynamics.Framework.Tools.MetaModel.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dynamics.Framework.Tools.ProjectSupport">
-      <HintPath>K:\DeployablePackages\6c28ea11-40fd-4a15-9105-839ab86fc31b\DevToolsService\Code\Microsoft.Dynamics.Framework.Tools.ProjectSupport.dll</HintPath>
+      <HintPath>K:\DeployablePackages\54b85a8c-b0b0-40ce-96c1-45fe664df8aa\DevToolsService\Code\Microsoft.Dynamics.Framework.Tools.ProjectSupport.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Dynamics.Framework.Tools.ProjectSystem">
-      <HintPath>K:\DeployablePackages\6c28ea11-40fd-4a15-9105-839ab86fc31b\DevToolsService\Code\Microsoft.Dynamics.Framework.Tools.ProjectSystem.dll</HintPath>
+      <HintPath>K:\DeployablePackages\54b85a8c-b0b0-40ce-96c1-45fe664df8aa\DevToolsService\Code\Microsoft.Dynamics.Framework.Tools.ProjectSystem.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -233,7 +233,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(INETROOT)\Source\Frameworks\DevToolsVS12\common\Microsoft.Dynamics.Framework.Tools.Extensibility.Targets" Condition=" '$(INETROOT)' != '' " />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Dynamics\AX\Microsoft.Dynamics.Framework.Tools.Extensibility.targets" Condition=" '$(INETROOT)' == '' " />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
