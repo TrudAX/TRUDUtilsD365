@@ -39,25 +39,41 @@
     </Reference>
     <Reference Include="Microsoft.Dynamics.AX.Metadata">
       <HintPath>K:\AosService\WebRoot\Bin\Microsoft.Dynamics.AX.Metadata.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Dynamics.AX.Metadata.Core">
-      <HintPath>..\..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\uhv05n1m.te4\Microsoft.Dynamics.AX.Metadata.Core.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>K:\AosService\WebRoot\Bin\Microsoft.Dynamics.AX.Metadata.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.AX.Server.Core">
+      <HintPath>K:\AosService\WebRoot\Bin\Microsoft.Dynamics.AX.Server.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.AX.Xpp.AxShared">
+      <HintPath>K:\AosService\WebRoot\Bin\Microsoft.Dynamics.AX.Xpp.AxShared.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dynamics.AX.Xpp.Support">
       <HintPath>K:\AosService\WebRoot\Bin\Microsoft.Dynamics.AX.Xpp.Support.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Microsoft.Dynamics.Framework.Tools.AutomationObjects">
+      <HintPath>K:\DeployablePackages\07d4043f-4349-4659-8d06-09221c891658\DevToolsService\Code\Microsoft.Dynamics.Framework.Tools.AutomationObjects.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.Framework.Tools.Core">
+      <HintPath>K:\DeployablePackages\07d4043f-4349-4659-8d06-09221c891658\DevToolsService\Code\Microsoft.Dynamics.Framework.Tools.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.Framework.Tools.Extensibility">
+      <HintPath>K:\DeployablePackages\07d4043f-4349-4659-8d06-09221c891658\DevToolsService\Code\Microsoft.Dynamics.Framework.Tools.Extensibility.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Dynamics.Framework.Tools.MetaModel">
+      <HintPath>K:\DeployablePackages\07d4043f-4349-4659-8d06-09221c891658\DevToolsService\Code\Microsoft.Dynamics.Framework.Tools.MetaModel.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Dynamics.Framework.Tools.MetaModel.Core">
-      <HintPath>..\..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\uhv05n1m.te4\Microsoft.Dynamics.Framework.Tools.MetaModel.Core.dll</HintPath>
+      <HintPath>K:\DeployablePackages\07d4043f-4349-4659-8d06-09221c891658\DevToolsService\Code\Microsoft.Dynamics.Framework.Tools.MetaModel.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dynamics.Framework.Tools.ProjectSupport">
-      <HintPath>K:\DeployablePackages\54b85a8c-b0b0-40ce-96c1-45fe664df8aa\DevToolsService\Code\Microsoft.Dynamics.Framework.Tools.ProjectSupport.dll</HintPath>
+      <HintPath>K:\DeployablePackages\07d4043f-4349-4659-8d06-09221c891658\DevToolsService\Code\Microsoft.Dynamics.Framework.Tools.ProjectSupport.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Dynamics.Framework.Tools.ProjectSystem">
-      <HintPath>K:\DeployablePackages\54b85a8c-b0b0-40ce-96c1-45fe664df8aa\DevToolsService\Code\Microsoft.Dynamics.Framework.Tools.ProjectSystem.dll</HintPath>
+      <HintPath>K:\DeployablePackages\07d4043f-4349-4659-8d06-09221c891658\DevToolsService\Code\Microsoft.Dynamics.Framework.Tools.ProjectSystem.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />

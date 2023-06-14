@@ -58,7 +58,7 @@ namespace TRUDUtilsD365.AddTableFindMethod
                 generateHelper.IndentSetValue(0);
                 generateHelper.AppendLine($"/// <summary>");
                 generateHelper.AppendLine($"/// Find record in the table <t>{TableName}</t>");
-                generateHelper.AppendLine($"/// <summary>");
+                generateHelper.AppendLine($"/// </summary>");
                 mandatoryFields = "";
                 foreach (AxTableFieldParm df in Fields.OrderBy(x => x.Position))
                 {
@@ -149,7 +149,7 @@ namespace TRUDUtilsD365.AddTableFindMethod
                 generateHelper.AppendLine("");
                 generateHelper.AppendLine($"/// <summary>");
                 generateHelper.AppendLine($"/// Find record in the table <t>{TableName}</t>");
-                generateHelper.AppendLine($"/// <summary>");
+                generateHelper.AppendLine($"/// </summary>");
                 generateHelper.AppendLine($"/// <param name = \"_recId\">the record id</param>");
                 generateHelper.AppendLine($"/// <param name = \"_forUpdate\">if its updatable</param>");
                 generateHelper.AppendLine($"/// <returns>a table <t>{TableName}</t></returns>");
@@ -187,7 +187,7 @@ namespace TRUDUtilsD365.AddTableFindMethod
 
                 generateHelper.AppendLine($"/// <summary>");
                 generateHelper.AppendLine($"/// Check if exists a record in the table <t>{TableName}</t> with the given parameters");
-                generateHelper.AppendLine($"/// <summary>");
+                generateHelper.AppendLine($"/// </summary>");
                 mandatoryFields = "";
                 foreach (AxTableFieldParm df in Fields.OrderBy(x => x.Position))
                 {
@@ -223,7 +223,6 @@ namespace TRUDUtilsD365.AddTableFindMethod
                 generateHelper.IndentIncrease();
 
                 generateHelper.AppendLine("boolean res;");
-                generateHelper.AppendLine(";");
 
                 //check for mandatory fields
                 if (mandatoryFields != "")
@@ -273,7 +272,7 @@ namespace TRUDUtilsD365.AddTableFindMethod
                 generateHelper.AppendLine("");
                 generateHelper.AppendLine($"/// <summary>");
                 generateHelper.AppendLine($"/// Check if exists a record in the table <t>{TableName}</t> with the given parameters and give a warning if not found");
-                generateHelper.AppendLine($"/// <summary>");
+                generateHelper.AppendLine($"/// </summary>");
                 mandatoryFields = "";
                 foreach (AxTableFieldParm df in Fields.OrderBy(x => x.Position))
                 {
@@ -339,7 +338,7 @@ namespace TRUDUtilsD365.AddTableFindMethod
 
                 generateHelper.AppendLine($"/// <summary>");
                 generateHelper.AppendLine($"/// Not found label id");
-                generateHelper.AppendLine($"/// <summary>");
+                generateHelper.AppendLine($"/// </summary>");
                 generateHelper.AppendLine($"/// <returns>not found msg template</returns>");
 
                 generateHelper.AppendLine("public static str txtNotExists()");
