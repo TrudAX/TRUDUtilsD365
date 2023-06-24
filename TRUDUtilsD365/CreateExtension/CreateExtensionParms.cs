@@ -19,7 +19,7 @@ namespace TRUDUtilsD365.CreateExtension
     {
         public string ResultClassName { get; set; } = "";
 
-        private KernelSettingsManager _kernelSettingsManager;
+        //private KernelSettingsManager _kernelSettingsManager;
 
         INamedElement SelectedElement;
 

@@ -7,6 +7,7 @@ using Microsoft.Dynamics.AX.Metadata.MetaModel;
 using Microsoft.Dynamics.Framework.Tools.Extensibility;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.Tables;
 using TRUDUtilsD365.Kernel;
+using TRUDUtilsD365.KernelSettings;
 
 namespace TRUDUtilsD365.AddTableFindMethod
 {
@@ -30,6 +31,10 @@ namespace TRUDUtilsD365.AddTableFindMethod
         public bool IsCreateFind { get; set; } = true;
         public bool IsCreateFindRecId { get; set; }
         public bool IsCreateExists { get; set; }
+        public bool IsTxtNotExists { get; set; }
+        public bool IsCheckExists { get; set; }
+
+        public bool IsGenerateComments { get; set; } = false;
 
         public bool IsTestMode { get; set; }
 
@@ -59,6 +64,19 @@ namespace TRUDUtilsD365.AddTableFindMethod
             if (IsCreateFind)
             {
                 generateHelper.IndentSetValue(0);
+                if (IsGenerateComments)
+                {
+                    generateHelper.AppendLine($"/// <summary>");
+                    generateHelper.AppendLine($"/// Find record in the table <t>{TableName}</t>");
+                    generateHelper.AppendLine($"/// </summary>");
+                    mandatoryFields = "";
+                    foreach (AxTableFieldParm df in Fields.OrderBy(x => x.Position))
+                    {
+                        generateHelper.AppendLine($"/// <param name = \"_{AxHelper.PrettyName(df.FieldName)}\">a {AxHelper.PrettyName(df.FieldName)}</param>");
+                    }
+                    generateHelper.AppendLine($"/// <param name = \"_forUpdate\">if its updatable</param>");
+                    generateHelper.AppendLine($"/// <returns>a table <t>{TableName}</t></returns>");
+                }
                 generateHelper.Append($"public static {TableName} find(");
                 generateHelper.IndentSetAsCurrentPos();
 
@@ -139,15 +157,22 @@ namespace TRUDUtilsD365.AddTableFindMethod
             if (IsCreateFindRecId)
             {
                 generateHelper.IndentSetValue(0);
-
                 generateHelper.AppendLine("");
+                if (IsGenerateComments)
+                {
+                    generateHelper.AppendLine($"/// <summary>");
+                    generateHelper.AppendLine($"/// Find record in the table <t>{TableName}</t>");
+                    generateHelper.AppendLine($"/// </summary>");
+                    generateHelper.AppendLine($"/// <param name = \"_recId\">the record id</param>");
+                    generateHelper.AppendLine($"/// <param name = \"_forUpdate\">if its updatable</param>");
+                    generateHelper.AppendLine($"/// <returns>a table <t>{TableName}</t></returns>");
+                }
                 generateHelper.AppendLine($"public static {TableName} findRecId(RefRecId _recId,  boolean _forUpdate = false)");
 
                 //build method header
                 generateHelper.AppendLine("{");
                 generateHelper.IndentIncrease();
                 generateHelper.AppendLine(TableName + " " + VarName + ";");
-                generateHelper.AppendLine(";");
 
                 generateHelper.AppendLine("if (_recId)");
                 generateHelper.AppendLine("{");
@@ -173,7 +198,18 @@ namespace TRUDUtilsD365.AddTableFindMethod
             {
                 generateHelper.IndentSetValue(0);
                 generateHelper.AppendLine("");
-
+                if (IsGenerateComments)
+                {
+                    generateHelper.AppendLine($"/// <summary>");
+                    generateHelper.AppendLine($"/// Check if exists a record in the table <t>{TableName}</t> with the given parameters");
+                    generateHelper.AppendLine($"/// </summary>");
+                    mandatoryFields = "";
+                    foreach (AxTableFieldParm df in Fields.OrderBy(x => x.Position))
+                    {
+                        generateHelper.AppendLine($"/// <param name = \"_{AxHelper.PrettyName(df.FieldName)}\">a {AxHelper.PrettyName(df.FieldName)}</param>");
+                    }
+                    generateHelper.AppendLine($"/// <returns>a table <t>{TableName}</t></returns>");
+                }
                 generateHelper.Append("public static boolean exists(");
                 generateHelper.IndentSetAsCurrentPos();
 
@@ -244,6 +280,94 @@ namespace TRUDUtilsD365.AddTableFindMethod
                 generateHelper.IndentDecrease();
 
                 generateHelper.AppendLine("}");
+            }
+            if (IsCheckExists)
+            {
+                generateHelper.IndentSetValue(0);
+                generateHelper.AppendLine("");
+                if (IsGenerateComments)
+                {
+                    generateHelper.AppendLine($"/// <summary>");
+                    generateHelper.AppendLine($"/// Check if exists a record in the table <t>{TableName}</t> with the given parameters and give a warning if not found");
+                    generateHelper.AppendLine($"/// </summary>");
+                    mandatoryFields = "";
+                    foreach (AxTableFieldParm df in Fields.OrderBy(x => x.Position))
+                    {
+                        generateHelper.AppendLine($"/// <param name = \"_{AxHelper.PrettyName(df.FieldName)}\">a {AxHelper.PrettyName(df.FieldName)}</param>");
+                    }
+                    generateHelper.AppendLine($"/// <returns>if exists a record in the table <t>{TableName}</t> with the given parameters</returns>");
+                }
+                generateHelper.Append("public static boolean checkExists(");
+                generateHelper.IndentSetAsCurrentPos();
+
+                // build args and mandatory fields list
+                mandatoryFields = "";
+                bool isFirst = true;
+                foreach (AxTableFieldParm df in Fields.OrderBy(x => x.Position))
+                {
+                    if (df.IsMandatory || df.FieldName == "RecId")
+                    {
+                        if (mandatoryFields.Length > 0) mandatoryFields += " && ";
+                        mandatoryFields += "_" + AxHelper.PrettyName(df.FieldName);
+                    }
+
+                    if (!isFirst) generateHelper.AppendLine(",");
+                    generateHelper.Append(df.FieldType, "Type");
+                    generateHelper.Append($" _{AxHelper.PrettyName(df.FieldName)}");
+                    isFirst = false;
+                }
+
+                generateHelper.AppendLine(")");
+
+                //build method header
+                generateHelper.IndentSetValue(0);
+                generateHelper.AppendLine("{");
+                generateHelper.IndentIncrease();
+
+                //check for mandatory fields
+                if (mandatoryFields != "")
+                {
+                    generateHelper.AppendLine($"if (({mandatoryFields})");
+                    generateHelper.IndentIncrease();
+                    generateHelper.Append("&& ");
+                    generateHelper.Append($"(!{TableName}::exists({mandatoryFields.Replace("&&", ",")}))");
+                    generateHelper.AppendLine(")");
+                    generateHelper.IndentDecrease();
+                    generateHelper.AppendLine("{");
+                    generateHelper.IndentIncrease();
+                    generateHelper.AppendLine($"return checkFailed(strFmt({TableName}::txtNotExists(), {mandatoryFields.Replace("&&", ",")}));");
+                    generateHelper.IndentDecrease();
+                    generateHelper.AppendLine("}");
+                }
+
+                generateHelper.AppendLine("");
+                generateHelper.AppendLine("return true;");
+                generateHelper.IndentDecrease();
+
+                generateHelper.AppendLine("}");
+                generateHelper.AppendLine("");
+            }
+
+            if (IsTxtNotExists)
+            {
+                KernelSettingsManager _kernelSettingsManager = new KernelSettingsManager();
+                _kernelSettingsManager.LoadSettings();
+                generateHelper.IndentSetValue(0);
+                generateHelper.AppendLine("");
+                if (IsGenerateComments)
+                {
+                    generateHelper.AppendLine($"/// <summary>");
+                    generateHelper.AppendLine($"/// Not found label id");
+                    generateHelper.AppendLine($"/// </summary>");
+                    generateHelper.AppendLine($"/// <returns>not found msg template</returns>");
+                }
+                generateHelper.AppendLine("public static str txtNotExists()");
+                generateHelper.AppendLine("{");
+                generateHelper.IndentIncrease();
+                generateHelper.AppendLine($@"return ""@{_kernelSettingsManager.GetAxModelSettings().ModelPrefix}:{TableName}TxtNotExists"";");
+                generateHelper.IndentDecrease();
+                generateHelper.AppendLine("}");
+                generateHelper.AppendLine("");
             }
 
             var methodText = generateHelper.ResultString.ToString();

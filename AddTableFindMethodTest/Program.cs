@@ -29,13 +29,13 @@ namespace AddTableFindMethodTest
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            //TestAddTableFindMethod();
+            TestAddTableFindMethod();
             //TestCreateExtensionClass();
             //TestEnumCreator();
             //TestTableFieldsBuilder();
             //TestRunBaseBuilder();
             //TestDataContractBuilder();
-            TestTableBuilder();
+            //TestTableBuilder();
             //TestSettings();
         }
 

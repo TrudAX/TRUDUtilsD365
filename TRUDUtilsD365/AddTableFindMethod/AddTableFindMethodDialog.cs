@@ -22,7 +22,8 @@ namespace TRUDUtilsD365.AddTableFindMethod
             MethodTypeCheckedListBox.Items.Add("find", _parms.IsCreateFind);
             MethodTypeCheckedListBox.Items.Add("exists", _parms.IsCreateExists);
             MethodTypeCheckedListBox.Items.Add("findRecId", _parms.IsCreateFindRecId);
-
+            MethodTypeCheckedListBox.Items.Add("txtNotExists", _parms.IsTxtNotExists);
+            MethodTypeCheckedListBox.Items.Add("checkExists", _parms.IsCheckExists);
             UpdateFromForm();
             ResultTextBox.Text = _parms.GenerateResult();
 
@@ -44,6 +45,12 @@ namespace TRUDUtilsD365.AddTableFindMethod
                     case "exists":
                         _parms.IsCreateExists = MethodTypeCheckedListBox.GetItemChecked(i);
                         break;
+                    case "txtNotExists":
+                        _parms.IsTxtNotExists = MethodTypeCheckedListBox.GetItemChecked(i);
+                        break;
+                    case "checkExists":
+                        _parms.IsCheckExists = MethodTypeCheckedListBox.GetItemChecked(i);
+                        break;
                 }
             }
         }
@@ -53,18 +60,6 @@ namespace TRUDUtilsD365.AddTableFindMethod
             UpdateFromForm();
 
             ResultTextBox.Text = _parms.GenerateResult();
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void MethodNameControl_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void TableNameControl_TextChanged(object sender, EventArgs e)
-        {
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

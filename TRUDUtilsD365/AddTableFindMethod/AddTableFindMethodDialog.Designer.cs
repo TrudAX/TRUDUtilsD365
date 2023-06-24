@@ -30,7 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.TableNameControl = new System.Windows.Forms.TextBox();
-            this.addTableFindMethodParmsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.label1 = new System.Windows.Forms.Label();
             this.FieldsControl = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -42,6 +41,8 @@
             this.MethodTypeCheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.label5 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.IsGenerateCommentsCheckBox = new System.Windows.Forms.CheckBox();
+            this.addTableFindMethodParmsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.addTableFindMethodParmsBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -53,11 +54,6 @@
             this.TableNameControl.Name = "TableNameControl";
             this.TableNameControl.Size = new System.Drawing.Size(178, 20);
             this.TableNameControl.TabIndex = 0;
-            this.TableNameControl.TextChanged += new System.EventHandler(this.TableNameControl_TextChanged);
-            // 
-            // addTableFindMethodParmsBindingSource
-            // 
-            this.addTableFindMethodParmsBindingSource.DataSource = typeof(TRUDUtilsD365.AddTableFindMethod.AddTableFindMethodParms);
             // 
             // label1
             // 
@@ -94,7 +90,6 @@
             this.MethodNameControl.Name = "MethodNameControl";
             this.MethodNameControl.Size = new System.Drawing.Size(175, 20);
             this.MethodNameControl.TabIndex = 4;
-            this.MethodNameControl.TextChanged += new System.EventHandler(this.MethodNameControl_TextChanged);
             // 
             // label3
             // 
@@ -104,7 +99,6 @@
             this.label3.Size = new System.Drawing.Size(52, 13);
             this.label3.TabIndex = 5;
             this.label3.Text = "Var name";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // ShowResultButton
             // 
@@ -150,7 +144,7 @@
             "findRecId"});
             this.MethodTypeCheckedListBox.Location = new System.Drawing.Point(21, 238);
             this.MethodTypeCheckedListBox.Name = "MethodTypeCheckedListBox";
-            this.MethodTypeCheckedListBox.Size = new System.Drawing.Size(178, 64);
+            this.MethodTypeCheckedListBox.Size = new System.Drawing.Size(178, 94);
             this.MethodTypeCheckedListBox.TabIndex = 10;
             // 
             // label5
@@ -173,11 +167,27 @@
             this.linkLabel1.Text = "Copy to clipboard";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
+            // IsGenerateCommentsCheckBox
+            // 
+            this.IsGenerateCommentsCheckBox.AutoSize = true;
+            this.IsGenerateCommentsCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.addTableFindMethodParmsBindingSource, "IsGenerateComments", true));
+            this.IsGenerateCommentsCheckBox.Location = new System.Drawing.Point(21, 348);
+            this.IsGenerateCommentsCheckBox.Name = "IsGenerateCommentsCheckBox";
+            this.IsGenerateCommentsCheckBox.Size = new System.Drawing.Size(121, 17);
+            this.IsGenerateCommentsCheckBox.TabIndex = 13;
+            this.IsGenerateCommentsCheckBox.Text = "Generate comments";
+            this.IsGenerateCommentsCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // addTableFindMethodParmsBindingSource
+            // 
+            this.addTableFindMethodParmsBindingSource.DataSource = typeof(TRUDUtilsD365.AddTableFindMethod.AddTableFindMethodParms);
+            // 
             // AddTableFindMethodDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(725, 430);
+            this.Controls.Add(this.IsGenerateCommentsCheckBox);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.MethodTypeCheckedListBox);
@@ -213,5 +223,6 @@
         private System.Windows.Forms.CheckedListBox MethodTypeCheckedListBox;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.CheckBox IsGenerateCommentsCheckBox;
     }
 }
