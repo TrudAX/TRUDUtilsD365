@@ -144,16 +144,16 @@ See detailed description at [RunBase template class builder](https://denistrunin
 
 ## SysOperation Framework builder
 
-Add-in generates code template for the SysOperation Framework
+The add-in generates the essential code for the SysOperation Framework:
 
-Supports the following properties:
+Supports the creation of the following objects:
 
-* Service class generation
-* Data contract class generation
-* Controller class generation
-* UIBuilder class generation
-* Menu item action generation
-* Security privilege generation
+* Service class
+* Data contract class
+* Controller class
+* UIBuilder Class
+* Menu item action
+* Security privilege
 
 ![](assets/SysOperationBuilder.png)
 
