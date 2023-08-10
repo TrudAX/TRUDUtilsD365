@@ -12,6 +12,7 @@ A set of Visual Studio Add-ins for Microsoft Dynamics 365 for Finance and Operat
 * [Table builder](#table-builder)
 * [Form builder](#form-builder)
 * [RunBase class builder](#runbase-class-builder)
+* [SysOperation Framework builder](#sysoperation-framework-builder)
 * [DataContract class builder](#datacontract-class-builder)
 * [Create find method](#create-find-method)
 * [Create menu item](#create-menu-item)
@@ -140,6 +141,21 @@ Supports the following options:
 See detailed description at [RunBase template class builder](https://denistrunin.com/runbasebuilder-util/)
 
 ![](assets/RunBaseBuilder.png)
+
+## SysOperation Framework builder
+
+The add-in generates the essential code for the SysOperation Framework:
+
+Supports the creation of the following objects:
+
+* Service class
+* Data contract class
+* Controller class
+* UIBuilder Class
+* Menu item action
+* Security privilege
+
+![](assets/SysOperationBuilder.png)
 
 ## DataContract class builder
 
