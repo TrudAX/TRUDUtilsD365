@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using EnvDTE;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.Dynamics.AX.Metadata.Core.MetaModel;
 using Microsoft.Dynamics.AX.Metadata.MetaModel;
 using Microsoft.Dynamics.AX.Metadata.Providers;
@@ -172,6 +173,7 @@ namespace TRUDUtilsD365.Kernel
 
         private static VSProjectNode GetActiveProjectNode()
         {
+            
             DTE dte = CoreUtility.ServiceProvider.GetService(typeof(DTE)) as DTE;
             if (dte == null)
                 throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture,
