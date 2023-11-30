@@ -217,6 +217,8 @@ Another option (this will run a new instance of VS)
 
 ### Using Power Shell
 
+The latest version is compatible with VS2022 only(I tested it with the latest .37VHD), if you need to install the extension for VS2019, download the previous version from here https://github.com/TrudAX/TRUDUtilsD365/releases/tag/2.5.7 
+
 ```powershell
 $repo = "TrudAX/TRUDUtilsD365"
 $releases = "https://api.github.com/repos/$repo/releases"
