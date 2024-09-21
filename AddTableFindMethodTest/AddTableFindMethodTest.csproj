@@ -34,10 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Dynamics.AX.Xpp.Support">
-      <HintPath>..\..\..\..\Program Files\Microsoft Visual Studio\2022\Professional\Common7\IDE\Extensions\j30535fu.rdl\Microsoft.Dynamics.AX.Xpp.Support.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

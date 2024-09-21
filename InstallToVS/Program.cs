@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using Microsoft.Win32;
 
 namespace InstallToVS
@@ -63,17 +64,52 @@ namespace InstallToVS
         }
         private static string FindExtensionFolder()
         {
-            String path;
+            String path="";
 
             path = Environment.GetEnvironmentVariable("DynamicsVSTools");
 
             if (string.IsNullOrEmpty(path))
             {
+                path = ExtractFolderPathFromRegistry();
+            }
+            if (string.IsNullOrEmpty(path))
+            {
                 throw new ApplicationException("Could not find D365FO tools in Windows registry.");
             }
+
             return Path.Combine(path, AddinFolder);
             //}
 
+        }
+        static string ExtractFolderPathFromRegistry()
+        {
+            string registryKeyPath = @"SOFTWARE\Classes\dynamics\shell\open\command";
+            try
+            {
+                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(registryKeyPath))
+                {
+                    if (key != null)
+                    {
+                        string value = key.GetValue(null) as string; // Get (Default) value
+                        if (!string.IsNullOrEmpty(value))
+                        {
+                            string pattern = @"C:\\Program Files\\Microsoft Visual Studio\\2022\\Professional\\Common7\\IDE\\Extensions\\[^\\]+";
+                            Match match = Regex.Match(value, pattern, RegexOptions.IgnoreCase);
+
+                            if (match.Success)
+                            {
+                                return match.Value;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error accessing registry: {ex.Message}");
+            }
+
+            return null;
         }
     }
 }
