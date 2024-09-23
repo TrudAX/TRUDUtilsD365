@@ -100,6 +100,13 @@ namespace InstallToVS
                             {
                                 return match.Value;
                             }
+                            pattern = @"C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\Common7\\IDE\\Extensions\\[^\\]+";
+                            match = Regex.Match(value, pattern, RegexOptions.IgnoreCase);
+
+                            if (match.Success)
+                            {
+                                return match.Value;
+                            }
                         }
                     }
                 }
