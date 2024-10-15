@@ -93,15 +93,8 @@ namespace InstallToVS
                         string value = key.GetValue(null) as string; // Get (Default) value
                         if (!string.IsNullOrEmpty(value))
                         {
-                            string pattern = @"C:\\Program Files\\Microsoft Visual Studio\\2022\\Professional\\Common7\\IDE\\Extensions\\[^\\]+";
+                            string pattern = @"C:\\Program Files\\Microsoft Visual Studio\\2022\\(Community|Enterprise|Professional)\\Common7\\IDE\\Extensions\\[^\\]+";
                             Match match = Regex.Match(value, pattern, RegexOptions.IgnoreCase);
-
-                            if (match.Success)
-                            {
-                                return match.Value;
-                            }
-                            pattern = @"C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\Common7\\IDE\\Extensions\\[^\\]+";
-                            match = Regex.Match(value, pattern, RegexOptions.IgnoreCase);
 
                             if (match.Success)
                             {
