@@ -10,11 +10,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TRUDUtilsD365</RootNamespace>
     <AssemblyName>TRUDUtilsD365</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SkipAssemblyComVisible>true</SkipAssemblyComVisible>
     <TargetFrameworkProfile />
-	<DynamicsVSToolsHintPath>$(DynamicsVSTools)</DynamicsVSToolsHintPath>
+    <DynamicsVSToolsHintPath>$(DynamicsVSTools)</DynamicsVSToolsHintPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,22 +38,22 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Program Files\Microsoft Visual Studio\2022\Professional\Common7\IDE\PublicAssemblies\envdte.dll</HintPath>
       <Private>False</Private>
-    </Reference> 
+    </Reference>
     <Reference Include="Microsoft.Dynamics.AX.Metadata">
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
       <HintPath Condition="'$(DynamicsVSToolsHintPath)' != ''">$(DynamicsVSToolsHintPath)\Microsoft.Dynamics.AX.Metadata.dll</HintPath>
-    </Reference>	
+    </Reference>
     <Reference Include="Microsoft.Dynamics.Framework.Tools.MetaModel.Core.17.0">
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
       <HintPath Condition="'$(DynamicsVSToolsHintPath)' != ''">$(DynamicsVSToolsHintPath)\Microsoft.Dynamics.Framework.Tools.MetaModel.Core.17.0.dll</HintPath>
-    </Reference>	
+    </Reference>
     <Reference Include="Microsoft.Dynamics.AX.Xpp.Support">
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
       <HintPath Condition="'$(DynamicsVSToolsHintPath)' != ''">$(DynamicsVSToolsHintPath)\Microsoft.Dynamics.AX.Xpp.Support.dll</HintPath>
-    </Reference>	
+    </Reference>
     <Reference Include="Microsoft.Dynamics.Framework.Tools.ProjectSupport.17.0">
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>

@@ -438,11 +438,7 @@ namespace TRUDUtilsD365.TableFieldsBuilder
                     }
                     else
                     {
-                        axTableFieldGroup = new AxTableFieldGroup {Name = GroupName};
-                        if (!string.IsNullOrEmpty(GroupLabel))
-                        {
-                            axTableFieldGroup.Label = GroupLabel;
-                        }
+                        axTableFieldGroup = this.CreateFieldGroup(GroupName, GroupLabel);
                         axTableFieldGroup.AddField(axTableFieldGroupField);
                         axTable.AddFieldGroup(axTableFieldGroup);
                     }
@@ -476,11 +472,8 @@ namespace TRUDUtilsD365.TableFieldsBuilder
                     }
                     else
                     {
-                        axTableFieldGroup = new AxTableFieldGroup { Name = GroupName };
-                        if (!string.IsNullOrEmpty(GroupLabel))
-                        {
-                            axTableFieldGroup.Label = GroupLabel;
-                        }
+                        axTableFieldGroup = this.CreateFieldGroup(GroupName, GroupLabel);
+
                         axTableFieldGroup.AddField(axTableFieldGroupField);
                         axTableExtension.FieldGroups.Add(axTableFieldGroup);
                     }
@@ -499,7 +492,30 @@ namespace TRUDUtilsD365.TableFieldsBuilder
             }
         }
 
+        private AxTableFieldGroup CreateFieldGroup(string groupName, string groupLabel)
+        {
+            // Split by space, remove empty entries (works in .NET 4.8)
+            var words = groupName.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
+            // Capitalize the first letter of each word and concatenate
+            string groupNameXpp = "";
+            foreach (var word in words)
+            {
+                if (word.Length > 0)
+                    groupNameXpp += char.ToUpper(word[0], CultureInfo.InvariantCulture) + word.Substring(1);
+            }
+
+            AxTableFieldGroup axTableFieldGroup = new AxTableFieldGroup { Name = groupNameXpp };
+            if (!string.IsNullOrEmpty(groupLabel))
+            {
+                axTableFieldGroup.Label = groupLabel;
+            }
+            else
+            {
+                axTableFieldGroup.Label = groupName;
+            }
+            return axTableFieldGroup;
+        }
     }
 
     public class TableFieldsBuilderParms
