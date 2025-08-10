@@ -431,9 +431,10 @@ namespace TRUDUtilsD365.TableFieldsBuilder
                 }
                 if (GroupName != String.Empty)
                 {
-                    if (axTable.FieldGroups.Contains(GroupName))
+                    string groupNameXpp = this.getGroupNameXpp(GroupName);
+                    if (axTable.FieldGroups.Contains(groupNameXpp))
                     {
-                        axTableFieldGroup = axTable.FieldGroups.getObject(GroupName);
+                        axTableFieldGroup = axTable.FieldGroups.getObject(groupNameXpp);
                         axTableFieldGroup.AddField(axTableFieldGroupField);
                     }
                     else
@@ -465,9 +466,10 @@ namespace TRUDUtilsD365.TableFieldsBuilder
 
                 if (GroupName != String.Empty)
                 {
-                    if (axTableExtension.FieldGroups.Contains(GroupName))
+                    string groupNameXpp = this.getGroupNameXpp(GroupName);
+                    if (axTableExtension.FieldGroups.Contains(groupNameXpp))
                     {
-                        axTableFieldGroup = axTableExtension.FieldGroups.getObject(GroupName);
+                        axTableFieldGroup = axTableExtension.FieldGroups.getObject(groupNameXpp);
                         axTableFieldGroup.AddField(axTableFieldGroupField);
                     }
                     else
@@ -491,12 +493,10 @@ namespace TRUDUtilsD365.TableFieldsBuilder
                 _axHelper.MetadataProvider.TableExtensions.Update(axTableExtension, _axHelper.ModelSaveInfo);
             }
         }
-
-        private AxTableFieldGroup CreateFieldGroup(string groupName, string groupLabel)
+        private string getGroupNameXpp(string groupName)
         {
             // Split by space, remove empty entries (works in .NET 4.8)
             var words = groupName.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
             // Capitalize the first letter of each word and concatenate
             string groupNameXpp = "";
             foreach (var word in words)
@@ -504,7 +504,12 @@ namespace TRUDUtilsD365.TableFieldsBuilder
                 if (word.Length > 0)
                     groupNameXpp += char.ToUpper(word[0], CultureInfo.InvariantCulture) + word.Substring(1);
             }
+            return groupNameXpp;
+        }
 
+        private AxTableFieldGroup CreateFieldGroup(string groupName, string groupLabel)
+        {
+            var groupNameXpp = getGroupNameXpp(groupName);
             AxTableFieldGroup axTableFieldGroup = new AxTableFieldGroup { Name = groupNameXpp };
             if (!string.IsNullOrEmpty(groupLabel))
             {
