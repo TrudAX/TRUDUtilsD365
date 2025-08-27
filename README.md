@@ -217,7 +217,42 @@ Another option (this will run a new instance of VS)
 
 ### Using Power Shell
 
-The latest version is compatible with VS2022 only(I tested it with the latest .37VHD), if you need to install the extension for VS2019, download the previous version from here https://github.com/TrudAX/TRUDUtilsD365/releases/tag/2.5.7 
+Latest dev version:
+
+```powershell
+# Target folder
+$path = "C:\AAA"
+
+# Ensure TLS 1.2 for GitHub downloads (older PowerShell)
+try {
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+} catch { }
+
+# Create the folder if it doesn't exist
+New-Item -Path $path -ItemType Directory -Force | Out-Null
+
+# Files to download (use RAW GitHub URLs, not the /blob/ pages)
+$files = @{
+    "InstallToVS.exe"   = "https://raw.githubusercontent.com/TrudAX/TRUDUtilsD365/master/InstallToVS/bin/Debug/InstallToVS.exe"
+    "TRUDUtilsD365.dll" = "https://raw.githubusercontent.com/TrudAX/TRUDUtilsD365/master/TRUDUtilsD365/bin/Debug/TRUDUtilsD365.dll"
+    "TRUDUtilsD365.pdb" = "https://raw.githubusercontent.com/TrudAX/TRUDUtilsD365/master/TRUDUtilsD365/bin/Debug/TRUDUtilsD365.pdb"
+}
+
+# Download and unblock each file
+foreach ($kvp in $files.GetEnumerator()) {
+    $dest = Join-Path $path $kvp.Key
+    Write-Host "Downloading $($kvp.Key) ..."
+    Invoke-WebRequest -Uri $kvp.Value -OutFile $dest -UseBasicParsing
+    Unblock-File -Path $dest
+}
+
+# Run InstallToVS.exe as Administrator
+$installer = Join-Path $path "InstallToVS.exe"
+Write-Host "Starting $installer elevated..."
+Start-Process -FilePath $installer -WorkingDirectory $path -Verb RunAs
+```
+
+Latest release version:
 
 ```powershell
 $repo = "TrudAX/TRUDUtilsD365"
