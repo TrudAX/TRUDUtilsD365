@@ -262,6 +262,7 @@ namespace TRUDUtilsD365.TableBuilder
                 newTable.CreatedDateTime  = NoYes.Yes;
                 newTable.ModifiedBy       = NoYes.Yes;
                 newTable.ModifiedDateTime = NoYes.Yes;
+                newTable.AllowRowVersionChangeTracking = NoYes.Yes;
 
                 AxTableField primaryField = new AxTableFieldString();
                 primaryField.Name              = KeyFieldName;
