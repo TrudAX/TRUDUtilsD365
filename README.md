@@ -190,7 +190,7 @@ Add-in creates table relation for the selected table/table-extension field based
 
 ## Troubleshooting
 
-Current solution was tested on v10 U24.
+Current solution was tested on v10 U43.
 
 All tools require that you have an active project with your current model. The first project in the solution is used.
 
@@ -208,7 +208,7 @@ One of the ways to do this:
 
 Another option (this will run a new instance of VS)
 
-* Open the solution and set the required breakpoints
+* Open the solution and set the required breakpoints (you may need to install .NET 4.8 Developer pack before this - https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48) 
 * Got to the Project->Property->Debug (for TRUDUtilsD365 project)
 * Set start action to "start external program" and specify the parameter "C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\Common7\IDE\devenv.exe"
 * Run the project
