@@ -63,11 +63,11 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.ValuesControl.BackColor = System.Drawing.SystemColors.Window;
             this.ValuesControl.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.snippetsParmsBindingSource, "Values", true));
-            this.ValuesControl.Location = new System.Drawing.Point(153, 137);
+            this.ValuesControl.Location = new System.Drawing.Point(170, 137);
             this.ValuesControl.Multiline = true;
             this.ValuesControl.Name = "ValuesControl";
             this.ValuesControl.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
-            this.ValuesControl.Size = new System.Drawing.Size(269, 265);
+            this.ValuesControl.Size = new System.Drawing.Size(293, 308);
             this.ValuesControl.TabIndex = 2;
             this.ValuesControl.WordWrap = false;
             // 
@@ -86,7 +86,7 @@
             // 
             // ShowResultButton
             // 
-            this.ShowResultButton.Location = new System.Drawing.Point(483, 8);
+            this.ShowResultButton.Location = new System.Drawing.Point(517, 8);
             this.ShowResultButton.Name = "ShowResultButton";
             this.ShowResultButton.Size = new System.Drawing.Size(75, 23);
             this.ShowResultButton.TabIndex = 6;
@@ -97,7 +97,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(432, 18);
+            this.label4.Location = new System.Drawing.Point(466, 18);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(45, 13);
             this.label4.TabIndex = 8;
@@ -110,19 +110,19 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ResultTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.snippetsParmsBindingSource, "ResultText", true));
             this.ResultTextBox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ResultTextBox.Location = new System.Drawing.Point(428, 39);
+            this.ResultTextBox.Location = new System.Drawing.Point(469, 39);
             this.ResultTextBox.MaxLength = 327670;
             this.ResultTextBox.Multiline = true;
             this.ResultTextBox.Name = "ResultTextBox";
             this.ResultTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.ResultTextBox.Size = new System.Drawing.Size(428, 363);
+            this.ResultTextBox.Size = new System.Drawing.Size(501, 406);
             this.ResultTextBox.TabIndex = 9;
             this.ResultTextBox.WordWrap = false;
             // 
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(564, 13);
+            this.linkLabel1.Location = new System.Drawing.Point(598, 13);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(89, 13);
             this.linkLabel1.TabIndex = 12;
@@ -140,14 +140,14 @@
             this.ParametersBox.Multiline = true;
             this.ParametersBox.Name = "ParametersBox";
             this.ParametersBox.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
-            this.ParametersBox.Size = new System.Drawing.Size(157, 265);
+            this.ParametersBox.Size = new System.Drawing.Size(174, 308);
             this.ParametersBox.TabIndex = 13;
             this.ParametersBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.ParametersBox.WordWrap = false;
             // 
             // CreateButton
             // 
-            this.CreateButton.Location = new System.Drawing.Point(659, 5);
+            this.CreateButton.Location = new System.Drawing.Point(693, 5);
             this.CreateButton.Name = "CreateButton";
             this.CreateButton.Size = new System.Drawing.Size(89, 28);
             this.CreateButton.TabIndex = 15;
@@ -171,7 +171,7 @@
             this.DescriptionBox.Location = new System.Drawing.Point(-2, 39);
             this.DescriptionBox.Multiline = true;
             this.DescriptionBox.Name = "DescriptionBox";
-            this.DescriptionBox.Size = new System.Drawing.Size(424, 73);
+            this.DescriptionBox.Size = new System.Drawing.Size(465, 73);
             this.DescriptionBox.TabIndex = 17;
             // 
             // label2
@@ -186,7 +186,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(227, 23);
+            this.label5.Location = new System.Drawing.Point(227, 18);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(60, 13);
             this.label5.TabIndex = 19;
@@ -218,7 +218,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(868, 414);
+            this.ClientSize = new System.Drawing.Size(982, 457);
             this.Controls.Add(this.SeparatorTextBox);
             this.Controls.Add(this.SepLabel);
             this.Controls.Add(this.label5);
