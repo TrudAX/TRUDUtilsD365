@@ -253,6 +253,7 @@ namespace TRUDUtilsD365.TableBuilder
                 newTable.Name             = TableName;
                 newTable.Label            = TableLabel;
                 newTable.TitleField1      = KeyFieldName;
+                newTable.TitleField2      = "Description";
                 newTable.CacheLookup      = RecordCacheLevel.Found;
                 newTable.ClusteredIndex   = $"{KeyFieldName}Idx";
                 newTable.PrimaryIndex     = newTable.ClusteredIndex;

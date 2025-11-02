@@ -48,7 +48,7 @@
             this.label12 = new System.Windows.Forms.Label();
             this.IsDisplayMethodCheckBox = new System.Windows.Forms.CheckBox();
             this.MandatoryCheckBox = new System.Windows.Forms.CheckBox();
-            this.FieldGroupBox = new System.Windows.Forms.TextBox();
+            this.FieldGroupBox = new System.Windows.Forms.ComboBox();
             this.StrLenBox = new System.Windows.Forms.TextBox();
             this.HelpTextBox = new System.Windows.Forms.TextBox();
             this.LabelBox = new System.Windows.Forms.TextBox();
@@ -306,9 +306,10 @@
             // 
             // FieldGroupBox
             // 
+            this.FieldGroupBox.FormattingEnabled = true;
             this.FieldGroupBox.Location = new System.Drawing.Point(94, 197);
             this.FieldGroupBox.Name = "FieldGroupBox";
-            this.FieldGroupBox.Size = new System.Drawing.Size(264, 20);
+            this.FieldGroupBox.Size = new System.Drawing.Size(264, 21);
             this.FieldGroupBox.TabIndex = 17;
             // 
             // StrLenBox
@@ -512,7 +513,7 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.CheckBox IsDisplayMethodCheckBox;
         private System.Windows.Forms.CheckBox MandatoryCheckBox;
-        private System.Windows.Forms.TextBox FieldGroupBox;
+        private System.Windows.Forms.ComboBox FieldGroupBox;
         private System.Windows.Forms.TextBox StrLenBox;
         private System.Windows.Forms.TextBox HelpTextBox;
         private System.Windows.Forms.TextBox LabelBox;
