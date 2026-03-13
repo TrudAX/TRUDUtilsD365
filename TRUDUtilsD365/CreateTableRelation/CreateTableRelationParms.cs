@@ -49,7 +49,11 @@ namespace TRUDUtilsD365.CreateTableRelation
                 _axHelper = new AxHelper();
             }
 
-            BaseField baseField = e.SelectedElements.OfType<BaseField>().First();
+            BaseField baseField = e.SelectedElements.OfType<BaseField>().FirstOrDefault();
+            if (baseField == null)
+            {
+                throw new System.Exception("No field element is selected");
+            }
             SelectedField = baseField.Name;
 
             TableName = baseField.Table != null ? baseField.Table.GetMetadataType().Name : baseField.TableExtension?.GetMetadataType().Name;
