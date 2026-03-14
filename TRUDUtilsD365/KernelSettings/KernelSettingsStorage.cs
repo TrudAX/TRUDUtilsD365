@@ -71,15 +71,15 @@ namespace TRUDUtilsD365.KernelSettings
 
             if (File.Exists(filePath))
             {
-                FileStream fs = new FileStream(filePath, FileMode.Open);
-                XmlDictionaryReader reader =
-                    XmlDictionaryReader.CreateTextReader(fs, new XmlDictionaryReaderQuotas());
-                DataContractSerializer ser = new DataContractSerializer(typeof(AxModelSettings));
+                using (FileStream fs = new FileStream(filePath, FileMode.Open))
+                using (XmlDictionaryReader reader =
+                    XmlDictionaryReader.CreateTextReader(fs, new XmlDictionaryReaderQuotas()))
+                {
+                    DataContractSerializer ser = new DataContractSerializer(typeof(AxModelSettings));
 
-                // Deserialize the data and read it from the instance.
-                axModelSettings = (AxModelSettings)ser.ReadObject(reader, true);
-                reader.Close();
-                fs.Close();
+                    // Deserialize the data and read it from the instance.
+                    axModelSettings = (AxModelSettings)ser.ReadObject(reader, true);
+                }
                 /*
                 doc.Load(filePath);
 

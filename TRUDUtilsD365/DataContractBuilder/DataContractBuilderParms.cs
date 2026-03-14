@@ -110,7 +110,7 @@ namespace TRUDUtilsD365.DataContractBuilder
                 DataContractBuilderVar builderVar = new DataContractBuilderVar();
 
                 string item = subList[0];                
-                if (item[item.Length - 1] == MandatoryPropertySym)//check mandatory
+                if (item.Length > 0 && item[item.Length - 1] == MandatoryPropertySym)//check mandatory
                 {
                     builderVar.IsMandatory = true;
                     builderVar.Type        = item.Remove(item.Length - 1).Trim();

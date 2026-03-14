@@ -132,12 +132,17 @@ namespace TRUDUtilsD365.RunBaseBuilder
                 if (item.Contains(';')) //these vars are copied from class declaration
                 {
                     item = item.Replace(";", "");
-                    runBaseBuilderVars.Type = item.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[0].Trim();
-                    runBaseBuilderVars.Name = item.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1].Trim();
+                    var itemParts = item.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (itemParts.Length < 2)
+                    {
+                        throw new Exception($"Invalid variable declaration '{item}': expected 'Type Name'");
+                    }
+                    runBaseBuilderVars.Type = itemParts[0].Trim();
+                    runBaseBuilderVars.Name = itemParts[1].Trim();
                 }
                 else
                 { 
-                    if (item[item.Length - 1] == MandatoryPropertySym)//check mandatory
+                    if (item.Length > 0 && item[item.Length - 1] == MandatoryPropertySym)//check mandatory
                     {
                         runBaseBuilderVars.IsMandatory = true;
                         runBaseBuilderVars.Type        = item.Remove(item.Length - 1).Trim();
