@@ -243,3 +243,6 @@ ModelManifest.xml
 .fake/
 InstallToVS/bin/Debug/InstallToVS.pdb
 InstallToVS/bin/Debug/InstallToVS.exe.config
+/.claude
+/Tools
+/Capture.PNG
