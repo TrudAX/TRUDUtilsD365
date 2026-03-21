@@ -44,21 +44,24 @@ namespace TRUDUtilsD365.ShowCrossReference
             crossReferenceGrid.AutoGenerateColumns = false;
             crossReferenceGrid.DataSource = parms.References;
 
-            AdjustGridHeight();
+            AdjustLayout();
         }
 
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
-            AdjustGridHeight();
+            AdjustLayout();
         }
 
-        private void AdjustGridHeight()
+        private void AdjustLayout()
         {
-            if (crossReferenceGrid != null && CodePreviewTextBox != null)
-            {
-                crossReferenceGrid.Height = CodePreviewTextBox.Top - crossReferenceGrid.Top - 4;
-            }
+            if (crossReferenceGrid == null || CodePreviewTextBox == null) return;
+
+            // Position textbox at form bottom
+            CodePreviewTextBox.Top = this.ClientSize.Height - CodePreviewTextBox.Height - 6;
+
+            // Grid fills space between its top and the textbox
+            crossReferenceGrid.Height = CodePreviewTextBox.Top - crossReferenceGrid.Top - 4;
         }
 
         private void GoToSourceButton_Click(object sender, EventArgs e)
@@ -77,6 +80,10 @@ namespace TRUDUtilsD365.ShowCrossReference
         private void crossReferenceGrid_SelectionChanged(object sender, EventArgs e)
         {
             UpdateCodePreview();
+        }
+
+        private void crossReferenceGrid_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
         }
 
         private void UpdateCodePreview()
@@ -119,14 +126,12 @@ namespace TRUDUtilsD365.ShowCrossReference
             if (crossReferenceGrid.Rows.Count == 0)
                 return;
 
-            // Get columns in display order
             var orderedColumns = crossReferenceGrid.Columns.Cast<DataGridViewColumn>()
                 .OrderBy(c => c.DisplayIndex)
                 .ToList();
 
             var sb = new StringBuilder();
 
-            // Header row
             for (int i = 0; i < orderedColumns.Count; i++)
             {
                 if (i > 0) sb.Append('\t');
@@ -134,14 +139,16 @@ namespace TRUDUtilsD365.ShowCrossReference
             }
             sb.AppendLine();
 
-            // Data rows
             foreach (DataGridViewRow row in crossReferenceGrid.Rows)
             {
                 for (int i = 0; i < orderedColumns.Count; i++)
                 {
                     if (i > 0) sb.Append('\t');
                     string val = row.Cells[orderedColumns[i].Index].Value?.ToString() ?? "";
-                    val = val.Replace("\r\n", " ").Replace("\n", " ");
+                    if (val.Contains("\n") || val.Contains("\t") || val.Contains("\""))
+                    {
+                        val = "\"" + val.Replace("\"", "\"\"") + "\"";
+                    }
                     sb.Append(val);
                 }
                 sb.AppendLine();
@@ -157,23 +164,27 @@ namespace TRUDUtilsD365.ShowCrossReference
             int totalLines = (int)CodeLinesUpDown.Value;
             _parms.ReloadCodeLines(totalLines);
 
-            // Toggle grid WrapMode based on code lines
-            if (totalLines > 1)
+            // Enable wrap so \n renders as line breaks in Code column
+            colCodeLine.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            // Disable auto-size so we control row height
+            crossReferenceGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+
+            // Calculate fixed row height for N lines
+            using (var g = crossReferenceGrid.CreateGraphics())
             {
-                colCodeLine.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-                crossReferenceGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            }
-            else
-            {
-                colCodeLine.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
-                crossReferenceGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+                var font = crossReferenceGrid.DefaultCellStyle.Font ?? crossReferenceGrid.Font;
+                int singleLineHeight = (int)Math.Ceiling(g.MeasureString("Xg", font).Height);
+                int rowHeight = singleLineHeight * totalLines + 4;
+                crossReferenceGrid.RowTemplate.Height = rowHeight;
+                foreach (DataGridViewRow row in crossReferenceGrid.Rows)
+                {
+                    row.Height = rowHeight;
+                }
             }
 
             // Resize code preview textbox to match code lines
-            int lineHeight = CodePreviewTextBox.Font.Height;
-            int newHeight = totalLines * lineHeight + 8;
-            CodePreviewTextBox.Height = newHeight;
-            AdjustGridHeight();
+            CodePreviewTextBox.Height = (int)(CodePreviewTextBox.Font.Height * totalLines * 1.2) + 12;
+            AdjustLayout();
 
             UpdateCodePreview();
         }

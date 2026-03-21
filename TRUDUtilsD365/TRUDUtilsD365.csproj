@@ -200,6 +200,7 @@
     <Compile Include="ShowCrossReference\ShowCrossReferenceDialog.Designer.cs">
       <DependentUpon>ShowCrossReferenceDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="ShowCrossReference\CrossReferenceService.cs" />
     <Compile Include="ShowCrossReference\ShowCrossReferenceParms.cs" />
     <Compile Include="ShowCrossReference\ShowCrossReferenceMenu.cs" />
   </ItemGroup>

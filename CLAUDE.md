@@ -11,13 +11,26 @@ The project references DLLs from this directory via `$(DynamicsVSToolsHintPath)`
 
 ## Add-in Architecture
 
-Each add-in follows a 3-file pattern in its own folder under `TRUDUtilsD365\`:
+Each add-in follows a pattern in its own folder under `TRUDUtilsD365\`:
 
 1. **Menu.cs** - MEF entry point: `[Export(typeof(IDesignerMenu))]` + `[DesignerMenuExportMetadata(AutomationNodeType = typeof(TargetType))]`, inherits `DesignerMenuBase`
-2. **Parms.cs** - Business logic with `InitFromSelectedElement(AddinDesignerEventArgs e)`
+2. **Parms.cs** - Data model and UI-facing logic with `InitFromSelectedElement(AddinDesignerEventArgs e)`
 3. **Dialog.cs + Designer.cs** - WinForms UI with `SetParameters(Parms)`
+4. **Service.cs** *(optional)* - D365 API interactions separated from UI logic (e.g., `CrossReferenceService.cs`)
 
-Example: `AddTableFindMethod\AddTableFindMethodMenu.cs`
+### ShowCrossReference Add-in (extended pattern)
+
+The cross-reference viewer uses a 5-file pattern with clear separation:
+
+| File | Responsibility |
+|------|---------------|
+| `ShowCrossReferenceMenu.cs` | MEF entry point, targets `BaseField` context menu |
+| `ShowCrossReferenceParms.cs` | Data models (`CrossReferenceEntry`, `SortableBindingList<T>`), filtering, sorting, access type detection |
+| `CrossReferenceService.cs` | All D365 API calls: XRef queries, source text extraction, VS editor navigation |
+| `ShowCrossReferenceDialog.cs` | WinForms event handlers, layout management |
+| `ShowCrossReferenceDialog.Designer.cs` | WinForms designer-generated controls |
+
+Example: `AddTableFindMethod\AddTableFindMethodMenu.cs` (simple 3-file pattern)
 
 ## Key Services
 
@@ -26,8 +39,12 @@ Example: `AddTableFindMethod\AddTableFindMethodMenu.cs`
 - `DesignMetaModelService.Instance.CrossReferenceProvider` - cross-reference queries
 - `DesignMetaModelService.Instance.CurrentMetadataProvider` - read metadata elements
 - `MetaModelUtility.GetXppSourceText(IRootNamedObject)` - extract X++ source code
-- `MetaModelUtility.GetXppSourceFilePath(xmlFilePath)` - convert XML path to XPP source path
+- `AxServiceProvider.GetService<IMetadataInfoProvider>().GetXppSourceFilePath(xmlFilePath)` - convert XML path to XPP source path (replaces deprecated `MetaModelUtility.GetXppSourceFilePath`)
 - `CoreUtility.HandleExceptionWithErrorMessage(ex)` - standard error handling
+
+## Known D365 XRef Quirks
+
+- **XRef reports entities/views as Tables**: `CrossReferenceProvider.FindReferences` returns `SourcePath` like `/Tables/EntityName/...` even for DataEntityViews and Views. When `Tables.Read()` returns null, fall back to `DataEntityViews.Read()` then `Views.Read()`. The `CrossReferenceService.ResolveActualElementType` method handles this and caches results.
 
 ## API Documentation
 

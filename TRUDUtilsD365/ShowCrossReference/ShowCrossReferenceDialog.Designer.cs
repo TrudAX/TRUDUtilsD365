@@ -190,11 +190,11 @@ namespace TRUDUtilsD365.ShowCrossReference
             this.crossReferenceGrid.TabIndex = 12;
             this.crossReferenceGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.crossReferenceGrid_CellDoubleClick);
             this.crossReferenceGrid.SelectionChanged += new System.EventHandler(this.crossReferenceGrid_SelectionChanged);
+            this.crossReferenceGrid.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.crossReferenceGrid_CellFormatting);
             //
             // CodePreviewTextBox
             //
-            this.CodePreviewTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.CodePreviewTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left
             | System.Windows.Forms.AnchorStyles.Right)));
             this.CodePreviewTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CodePreviewTextBox.Location = new System.Drawing.Point(12, 535);
