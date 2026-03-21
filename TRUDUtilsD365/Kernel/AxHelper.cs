@@ -170,10 +170,31 @@ namespace TRUDUtilsD365.Kernel
                 return _metaModelService;
             }
         }
+        internal static VSProjectNode GetActiveProjectNode2(DTE dte)
+        {
+            Array array = dte.ActiveSolutionProjects as Array;
+            if (array != null && array.Length > 0)
+            {
+                EnvDTE.Project project = array.GetValue(0) as EnvDTE.Project;
+                if (project != null)
+                {
+                    return project.Object as VSProjectNode;
+                }
+            }
+            return null;
+
+        }
 
         private static VSProjectNode GetActiveProjectNode()
         {
-            
+            DTE service = AxServiceProvider.GetService<DTE>();
+            if (service == null)
+            {
+                throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, "No service for DTE found. The DTE must be registered as a service for using this API.", Array.Empty<object>()));
+            }
+            VSProjectNode activeProjectNode = AxHelper.GetActiveProjectNode2(service);
+            return activeProjectNode;
+            /*
             DTE dte = CoreUtility.ServiceProvider.GetService(typeof(DTE)) as DTE;
             if (dte == null)
                 throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture,
@@ -187,16 +208,22 @@ namespace TRUDUtilsD365.Kernel
             }
 
             return null;
+            */
         }
 
         public void AppendToActiveProject(INamedObject edt)
         {
             VSProjectNode activeProjectNode = GetActiveProjectNode();
 
+            ModelInfo model = DesignMetaModelService.Instance.CurrentMetaModelService.GetModel(activeProjectNode.GetProjectProperty("Model", false));
+
             activeProjectNode.AddModelElementsToProject(new List<MetadataReference>
             {
-                new MetadataReference(edt.Name, edt.GetType())
+                new MetadataReference(edt.Name, edt.GetType(), model)
             });
+            //activeProjectNode.Save("", 0, 0);
+            activeProjectNode.SetProjectFileDirty(true);
+            //activeProjectNode.Dispose();
         }
     }
 }
