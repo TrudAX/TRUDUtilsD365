@@ -44,7 +44,11 @@ namespace TRUDUtilsD365.ShowCrossReference
             crossReferenceGrid.AutoGenerateColumns = false;
             crossReferenceGrid.DataSource = parms.References;
 
+            // Set initial code preview height for 1 line
+            int totalLines = (int)CodeLinesUpDown.Value;
+            CodePreviewTextBox.Height = Math.Max(40, (int)(CodePreviewTextBox.Font.Height * totalLines * 1.2) + 12);
             AdjustLayout();
+            UpdateCodePreview();
         }
 
         protected override void OnResize(EventArgs e)
@@ -183,7 +187,7 @@ namespace TRUDUtilsD365.ShowCrossReference
             }
 
             // Resize code preview textbox to match code lines
-            CodePreviewTextBox.Height = (int)(CodePreviewTextBox.Font.Height * totalLines * 1.2) + 12;
+            CodePreviewTextBox.Height = Math.Max(40, (int)(CodePreviewTextBox.Font.Height * totalLines * 1.2) + 12);
             AdjustLayout();
 
             UpdateCodePreview();

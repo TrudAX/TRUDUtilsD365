@@ -58,12 +58,9 @@ namespace TRUDUtilsD365.ShowCrossReference
                 config.CrossReferencesDbServerName, config.CrossReferencesDatabaseName);
         }
 
-        public List<CrossReferenceEntry> LoadCrossReferences(string tableName, string fieldName, bool isTableExtension)
+        public List<CrossReferenceEntry> LoadCrossReferences(string targetPath)
         {
             var entries = new List<CrossReferenceEntry>();
-
-            string pathPrefix = isTableExtension ? "TableExtensions" : "Tables";
-            string targetPath = $"/{pathPrefix}/{tableName}/Fields/{fieldName}";
 
             ICrossReferenceProvider xrefProvider = GetCrossReferenceProvider();
             IEnumerable<CrossReference> refs = xrefProvider.FindReferences(string.Empty, targetPath, CrossReferenceKind.Any);

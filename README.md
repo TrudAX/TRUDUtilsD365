@@ -13,6 +13,7 @@ A set of Visual Studio Add-ins for Microsoft Dynamics 365 for Finance and Operat
 * [Form builder](#form-builder)
 * [RunBase class builder](#runbase-class-builder)
 * [DataContract class builder](#datacontract-class-builder)
+* [Show cross-reference](#show-cross-reference)
 * [Create find method](#create-find-method)
 * [Create menu item](#create-menu-item)
 * [Create security privilege](#create-security-privilege)
@@ -154,6 +155,23 @@ Supports the following properties:
 Also can generate a code template for Data provider and [Controller](https://denistrunin.com/d365utils-generatedp/) 
 
 ![1547085113848](assets/DataContractBuilder.png)
+
+## Show cross-reference
+
+This Add-in displays cross-references for the selected element, allowing you to see the actual X++ code and determine the access type (Read or Write) for table field references.
+
+Supported element types: Table fields, Data entity fields, View fields, Tables, Classes, Forms, Views, Data entities, Enums, Methods (table/class/form), Table extensions, Form extensions.
+
+Features:
+
+* Displays the code line where the reference occurs (with configurable number of context lines)
+* Filter by module and access type (Read/Write)
+* Sortable grid with default sort by element type, name, and method
+* Go to source navigation (opens the X++ file at the exact line)
+* Copy to clipboard (tab-separated, paste-friendly for Excel)
+* Access type detection: identifies Read vs Write references based on code analysis (including `setField(fieldNum(...))` pattern)
+
+This tool can be run using Right-click AddIns on any supported element in the designer.
 
 ## Create find method
 

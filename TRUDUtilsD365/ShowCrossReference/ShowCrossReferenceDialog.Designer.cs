@@ -200,7 +200,7 @@ namespace TRUDUtilsD365.ShowCrossReference
             this.CodePreviewTextBox.Name = "CodePreviewTextBox";
             this.CodePreviewTextBox.ReadOnly = true;
             this.CodePreviewTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
-            this.CodePreviewTextBox.Size = new System.Drawing.Size(960, 20);
+            this.CodePreviewTextBox.Size = new System.Drawing.Size(960, 40);
             this.CodePreviewTextBox.TabIndex = 13;
             this.CodePreviewTextBox.WordWrap = false;
             this.CodePreviewTextBox.BackColor = System.Drawing.SystemColors.Window;

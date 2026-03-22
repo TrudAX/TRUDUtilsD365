@@ -24,9 +24,9 @@ The cross-reference viewer uses a 5-file pattern with clear separation:
 
 | File | Responsibility |
 |------|---------------|
-| `ShowCrossReferenceMenu.cs` | MEF entry point, targets `BaseField` context menu |
-| `ShowCrossReferenceParms.cs` | Data models (`CrossReferenceEntry`, `SortableBindingList<T>`), filtering, sorting, access type detection |
-| `CrossReferenceService.cs` | All D365 API calls: XRef queries, source text extraction, VS editor navigation |
+| `ShowCrossReferenceMenu.cs` | MEF entry point, targets multiple element types (tables, classes, forms, views, data entities, enums, methods, fields) |
+| `ShowCrossReferenceParms.cs` | Data models (`CrossReferenceEntry`, `SortableBindingList<T>`), filtering, sorting, access type detection, element-to-targetPath mapping |
+| `CrossReferenceService.cs` | All D365 API calls: XRef queries (`LoadCrossReferences(targetPath)`), source text extraction, VS editor navigation |
 | `ShowCrossReferenceDialog.cs` | WinForms event handlers, layout management |
 | `ShowCrossReferenceDialog.Designer.cs` | WinForms designer-generated controls |
 
@@ -45,6 +45,43 @@ Example: `AddTableFindMethod\AddTableFindMethodMenu.cs` (simple 3-file pattern)
 ## Known D365 XRef Quirks
 
 - **XRef reports entities/views as Tables**: `CrossReferenceProvider.FindReferences` returns `SourcePath` like `/Tables/EntityName/...` even for DataEntityViews and Views. When `Tables.Read()` returns null, fall back to `DataEntityViews.Read()` then `Views.Read()`. The `CrossReferenceService.ResolveActualElementType` method handles this and caches results.
+
+- **Standard X++ References uses hierarchical matching**: The standard X++ References panel does prefix/hierarchical queries — e.g. references to `/Classes/MyClass` also include references to `/Classes/MyClass/Methods/*`. Our `FindReferences` call uses exact target path matching, so it returns fewer results (only direct references to the element, not its children).
+
+## Cross-Reference Target Path Format
+
+`FindReferences(sourcePath, targetPath, CrossReferenceKind)` — `sourcePath` empty = find all references TO target.
+
+| Element | targetPath |
+|---------|-----------|
+| Table | `/Tables/{Name}` |
+| Table field | `/Tables/{TableName}/Fields/{FieldName}` |
+| Table extension | `/TableExtensions/{Name}` |
+| Class | `/Classes/{Name}` |
+| Class method | `/Classes/{Name}/Methods/{MethodName}` |
+| Form | `/Forms/{Name}` |
+| View | `/Views/{Name}` |
+| Data entity | `/DataEntityViews/{Name}` |
+| Data entity field | `/DataEntityViews/{Name}/Fields/{FieldName}` |
+| Enum | `/Enums/{Name}` |
+
+## Supported Automation Types for Designer Menus
+
+Key types from `Microsoft.Dynamics.Framework.Tools.MetaModel.Automation.*`:
+
+| Namespace | Types |
+|-----------|-------|
+| `.Tables` | `BaseField`, `ITable`, `Table`, `ITableExtension`, `TableExtension` |
+| `.Classes` | `ClassItem` |
+| `.Forms` | `IForm`, `FormExtension`, `FormDataSource`, `FormDataSourceField`, `FormControl` |
+| `.Views` | `IView`, `IViewField`, `View`, `ViewExtension` |
+| `.DataEntityViews` | `IDataEntity`, `IDataEntityView`, `DataEntityView`, `DataEntityViewExtension`, `IDataEntityViewField` |
+| `.BaseTypes` | `IBaseEnum`, `EdtString` |
+| `.Menus` | `IMenuItem`, `IMenu` |
+| `.Security` | `ISecurityDuty`, `ISecurityRole` |
+| *(base)* | `IMethodBase`, `NamedElement`, `IRootElement` |
+
+Use `((NamedElement)element).RootElement` to get the parent element from a method or field. `IRootElement.GetMetadataType().Name` returns the metadata element name.
 
 ## API Documentation
 
