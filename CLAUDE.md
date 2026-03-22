@@ -1,7 +1,7 @@
 
 ## Project Overview
 
-TRUDUtilsD365 is a Visual Studio 2022 VSIX add-in for D365 Finance & Operations X++ development. It provides context-menu tools in the VS designer for code generation and cross-reference analysis.
+TRUDUtilsD365 is a Visual Studio 2022 Developer Tools Add-in for D365 Finance & Operations X++ development. It provides context-menu tools in the VS designer for code generation and cross-reference analysis.
 
 ## Extension Folder
 
@@ -52,4 +52,8 @@ See `Tools\documentation.md` for detailed decompiled API signatures and usage pa
 
 ## Build
 
-MSBuild with .NET Framework 4.8. Post-build copies output to `$(DynamicsVSToolsHintPath)\AddinExtensions\`.
+MSBuild with .NET Framework 4.8. Post-build copies output to `AddinExtensions\`. Always use `-p:BuildingInsideVisualStudio=true` to trigger the copy step (it is conditioned on this property):
+
+```
+"/c/Program Files/Microsoft Visual Studio/2022/Professional/MSBuild/Current/Bin/MSBuild.exe" "TRUDUtilsD365.sln" -p:Configuration=Debug -p:BuildingInsideVisualStudio=true -verbosity:minimal
+```

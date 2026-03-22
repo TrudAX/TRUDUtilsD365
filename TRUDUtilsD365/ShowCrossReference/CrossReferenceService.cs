@@ -7,6 +7,10 @@ using Microsoft.Dynamics.AX.Metadata.MetaModel;
 using Microsoft.Dynamics.Framework.Tools.Core;
 using Microsoft.Dynamics.Framework.Tools.MetaModel.Core;
 using Microsoft.Dynamics.Framework.Tools.MetaModel;
+using Microsoft.Dynamics.Framework.Tools.Configuration;
+using Microsoft.Dynamics.AX.Metadata.Storage;
+using Microsoft.Dynamics.AX.Metadata.Storage.DiskProvider;
+using Microsoft.Dynamics.AX.Metadata.Providers;
 using TRUDUtilsD365.Kernel;
 
 namespace TRUDUtilsD365.ShowCrossReference
@@ -18,6 +22,41 @@ namespace TRUDUtilsD365.ShowCrossReference
     public class CrossReferenceService
     {
         private readonly Dictionary<string, string> _sourceTextCache = new Dictionary<string, string>();
+        private static IMetadataProvider _fallbackMetadataProvider;
+
+        private static IMetadataProvider GetMetadataProvider()
+        {
+            var designService = DesignMetaModelService.Instance
+                                ?? AxServiceProvider.GetService<IDesignMetaModelService>() as DesignMetaModelService;
+            if (designService != null)
+            {
+                return designService.CurrentMetadataProvider;
+            }
+
+            if (_fallbackMetadataProvider == null)
+            {
+                var config = ConfigurationHelper.CurrentConfiguration;
+                var diskConfig = new DiskProviderConfiguration
+                {
+                    XppMetadataPath = config.ModelStoreFolder,
+                    MetadataPath = config.ModelStoreFolder
+                };
+                _fallbackMetadataProvider = new MetadataProviderFactory().CreateDiskProvider(diskConfig);
+            }
+            return _fallbackMetadataProvider;
+        }
+
+        private static ICrossReferenceProvider GetCrossReferenceProvider()
+        {
+            if (DesignMetaModelService.Instance != null)
+            {
+                return DesignMetaModelService.Instance.CrossReferenceProvider;
+            }
+
+            var config = ConfigurationHelper.CurrentConfiguration;
+            return CrossReferenceProviderFactory.CreateSqlCrossReferenceProvider(
+                config.CrossReferencesDbServerName, config.CrossReferencesDatabaseName);
+        }
 
         public List<CrossReferenceEntry> LoadCrossReferences(string tableName, string fieldName, bool isTableExtension)
         {
@@ -26,7 +65,7 @@ namespace TRUDUtilsD365.ShowCrossReference
             string pathPrefix = isTableExtension ? "TableExtensions" : "Tables";
             string targetPath = $"/{pathPrefix}/{tableName}/Fields/{fieldName}";
 
-            ICrossReferenceProvider xrefProvider = DesignMetaModelService.Instance.CrossReferenceProvider;
+            ICrossReferenceProvider xrefProvider = GetCrossReferenceProvider();
             IEnumerable<CrossReference> refs = xrefProvider.FindReferences(string.Empty, targetPath, CrossReferenceKind.Any);
 
             foreach (CrossReference xref in refs)
@@ -120,8 +159,7 @@ namespace TRUDUtilsD365.ShowCrossReference
 
                     if (!string.IsNullOrEmpty(xppFilePath))
                     {
-                        AxHelper axHelper = new AxHelper();
-                        var rootElement = ReadElementAsRoot(axHelper.MetadataProvider, entry.ElementType, entry.ElementName);
+                        var rootElement = ReadElementAsRoot(GetMetadataProvider(), entry.ElementType, entry.ElementName);
                         if (rootElement != null)
                         {
                             string sourceText = MetaModelUtility.GetXppSourceText(rootElement);
@@ -175,8 +213,7 @@ namespace TRUDUtilsD365.ShowCrossReference
                 return;
             }
 
-            AxHelper axHelper = new AxHelper();
-            var metadataProvider = axHelper.MetadataProvider;
+            var metadataProvider = GetMetadataProvider();
 
             if (metadataProvider.Tables.Read(entry.ElementName) != null)
             {
@@ -203,10 +240,7 @@ namespace TRUDUtilsD365.ShowCrossReference
 
         private string GetElementSourceText(string elementType, string elementName)
         {
-            AxHelper axHelper = new AxHelper();
-            var metadataProvider = axHelper.MetadataProvider;
-
-            IRootNamedObject rootElement = ReadElementAsRoot(metadataProvider, elementType, elementName);
+            IRootNamedObject rootElement = ReadElementAsRoot(GetMetadataProvider(), elementType, elementName);
 
             if (rootElement == null)
                 return string.Empty;
@@ -255,8 +289,7 @@ namespace TRUDUtilsD365.ShowCrossReference
 
         private void NavigateViaSourceText(CrossReferenceEntry entry)
         {
-            AxHelper axHelper = new AxHelper();
-            var rootElement = ReadElementAsRoot(axHelper.MetadataProvider, entry.ElementType, entry.ElementName);
+            var rootElement = ReadElementAsRoot(GetMetadataProvider(), entry.ElementType, entry.ElementName);
             if (rootElement == null) return;
 
             string sourceText = MetaModelUtility.GetXppSourceText(rootElement);

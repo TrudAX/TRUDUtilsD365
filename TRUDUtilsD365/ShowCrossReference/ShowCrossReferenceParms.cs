@@ -84,22 +84,11 @@ namespace TRUDUtilsD365.ShowCrossReference
         private readonly CrossReferenceService _service = new CrossReferenceService();
         private readonly List<CrossReferenceEntry> _allReferences = new List<CrossReferenceEntry>();
 
-        public void InitFromSelectedElement(AddinDesignerEventArgs e)
+        public void Init(string tableName, string fieldName, bool isTableExtension = false)
         {
-            var field = (BaseField)e.SelectedElement;
-
-            if (field.Table != null)
-            {
-                TableName = field.Table.GetMetadataType().Name;
-                IsTableExtension = false;
-            }
-            else if (field.TableExtension != null)
-            {
-                TableName = field.TableExtension.GetMetadataType().Name;
-                IsTableExtension = true;
-            }
-
-            FieldName = field.Name;
+            TableName = tableName;
+            FieldName = fieldName;
+            IsTableExtension = isTableExtension;
 
             _allReferences.Clear();
             References = new SortableBindingList<CrossReferenceEntry>();
@@ -113,6 +102,31 @@ namespace TRUDUtilsD365.ShowCrossReference
 
             foreach (var entry in _allReferences)
                 References.Add(entry);
+        }
+
+        public void InitFromSelectedElement(AddinDesignerEventArgs e)
+        {
+            var field = (BaseField)e.SelectedElement;
+
+            string tableName;
+            bool isExtension;
+
+            if (field.Table != null)
+            {
+                tableName = field.Table.GetMetadataType().Name;
+                isExtension = false;
+            }
+            else if (field.TableExtension != null)
+            {
+                tableName = field.TableExtension.GetMetadataType().Name;
+                isExtension = true;
+            }
+            else
+            {
+                return;
+            }
+
+            Init(tableName, field.Name, isExtension);
         }
 
         public void ReloadCodeLines(int totalLines)

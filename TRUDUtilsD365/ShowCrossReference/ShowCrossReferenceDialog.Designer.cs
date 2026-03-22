@@ -39,7 +39,6 @@ namespace TRUDUtilsD365.ShowCrossReference
             this.colCodeLine = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colAccessType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colSourceModule = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colKind = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.crossReferenceGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CodeLinesUpDown)).BeginInit();
             this.SuspendLayout();
@@ -178,8 +177,7 @@ namespace TRUDUtilsD365.ShowCrossReference
             this.colColumnNumber,
             this.colCodeLine,
             this.colAccessType,
-            this.colSourceModule,
-            this.colKind});
+            this.colSourceModule});
             this.crossReferenceGrid.Location = new System.Drawing.Point(12, 85);
             this.crossReferenceGrid.MultiSelect = false;
             this.crossReferenceGrid.Name = "crossReferenceGrid";
@@ -271,14 +269,6 @@ namespace TRUDUtilsD365.ShowCrossReference
             this.colSourceModule.ReadOnly = true;
             this.colSourceModule.Width = 100;
             //
-            // colKind
-            //
-            this.colKind.DataPropertyName = "Kind";
-            this.colKind.HeaderText = "Kind";
-            this.colKind.Name = "colKind";
-            this.colKind.ReadOnly = true;
-            this.colKind.Width = 80;
-            //
             // ShowCrossReferenceDialog
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -330,6 +320,5 @@ namespace TRUDUtilsD365.ShowCrossReference
         private System.Windows.Forms.DataGridViewTextBoxColumn colCodeLine;
         private System.Windows.Forms.DataGridViewTextBoxColumn colAccessType;
         private System.Windows.Forms.DataGridViewTextBoxColumn colSourceModule;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colKind;
     }
 }
