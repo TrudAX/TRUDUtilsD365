@@ -171,6 +171,8 @@ Features:
 * Copy to clipboard (tab-separated, paste-friendly for Excel)
 * Access type detection: identifies Read vs Write references based on code analysis (including `setField(fieldNum(...))` pattern)
 
+![ShowCrossReference](assets/ShowCrossReference.png)
+
 This tool can be run using Right-click AddIns on any supported element in the designer.
 
 ## Create find method
