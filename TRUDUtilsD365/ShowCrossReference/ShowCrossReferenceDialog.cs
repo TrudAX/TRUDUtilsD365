@@ -165,6 +165,15 @@ namespace TRUDUtilsD365.ShowCrossReference
         {
             if (_parms == null) return;
 
+            // If user edited the element name, reload all references for the new path
+            string newPath = FieldNameLabel.Text.Trim();
+            if (newPath != _parms.TargetPath)
+            {
+                _parms.Init(newPath);
+                SetParameters(_parms);
+                return;
+            }
+
             int totalLines = (int)CodeLinesUpDown.Value;
             _parms.ReloadCodeLines(totalLines);
 

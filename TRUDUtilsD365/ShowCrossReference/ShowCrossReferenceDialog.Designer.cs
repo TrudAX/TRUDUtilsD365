@@ -49,7 +49,6 @@ namespace TRUDUtilsD365.ShowCrossReference
             this.FieldNameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FieldNameLabel.Location = new System.Drawing.Point(12, 9);
             this.FieldNameLabel.Name = "FieldNameLabel";
-            this.FieldNameLabel.ReadOnly = true;
             this.FieldNameLabel.Size = new System.Drawing.Size(500, 17);
             this.FieldNameLabel.TabIndex = 0;
             this.FieldNameLabel.Text = "Table.FieldName";
@@ -184,7 +183,7 @@ namespace TRUDUtilsD365.ShowCrossReference
             this.crossReferenceGrid.ReadOnly = true;
             this.crossReferenceGrid.RowHeadersVisible = false;
             this.crossReferenceGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.crossReferenceGrid.Size = new System.Drawing.Size(960, 446);
+            this.crossReferenceGrid.Size = new System.Drawing.Size(1376, 446);
             this.crossReferenceGrid.TabIndex = 12;
             this.crossReferenceGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.crossReferenceGrid_CellDoubleClick);
             this.crossReferenceGrid.SelectionChanged += new System.EventHandler(this.crossReferenceGrid_SelectionChanged);
@@ -200,7 +199,7 @@ namespace TRUDUtilsD365.ShowCrossReference
             this.CodePreviewTextBox.Name = "CodePreviewTextBox";
             this.CodePreviewTextBox.ReadOnly = true;
             this.CodePreviewTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
-            this.CodePreviewTextBox.Size = new System.Drawing.Size(960, 40);
+            this.CodePreviewTextBox.Size = new System.Drawing.Size(1376, 40);
             this.CodePreviewTextBox.TabIndex = 13;
             this.CodePreviewTextBox.WordWrap = false;
             this.CodePreviewTextBox.BackColor = System.Drawing.SystemColors.Window;
@@ -251,7 +250,7 @@ namespace TRUDUtilsD365.ShowCrossReference
             this.colCodeLine.HeaderText = "Code";
             this.colCodeLine.Name = "colCodeLine";
             this.colCodeLine.ReadOnly = true;
-            this.colCodeLine.Width = 300;
+            this.colCodeLine.Width = 720;
             //
             // colAccessType
             //
@@ -273,7 +272,7 @@ namespace TRUDUtilsD365.ShowCrossReference
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(984, 561);
+            this.ClientSize = new System.Drawing.Size(1400, 561);
             this.Controls.Add(this.CodePreviewTextBox);
             this.Controls.Add(this.crossReferenceGrid);
             this.Controls.Add(this.RefreshButton);
