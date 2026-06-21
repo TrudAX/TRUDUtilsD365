@@ -8,6 +8,7 @@ using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.Dynamics.AX.Metadata.Core.MetaModel;
 using Microsoft.Dynamics.AX.Metadata.MetaModel;
+using Microsoft.Dynamics.AX.Metadata.Patterns;
 using Microsoft.Dynamics.AX.Metadata.Providers;
 using Microsoft.Dynamics.AX.Metadata.Service;
 using Microsoft.Dynamics.Framework.Tools.Core;
@@ -59,6 +60,31 @@ namespace TRUDUtilsD365.Kernel
                 }
             }
             return new string(array);
+        }
+
+        // Pattern catalog (standard patterns are embedded resources in Microsoft.Dynamics.AX.Metadata.Patterns.dll,
+        // so this reflects the patterns shipped with the installed platform). The standard set is cached statically
+        // inside PatternFactory, so a single shared instance is enough.
+        private static readonly PatternFactory PatternCatalog = new PatternFactory();
+
+        /// <summary>
+        /// Headless equivalent of the designer "Apply Pattern" command: looks up the currently active version of
+        /// <paramref name="patternName"/> and applies it to <paramref name="element"/> - setting Pattern/PatternVersion
+        /// and every pattern-mandated property (Style, WidthMode, etc.). Requires the element's control structure to
+        /// match the pattern.
+        /// </summary>
+        public static void ApplyPattern(IPatternable element, string patternName)
+        {
+            Pattern pattern = PatternCatalog.GetPatternsByName(patternName).FirstOrDefault(p => p.Active);
+            if (pattern == null)
+            {
+                throw new Exception($"Active version of pattern '{patternName}' was not found in the pattern catalog");
+            }
+            if (!element.ApplyPattern(pattern))
+            {
+                throw new Exception($"Pattern '{patternName} {pattern.Version}' could not be applied to '{element.Name}' - " +
+                                    "the control structure does not match the pattern");
+            }
         }
 
         public static string GetTypeNameFromLabel(string typeName)

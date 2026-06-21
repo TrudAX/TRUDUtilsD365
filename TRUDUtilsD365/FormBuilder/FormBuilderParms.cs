@@ -12,6 +12,13 @@ namespace TRUDUtilsD365.FormBuilder
         SimpleList,
         SimpleListDetails
     }
+
+    public class FormTabDef
+    {
+        public string Caption;
+        public bool IsList;
+    }
+
     public class FormBuilderParms
     {
         public string TableName { get; set; } = "";
@@ -23,10 +30,19 @@ namespace TRUDUtilsD365.FormBuilder
         public string FormLabel { get; set; } = "";
         public string FormHelp { get; set; } = "";
 
-        public string TabLabels { get; set; } = "Details";
-
         public string GroupNameGrid { get; set; } = "Overview";
         public string GroupNameHeader { get; set; } = "DetailsHeaderGroup";
+
+        // Values entered in the right-hand "Values" column on the SimpleListDetails-Tabular tab.
+        // Each line maps positionally to a static label: line 1 = Grid group, line 2 = Header group,
+        // line 3+ = Tabs (one tab per line; "Name, list" creates a toolbar+grid tab page).
+        public string SimpleListDetailsValues { get; set; } =
+            "Overview"           + Environment.NewLine +
+            "DetailsHeaderGroup" + Environment.NewLine +
+            "Details"            + Environment.NewLine +
+            "Lines,list";
+
+        private List<FormTabDef> _parsedTabs;
 
         private AxHelper _axHelper;
 
@@ -62,6 +78,47 @@ namespace TRUDUtilsD365.FormBuilder
             }
         }
 
+        public void ParseSimpleListDetailsParams()
+        {
+            _parsedTabs = new List<FormTabDef>();
+
+            string[] lines = SimpleListDetailsValues.Split(
+                new[] { Environment.NewLine, "\n" }, StringSplitOptions.None);
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string value = lines[i].Trim();
+
+                switch (i)
+                {
+                    case 0:   // Grid group
+                        GroupNameGrid = value;
+                        break;
+                    case 1:   // Header group
+                        GroupNameHeader = value;
+                        break;
+                    default:  // Tabs (one per line)
+                        AddTabDef(value);
+                        break;
+                }
+            }
+        }
+
+        void AddTabDef(string tabEntry)
+        {
+            if (string.IsNullOrWhiteSpace(tabEntry))
+            {
+                return;
+            }
+
+            string[] parts = tabEntry.Split(',');
+            bool isList = parts.Length > 1 &&
+                          parts[parts.Length - 1].Trim().Equals("list", StringComparison.OrdinalIgnoreCase);
+
+            string caption = isList ? parts[0].Trim() : tabEntry.Trim();
+            _parsedTabs.Add(new FormTabDef { Caption = caption, IsList = isList });
+        }
+
         public void Run()
         {
             _logString = "";
@@ -70,6 +127,12 @@ namespace TRUDUtilsD365.FormBuilder
             {
                 _axHelper = new AxHelper();
             }
+
+            if (TemplateType == FormTemplateType.SimpleListDetails)
+            {
+                ParseSimpleListDetailsParams();
+            }
+
             DoTableUpdate();
 
             DoFormCreate();
@@ -158,7 +221,14 @@ namespace TRUDUtilsD365.FormBuilder
                     newForm.Design.AddControl(axFormGridControl);
                     break;
                 case FormTemplateType.SimpleListDetails:
-                    newForm.Design.AddControl(new AxFormActionPaneControl { Name = "MainActionPane" });
+                    // "Simple list and details - Tabular grid". Only the structure and data-binding/functional
+                    // properties are set here; all pattern-mandated layout properties (Style, WidthMode, FrameType,
+                    // grid Tabular/AllowEdit/..., the design Pattern/PatternVersion, etc.) are applied at the end by
+                    // AxHelper.ApplyPattern - the headless equivalent of the designer "Apply Pattern" command.
+                    AxFormActionPaneControl mainActionPane = new AxFormActionPaneControl { Name = "MainActionPane" };
+                    mainActionPane.AddControl(new AxFormButtonGroupControl { Name = "FormButtonGroupControlMain" });
+                    newForm.Design.AddControl(mainActionPane);
+
                     filterGrp = new AxFormGroupControl { Name = "NavigationListGroup" };
 
                     quickFilterControl = new AxFormControlExtension { Name = "QuickFilterControl" };
@@ -167,6 +237,10 @@ namespace TRUDUtilsD365.FormBuilder
                     formControlExtensionProperty.Type  = CompilerBaseType.String;
                     formControlExtensionProperty.Value = "MainGrid";
                     quickFilterControl.ExtensionProperties.Add(formControlExtensionProperty);
+                    // QuickFilterControl declares these two extra properties; the designer materializes them
+                    // (empty) too, so emit them to match the designer "Apply Pattern" output exactly.
+                    quickFilterControl.ExtensionProperties.Add(new AxFormControlExtensionProperty { Name = "placeholderText",   Type = CompilerBaseType.String });
+                    quickFilterControl.ExtensionProperties.Add(new AxFormControlExtensionProperty { Name = "defaultColumnName", Type = CompilerBaseType.String });
 
                     filterGrp.AddControl(new AxFormControl { Name = "NavListQuickFilter", FormControlExtension = quickFilterControl });
                     axFormGridControl = new AxFormGridControl { Name = "MainGrid", DataSource = dsName };
@@ -183,25 +257,33 @@ namespace TRUDUtilsD365.FormBuilder
                     }
 
                     filterGrp.AddControl(axFormGridControl);
-                    newForm.Design.AddControl(filterGrp);                    
+                    newForm.Design.AddControl(filterGrp);
 
-                    detailsHeaderGroup = new AxFormGroupControl { Name = "DetailsHeaderGroup" };
-                    detailsHeaderGroup.DataSource = dsName;
-                    detailsHeaderGroup.DataGroup = GroupNameHeader;
+                    newForm.Design.AddControl(new AxFormGroupControl { Name = "VerticalSplitterGroup" });
+
+                    detailsHeaderGroup = new AxFormGroupControl { Name = "DetailsHeaderGroup", DataSource = dsName };
+                    if (!string.IsNullOrWhiteSpace(GroupNameHeader))
+                    {
+                        detailsHeaderGroup.DataGroup = GroupNameHeader;
+                    }
 
                     newForm.Design.AddControl(detailsHeaderGroup);
 
                     formTabControl = new AxFormTabControl { Name = "DetailsTab" };
 
-                    List<string> listImp = new List<string>(
-                        TabLabels.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
-                    foreach (string lineImp in listImp)
+                    foreach (FormTabDef tabDef in _parsedTabs)
                     {
-                        string tabName = AxHelper.GetTypeNameFromLabel(lineImp) + "TabPage";
-                        formTabControl.AddControl(new AxFormTabPageControl {Name = tabName, Caption = lineImp,DataSource = dsName });
+                        formTabControl.AddControl(tabDef.IsList
+                            ? CreateListTabPage(tabDef.Caption)
+                            : CreateDetailsTabPage(tabDef.Caption, dsName));
                     }
 
                     newForm.Design.AddControl(formTabControl);
+
+                    // Apply the form pattern and the header sub-pattern (tab-page sub-patterns are applied in the
+                    // helpers). This stamps the current pattern versions and all mandated layout properties.
+                    AxHelper.ApplyPattern(newForm.Design, "SimpleListDetails-Grid");
+                    AxHelper.ApplyPattern(detailsHeaderGroup, "FieldsFieldGroups");
 
                     break;
 
@@ -211,6 +293,60 @@ namespace TRUDUtilsD365.FormBuilder
             _axHelper.AppendToActiveProject(newForm);
 
             AddLog($"Form: {newForm.Name} - Restore it before use;");
+        }
+
+        AxFormTabPageControl CreateDetailsTabPage(string caption, string dsName)
+        {
+            AxFormTabPageControl tabPage = new AxFormTabPageControl
+            {
+                Name       = AxHelper.GetTypeNameFromLabel(caption) + "TabPage",
+                Caption    = caption,
+                DataSource = dsName
+            };
+            AxHelper.ApplyPattern(tabPage, "FieldsFieldGroups");
+            return tabPage;
+        }
+
+        AxFormTabPageControl CreateListTabPage(string caption)
+        {
+            string suffix = AxHelper.GetTypeNameFromLabel(caption);
+
+            AxFormTabPageControl tabPage = new AxFormTabPageControl
+            {
+                Name    = "TabPage" + suffix,
+                Caption = caption
+            };
+
+            AxFormActionPaneControl actionPane = new AxFormActionPaneControl { Name = "ActionPaneControl" + suffix };
+
+            AxFormButtonGroupControl newDeleteGroup = new AxFormButtonGroupControl { Name = "NewDeleteGroup" + suffix };
+            newDeleteGroup.AddControl(new AxFormCommandButtonControl
+            {
+                Name          = "AddButton" + suffix,
+                Command       = ClientTaskType.New,
+                NormalImage   = "New",
+                ButtonDisplay = ButtonDisplay_ITxt.TextWithImageLeft,
+                Primary       = NoYes.Yes,
+                Text          = "@sys60080"
+            });
+            newDeleteGroup.AddControl(new AxFormCommandButtonControl
+            {
+                Name          = "RemoveButton" + suffix,
+                Command       = ClientTaskType.DeleteRecord,
+                NormalImage   = "Delete",
+                ButtonDisplay = ButtonDisplay_ITxt.TextWithImageLeft,
+                Primary       = NoYes.Yes,
+                SaveRecord    = NoYes.No,
+                Text          = "@sys26394"
+            });
+            actionPane.AddControl(newDeleteGroup);
+            actionPane.AddControl(new AxFormButtonGroupControl { Name = "FormButtonGroupControl" + suffix });
+
+            tabPage.AddControl(actionPane);
+            tabPage.AddControl(new AxFormGridControl { Name = "Grid" + suffix });
+
+            AxHelper.ApplyPattern(tabPage, "ToolbarList");
+            return tabPage;
         }
 
 

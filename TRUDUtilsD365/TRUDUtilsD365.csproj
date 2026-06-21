@@ -44,6 +44,11 @@
       <Private>False</Private>
       <HintPath Condition="'$(DynamicsVSToolsHintPath)' != ''">$(DynamicsVSToolsHintPath)\Microsoft.Dynamics.AX.Metadata.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Dynamics.AX.Metadata.Patterns">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+      <HintPath Condition="'$(DynamicsVSToolsHintPath)' != ''">$(DynamicsVSToolsHintPath)\Microsoft.Dynamics.AX.Metadata.Patterns.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Dynamics.Framework.Tools.MetaModel.Core.17.0">
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
