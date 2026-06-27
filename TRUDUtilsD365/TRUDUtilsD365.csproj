@@ -154,6 +154,15 @@
       <DependentUpon>FormBuilderDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="FormBuilder\FormBuilderMenu.cs" />
+    <Compile Include="FormTemplateControlBuilder\FormPatternControlBuilderService.cs" />
+    <Compile Include="FormTemplateControlBuilder\FormTemplateControlBuilderParms.cs" />
+    <Compile Include="FormTemplateControlBuilder\FormTemplateControlBuilderMenu.cs" />
+    <Compile Include="FormTemplateControlBuilder\FormTemplateControlBuilderDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormTemplateControlBuilder\FormTemplateControlBuilderDialog.Designer.cs">
+      <DependentUpon>FormTemplateControlBuilderDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Kernel\AxHelper.cs" />
     <Compile Include="MenuItemBuilder\MenuItemBuilderMenu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

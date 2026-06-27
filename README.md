@@ -11,6 +11,7 @@ A set of Visual Studio Add-ins for Microsoft Dynamics 365 for Finance and Operat
 * [Fields builder](#fields-builder)
 * [Table builder](#table-builder)
 * [Form builder](#form-builder)
+* [Form template control builder](#form-template-control-builder)
 * [RunBase class builder](#runbase-class-builder)
 * [DataContract class builder](#datacontract-class-builder)
 * [Show cross-reference](#show-cross-reference)
@@ -126,6 +127,23 @@ The tool does the following:
 * Creates a Menu item for the created form
 
 ![](assets/FormBuilder.png)
+
+## Form template control builder
+
+This tool adds the controls required by a form's assigned design pattern (template) to an existing form. It is the opposite scenario to the Form builder: the form already exists and has a template assigned to its design, but no controls yet.
+
+Select such a form and run the tool. It will:
+
+* Read the template currently assigned to the form design (e.g. "Simple List", "Details Master")
+* Add all the controls that template requires, resolving embedded sub-patterns as well
+* Optionally add the optional controls too ("Add optional controls" checkbox, enabled by default)
+* Apply the pattern so the mandated layout properties are set (restore the form before use)
+
+The form design must have a template assigned and contain no controls.
+
+![](assets/FormTemplateControlBuilder.png)
+
+This tool can be run using Right-click AddIns on a Form in the designer.
 
 ## RunBase class builder
 
