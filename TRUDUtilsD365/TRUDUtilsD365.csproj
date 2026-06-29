@@ -14,7 +14,7 @@
     <FileAlignment>512</FileAlignment>
     <SkipAssemblyComVisible>true</SkipAssemblyComVisible>
     <TargetFrameworkProfile />
-    <DynamicsVSToolsHintPath>C:\Program Files\Microsoft Visual Studio\2022\Professional\Common7\IDE\Extensions\s3rpjihy.vwj</DynamicsVSToolsHintPath>
+    <DynamicsVSToolsHintPath>C:\Program Files\Microsoft Visual Studio\2022\Professional\Common7\IDE\Extensions\lbiljn0x.5bt</DynamicsVSToolsHintPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
